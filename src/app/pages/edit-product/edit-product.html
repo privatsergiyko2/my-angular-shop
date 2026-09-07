@@ -1,0 +1,43 @@
+<p>Product exists: {{ !!product }}</p>
+
+@if (editForm) {
+  <form [formGroup]="editForm">
+
+    <p>{{ product?.title }}</p>
+
+    <input type="text" formControlName="title">
+
+    <input type="number" formControlName="price">
+
+    <textarea formControlName="description"></textarea>
+
+    <input type="text" formControlName="category">
+
+    <input type="number" formControlName="rating">
+
+    <input type="text" formControlName="thumbnail">
+
+    @if (editForm.get("title")?.invalid && editForm.get("title")?.touched) {
+      <p>Title is required</p>
+    }
+
+    @if (editForm.get("price")?.errors?.["min"] && editForm.get("price")?.touched) {
+      <p>Price cannot be less than 0</p>
+    }
+
+    @if (editForm.get("price")?.errors?.['required'] && editForm.get("price")?.touched ) {
+      <p>Price is required</p>
+    }
+
+    @if (saveErrorMessage) {
+      <p>{{saveErrorMessage}}</p>
+    }
+
+
+    <button type="button" [disabled]="isSaving" (click)="save()">Save</button>
+    @if (isSaved) {
+      <p>Товар успішно оновлено!</p>
+    }
+  </form>
+}
+

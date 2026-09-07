@@ -1,0 +1,8 @@
+<p>Cart: {{ cartService.cart.length }}</p>
+
+@if ((currentUrl | async) !== '/cart') {
+  <button [routerLink]="'/cart'">Open Cart</button>
+}
+
+
+<button [routerLink]="'/favorites'">Open favorites</button>

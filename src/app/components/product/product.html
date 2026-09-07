@@ -1,0 +1,39 @@
+<div class="card" style="width: 18rem;">
+  <img [src]="product.thumbnail" class="card-img-top" [alt]="product.title">
+  <div class="card-body ">
+    <h5 class="card-title">{{product.title}}</h5>
+
+    <p class="card-text">
+      {{ product.description }}
+    </p>
+
+    <p class="card-text">
+      Price: {{product.price}}
+    </p>
+
+    <p class="card-text">
+      ⭐ {{ product.rating }}
+    </p>
+
+    <button class="btn btn-primary" [routerLink]="['/products', product.id]">
+      Details
+    </button>
+
+    <button [routerLink]="['/edit', product.id]">Edit</button>
+
+    @if(showAddToCard) {
+      <button class="btn btn-success" (click)="addToCart.emit(product)">
+        Add to Cart
+      </button>
+    }
+
+    <button (click)="addToFavorites()">
+      Add to Favorites
+    </button>
+
+    <button (click)="remove.emit(product)">Remove</button>
+
+    <button (click)="removeFromFavorites(product.id)">Remove from favorites</button>
+  </div>
+</div>
+

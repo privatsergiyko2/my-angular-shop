@@ -1,0 +1,10 @@
+@for(cartItem of cartService.cart; track $index) {
+  <app-product [showAddToCard]="false" [product]="cartItem.product" (remove)="removeFromCart($event)"></app-product>
+  <p>Quantity: {{ cartItem.quantity }}</p>
+  <p>Subtotal {{cartItem.product.price * cartItem.quantity}}</p>
+  <button (click)="cartService.increaseQuantity(cartItem.product.id)">+</button>
+  <button (click)="cartService.decreaseQuantity(cartItem.product.id)">-</button>
+} @empty {
+  Card is empty
+}
+<p>Total: {{ cartService.getTotalPrice() }}</p>

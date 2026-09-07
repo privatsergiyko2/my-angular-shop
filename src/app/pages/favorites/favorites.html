@@ -1,0 +1,7 @@
+@for (favoriteProduct of favoritesProducts; track favoriteProduct.id) {
+  <app-product [product]="favoriteProduct"></app-product>
+}
+
+@if (favoritesProducts.length === 0) {
+  <p>Favorites is empty</p>
+}
