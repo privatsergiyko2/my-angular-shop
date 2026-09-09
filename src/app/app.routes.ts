@@ -5,7 +5,7 @@ import {Products} from './pages/products/products';
 import {AddPage} from './pages/add-page/add-page';
 import {EditProduct} from './pages/edit-product/edit-product';
 import {FavoritesComponent} from './pages/favorites/favorites';
-import  {RouterLink} from '@angular/router';
+import {Payment} from './payment/payment';
 
 export const routes: Routes = [
   {
@@ -31,5 +31,9 @@ export const routes: Routes = [
   {
     path: 'favorites',
     component: FavoritesComponent,
+  },
+  {
+    path: 'payment',
+    component: Payment,
   }
 ];
