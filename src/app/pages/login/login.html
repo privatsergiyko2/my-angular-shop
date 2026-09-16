@@ -1,0 +1,26 @@
+<form [formGroup]="loginForm">
+  <div>
+    <label for="">E-mail</label>
+    <input formControlName="email">
+    @if
+    (this.loginForm.get("email")?.hasError("required") && this.loginForm.get("email")?.touched) {
+      <p>Email is required</p>
+    }
+    @if (this.loginForm.get("email")?.hasError("email") && this.loginForm.get("email")?.touched) {
+      <p>Email is invalid</p>
+    }
+  </div>
+
+  <div>
+    <label for="">Password</label>
+    <input formControlName="password">
+    @if (this.loginForm.get("password")?.hasError("required") && this.loginForm.get("password")?.touched) {
+      <p>Password is required</p>
+    }
+    @if (this.loginForm.get("password")?.hasError("minlength") && this.loginForm.get("password")?.touched) {
+      <p>Password is too small</p>
+    }
+  </div>
+
+  <button (click)="login()">Login</button>
+</form>

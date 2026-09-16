@@ -1,0 +1,15 @@
+
+<p>Order successfully placed</p>
+<p>Order name: {{this.order.name}}</p>
+<p>Total: {{this.order.total}}</p>
+<div class="order-blocks">
+@for (item of order.items; track item.product.id) {
+  <div>
+    <p>{{item.product.title}}</p>
+    <p>Quantity: {{item.quantity}}</p>
+    <p>Price: {{item.product.price}}</p>
+  </div>
+}
+</div>
+
+<button (click)="goToProducts()">Back to main page</button>

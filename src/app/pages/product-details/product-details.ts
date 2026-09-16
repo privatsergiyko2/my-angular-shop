@@ -1,7 +1,8 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {Product} from '../../models/product';
 import {ProductsService} from '../../services/products';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-product-details',
@@ -11,25 +12,15 @@ import {ProductsService} from '../../services/products';
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })
-export class ProductDetails implements OnInit {
+export class ProductDetails  {
+  private route: ActivatedRoute = inject(ActivatedRoute)
   private _productService = inject(ProductsService);
 
-  id: string = '';
+  id: string = this.route.snapshot.paramMap.get('id') || '';
+
+  productSignal   = toSignal(
+    this._productService.getProductById(Number(this.id))
+  )
+
   product: Product | null = null;
-
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id') || '';
-
-    console.log('ID:', this.id);
-
-    this._productService.getProductById(Number(this.id)).subscribe(response => {
-      console.log('API RESPONSE:', response);
-
-      this.product = response;
-
-      console.log('PRODUCT AFTER ASSIGN:', this.product);
-    });
-  }
 }

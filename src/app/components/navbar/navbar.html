@@ -6,3 +6,12 @@
 
 
 <button [routerLink]="'/favorites'">Open favorites</button>
+
+
+
+@if (userGet | async) {
+  <button (click)="logout()">Logout</button>
+} @else {
+  <button (click)="login()">Login</button>
+  <button (click)="register()">Register</button>
+}

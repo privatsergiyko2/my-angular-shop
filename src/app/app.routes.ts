@@ -5,7 +5,11 @@ import {Products} from './pages/products/products';
 import {AddPage} from './pages/add-page/add-page';
 import {EditProduct} from './pages/edit-product/edit-product';
 import {FavoritesComponent} from './pages/favorites/favorites';
-import {Payment} from './payment/payment';
+import {Payment} from './pages/payment/payment';
+import {OrderSuccess} from './pages/order-success/order-success';
+import {Login} from './pages/login/login';
+import {Register} from './pages/register/register';
+import {authGuard} from './guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -35,5 +39,18 @@ export const routes: Routes = [
   {
     path: 'payment',
     component: Payment,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'order-success',
+    component: OrderSuccess,
+  },
+  {
+    path: 'login',
+    component: Login,
+  },
+  {
+    path: 'register',
+    component: Register,
   }
 ];

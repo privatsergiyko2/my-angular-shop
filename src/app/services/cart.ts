@@ -43,9 +43,6 @@ export class CartService {
     console.log(this.cart);
   }
 
-
-
-
   removeProduct(id: number) {
     this.cart = this.cart.filter(product => product.product.id !== id)
     this.saveCart();

@@ -1,0 +1,85 @@
+<form [formGroup]="paymentForm" (ngSubmit)="pay()">
+
+  <label>Name</label>
+  <input formControlName="name">
+
+  <label>Email</label>
+  <input
+    type="email"
+    formControlName="email"
+  >
+
+  @if (elementsOptions.clientSecret) {
+
+    <ngx-stripe-payment
+      [stripe]="stripe"
+      [elementsOptions]="elementsOptions"
+      [options]="paymentElementOptions"
+    />
+
+  }
+
+  <button type="submit">
+    Pay
+  </button>
+
+</form>
+<!--<form [formGroup]="paymentForm">-->
+<!--  <h2>Payment</h2>-->
+
+<!--  <div>-->
+<!--    <label for="name">Name</label>-->
+<!--    <input  formControlName="name"  id="name" type="text" placeholder="Enter your name">-->
+<!--    @if (paymentForm.get("name")?.invalid && paymentForm.get("name")?.touched) {-->
+<!--      <p>Name is required</p>-->
+<!--    }-->
+<!--  </div>-->
+
+<!--  <div>-->
+<!--    <label for="email">Email</label>-->
+<!--    <input formControlName="email" id="email" type="email" placeholder="Enter your email">-->
+<!--    @if (paymentForm.get("email")?.errors?.["email"] && paymentForm.get("email")?.touched) {-->
+<!--      <p>Invalid email</p>-->
+<!--    }-->
+<!--    @if (paymentForm.get("email")?.errors?.["required"] && paymentForm.get("email")?.touched) {-->
+<!--      <p>Email is required</p>-->
+<!--    }-->
+<!--  </div>-->
+
+<!--  <div>-->
+<!--    <label for="cardNumber">Card Number</label>-->
+<!--    <input formControlName="cardNumber" id="cardNumber" type="text" placeholder="1234 5678 9012 3456">-->
+<!--    @if (paymentForm.get("cardNumber")?.errors?.["minlength"] && paymentForm.get("cardNumber")?.touched) {-->
+<!--      <p>Card number is too short</p>-->
+<!--    }-->
+<!--    @if (paymentForm.get("cardNumber")?.errors?.["required"] && paymentForm.get("cardNumber")?.touched) {-->
+<!--      <p>Card number is required</p>-->
+<!--    }-->
+<!--  </div>-->
+
+<!--  <div>-->
+<!--    <label for="expiry">Expiry Date</label>-->
+<!--    <input formControlName="expiry" id="expiry" type="text" placeholder="MM/YY">-->
+<!--    @if (paymentForm.get("expiry")?.errors?.["pattern"] && paymentForm.get("expiry")?.touched) {-->
+<!--      <p>Expiry is not correct</p>-->
+<!--    }-->
+<!--    @if (paymentForm.get("expiry")?.errors?.["required"] && paymentForm.get("expiry")?.touched) {-->
+<!--      <p>Expiry is required</p>-->
+<!--    }-->
+<!--  </div>-->
+
+<!--  <div>-->
+<!--    <label for="cvv">CVV</label>-->
+<!--    <input  formControlName="cvv" id="cvv" type="text" placeholder="123">-->
+<!--    @if (paymentForm.get("cvv")?.errors?.["minlength"] && paymentForm.get("cvv")?.touched) {-->
+<!--      <p>cvv is too small</p>-->
+<!--    }-->
+<!--    @if (paymentForm.get("cvv")?.errors?.["required"] && paymentForm.get("cvv")?.touched) {-->
+<!--      <p>Cvv is required</p>-->
+<!--    }-->
+<!--  </div>-->
+
+<!--  <p>Total price: {{ _cartservice.getTotalPrice() }}</p>-->
+
+<!--  <button type="button" (click)="pay()">Pay Now</button>-->
+<!--</form>-->
