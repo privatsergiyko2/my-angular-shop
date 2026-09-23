@@ -8,6 +8,7 @@ import {ProductsService} from '../../services/products';
 import {RouterLink} from '@angular/router';
 import {Product} from '../../models/product';
 import {Auth} from '../../services/auth';
+import { catchError, take, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -48,38 +49,44 @@ export class Products implements OnInit {
 
 
   constructor() {
-    this._productsService.getProducts().subscribe(
-      response => {
-        this.products = response.products;
-        this.filteredProducts = response.products;
-        this.filterProducts();
-        console.log('filtered:', this.filteredProducts);
-        this.isLoading = false;
-        this.cdr.detectChanges();
-        console.log('loading:', this.isLoading);
-        console.log('products length:', this.filteredProducts.length);
-      },
-      error => {
-        this.isError = true;
-        this.isLoading = false;
-      }
-    );
+    this._productsService
+      .getProducts()
+      .pipe(
+        take(1),
+        tap((products) => {
+          this.products = products;
+          this.filteredProducts = products;
+          this.filterProducts();
+          console.log('filtered:', this.filteredProducts);
+          this.isLoading = false;
+          this.cdr.detectChanges();
+          console.log('loading:', this.isLoading);
+          console.log('products length:', this.filteredProducts.length);
+        }),
+      )
+      .subscribe();
   }
 
 
   retry() {
     this.isLoading = true
-    this._productsService.getProducts().subscribe(response => {
-        this.products = response.products;
-        this.filteredProducts = response.products;
-        this.isError = false;
-        this.isLoading = false;
-      },
-      error => {
-        this.isError = true;
-        this.isLoading = false
-      })
-
+    this._productsService
+      .getProducts()
+      .pipe(
+        take(1),
+        tap((products) => {
+          this.products = products;
+          this.filteredProducts = products;
+          this.isError = false;
+          this.isLoading = false;
+        }),
+        catchError((error) => {
+          this.isError = true;
+          this.isLoading = false;
+          return throwError(() => error);
+        }),
+      )
+      .subscribe();
   }
 
 

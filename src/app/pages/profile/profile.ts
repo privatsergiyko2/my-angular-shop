@@ -6,10 +6,7 @@ import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [
-    ReactiveFormsModule,
-    RouterLink
-  ],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
@@ -19,41 +16,41 @@ export class Profile {
   newUser = new FormGroup({
     name: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
-  })
+  });
 
-  password = new FormGroup({
-    currentPassword: new FormControl('', [Validators.required]),
-    newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    confirmPassword: new FormControl('', [Validators.required,Validators.minLength(8)]),
-  }, this.passwordMatchValidator)
+  password = new FormGroup(
+    {
+      currentPassword: new FormControl('', [Validators.required]),
+      newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    },
+    this.passwordMatchValidator,
+  );
 
-
-
+  passwordError = '';
   user = JSON.parse(localStorage.getItem('user')!);
 
   constructor() {
     this.newUser.patchValue({
       name: this.user.name,
       email: this.user.email,
-    })
+    });
   }
 
   passwordMatchValidator(form: AbstractControl) {
     const newPassword = form.get('newPassword');
     const confirmPassword = form.get('confirmPassword');
-    if(newPassword?.value=== confirmPassword?.value) {
+    if (newPassword?.value === confirmPassword?.value) {
       return null;
     } else {
       return { passwordMismatch: true };
     }
   }
 
-  passwordError = '';
-
-  savePassword () {
-    if(this.password.invalid) {
+  savePassword() {
+    if (this.password.invalid) {
       this.password.markAllAsTouched();
-      return
+      return;
     }
     if (this.password.get('currentPassword')?.value !== this.user.password) {
       this.passwordError = 'Current password is incorrect';
@@ -63,22 +60,20 @@ export class Profile {
     localStorage.setItem('user', JSON.stringify(this.user));
   }
 
-
-
-  logout () {
+  logout() {
     this._auth.logout();
     this.router.navigate(['/login']);
   }
 
   save() {
-    if(this.newUser.invalid) {
-      this.newUser.markAllAsTouched()
-      return
+    if (this.newUser.invalid) {
+      this.newUser.markAllAsTouched();
+      return;
     }
     this.user = {
-     ...this.user,
+      ...this.user,
       ...this.newUser.value,
-    }
+    };
     localStorage.setItem('user', JSON.stringify(this.user));
   }
 }
