@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {NgForOf} from '@angular/common';
 import {ProductComponent} from '../../components/product/product';
 import {CartService} from '../../services/cart';
@@ -7,6 +7,7 @@ import {FormControl, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ProductsService} from '../../services/products';
 import {RouterLink} from '@angular/router';
 import {Product} from '../../models/product';
+import {Auth} from '../../services/auth';
 
 @Component({
   selector: 'app-products',
@@ -24,7 +25,7 @@ export class Products implements OnInit {
   searchInputControl = new FormControl('', [
     Validators.minLength(3)
   ]);
-
+  private cdr = inject(ChangeDetectorRef);
   public cartService = inject(CartService);
   private _productsService = inject(ProductsService);
 
@@ -38,6 +39,8 @@ export class Products implements OnInit {
   products: Product[] = [];
   filteredProducts: Product[] = [];
 
+  _auth = inject(Auth);
+  isLoggedIn = this._auth.userSubject.value;
   selectedCategory = notSelectedFilter;
 
   isError = false;
@@ -50,36 +53,34 @@ export class Products implements OnInit {
         this.products = response.products;
         this.filteredProducts = response.products;
         this.filterProducts();
-
+        console.log('filtered:', this.filteredProducts);
         this.isLoading = false;
+        this.cdr.detectChanges();
+        console.log('loading:', this.isLoading);
+        console.log('products length:', this.filteredProducts.length);
       },
       error => {
         this.isError = true;
         this.isLoading = false;
       }
     );
-    this._productsService.getProducts$().subscribe(products => {
-      this.products = products;
-      this.filterProducts();
-    });
   }
 
 
   retry() {
     this.isLoading = true
     this._productsService.getProducts().subscribe(response => {
-      this.products = response.products;
-      this.filteredProducts = response.products;
-      this.isError = false;
-      this.isLoading = false;
-    },
+        this.products = response.products;
+        this.filteredProducts = response.products;
+        this.isError = false;
+        this.isLoading = false;
+      },
       error => {
         this.isError = true;
         this.isLoading = false
       })
 
   }
-
 
 
   ngOnInit(): void {
@@ -105,29 +106,11 @@ export class Products implements OnInit {
     });
   }
 
-  // filterProducts() {
-  //   const searchValue =
-  //     this.searchInputControl.value?.toLowerCase() || '';
-  //
-  //   this.filteredProducts = this.products.filter(product => {
-  //     const productTitle = product.title.toLowerCase();
-  //
-  //     if (this.selectedCategory === notSelectedFilter) {
-  //       return productTitle.includes(searchValue);
-  //     }
-  //
-  //     return product.category === this.selectedCategory &&
-  //       productTitle.includes(searchValue);
-  //   });
-  // }
 
   showCategory(category: string) {
     this.selectedCategory = category;
     this.filterProducts();
   }
-
-
-
 
 
   protected removeFromProduct(item: Product) {

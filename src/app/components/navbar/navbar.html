@@ -1,17 +1,50 @@
-<p>Cart: {{ cartService.cart.length }}</p>
 
-@if ((currentUrl | async) !== '/cart') {
-  <button [routerLink]="'/cart'">Open Cart</button>
-}
-
-
-<button [routerLink]="'/favorites'">Open favorites</button>
+<!--<p>Cart: {{ cartService.cart.length }}</p>-->
+<!--<nav>-->
+<!--@if ((currentUrl | async) !== '/cart') {-->
+<!--  <button [routerLink]="'/cart'">Open Cart</button>-->
+<!--}-->
 
 
+<!--<button [routerLink]="'/favorites'">Open favorites</button>-->
 
-@if (userGet | async) {
-  <button (click)="logout()">Logout</button>
-} @else {
-  <button (click)="login()">Login</button>
-  <button (click)="register()">Register</button>
-}
+<!--<button routerLink="/orders">My orders</button>-->
+
+<!--<button routerLink="/profile">Profile</button>-->
+
+<!--@if (userGet | async) {-->
+<!--  <button (click)="logout()">Logout</button>-->
+<!--} @else {-->
+<!--  <button (click)="login()">Login</button>-->
+<!--  <button (click)="register()" class="primary">Register</button>-->
+<!--}-->
+<!--</nav>-->
+
+
+
+<nav>
+
+
+  @if (userGet | async) {
+
+    @if ((currentUrl | async) !== '/cart') {
+      <button [routerLink]="'/cart'" class="cart-button">Open Cart   🛒 {{ cartService.cart.length }}</button>
+
+    }
+
+    <button [routerLink]="'/favorites'">Open favorites</button>
+
+    <button routerLink="/orders">My orders</button>
+
+    <button routerLink="/profile">Profile</button>
+
+    <button class="logout" (click)="logout()">Logout</button>
+
+  } @else {
+
+    <button (click)="login()">Login</button>
+
+    <button (click)="register()">Register</button>
+
+  }
+</nav>

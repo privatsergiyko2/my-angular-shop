@@ -1,5 +1,5 @@
 import {ChangeDetectorRef,Component, inject} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Product} from '../../models/product';
 import {ProductsService} from '../../services/products';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -8,7 +8,8 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 @Component({
   selector: 'app-edit-product',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './edit-product.html',
   styleUrl: './edit-product.scss',
@@ -48,7 +49,6 @@ export class EditProduct {
       })
       this._cdr.detectChanges();
     });
-    console.log(id);
   }
 
   save () {
@@ -59,13 +59,11 @@ export class EditProduct {
     const id = Number(this._route.snapshot.paramMap.get('id'))
     const data = this.editForm.value;
     this.isSaving = true;
-    console.log(data);
     this._productService.updateProduct(id, data).subscribe(response => {
       this.isSaved = true;
       this._productService.updateProductInList(response);
       this._router.navigate(['/']);
       this.isSaving = false;
-      console.log(response);
     },
       error => {
       this.saveErrorMessage = 'Не вдалося оновити товар. Спробуйте ще раз.';

@@ -5,12 +5,14 @@ import {Product} from '../../models/product';
 import {HttpClient} from '@angular/common/http';
 import {PaymentResponse} from '../../payment-response';
 import {Router} from '@angular/router';
+import {RouterLink} from '@angular/router';
 
 
 @Component({
   selector: 'app-cart',
   imports: [
-    ProductComponent
+    ProductComponent,
+    RouterLink
   ],
   templateUrl: './cart.html',
   styleUrl: './cart.scss',

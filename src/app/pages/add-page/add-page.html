@@ -1,26 +1,33 @@
-<button routerLink="/">Return</button>
-<form [formGroup]="myForm" (ngSubmit)="onSubmit()">
-  <label for="name">Name:</label>
-  <input type="text" id="name" formControlName="title">
-
-<!--  <label for="id">Id:</label>-->
-<!--  <input type="number" id="id" formControlName="id">-->
-
-  <label for="price">Price:</label>
-  <input type="number" id="price" formControlName="price">
-
-  <label for="category">category:</label>
-  <input type="text" id="category" formControlName="category">
-
-  <label for="imageUrl">imageUrl:</label>
-  <input type="text" id="imageUrl" formControlName="thumbnail">
-
-  <label for="rating">rating:</label>
-  <input type="number" id="rating" formControlName="rating">
-
-  <label for="description">description:</label>
-  <input type="text" id="description" formControlName="description">
-  <button type="submit" [disabled]="myForm.invalid || isLoading">Submit</button>
+<form class="add-form" [formGroup]="myForm" (ngSubmit)="onSubmit()">
+  <h1>Add Product</h1>
+  <div class="form-group">
+    <label for="name">Name:</label>
+    <input type="text" id="name" formControlName="title">
+  </div>
+  <div class="form-group">
+    <label for="price">Price:</label>
+    <input type="number" id="price" formControlName="price">
+  </div>
+  <div class="form-group">
+    <label for="category">Category:</label>
+    <input type="text" id="category" formControlName="category">
+  </div>
+  <div class="form-group">
+    <label for="imageUrl">ImageUrl:</label>
+    <input type="text" id="imageUrl" formControlName="thumbnail">
+  </div>
+  <div class="form-group">
+    <label for="rating">Rating:</label>
+    <input type="number" id="rating" formControlName="rating">
+  </div>
+  <div class="form-group">
+    <label for="description">description:</label>
+    <input type="text" id="description" formControlName="description">
+  </div>
+  <div class="add-form-buttons">
+    <button class="add-form-submit" type="submit" [disabled]="myForm.invalid || isLoading">Submit</button>
+    <button class="add-form-return" routerLink="/">Return</button>
+  </div>
   @if (isLoading) {
     <p>тест</p>
   }

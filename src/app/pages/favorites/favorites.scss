@@ -1,0 +1,43 @@
+.favorites-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.favorites-title {
+ margin-top: 20px;
+ justify-self: center;
+}
+
+
+.favorites-empty {
+  text-align: center;
+  color: #64748b;
+  font-size: 16px;
+  margin-top: 40px;
+}
+
+.favorites-back-button {
+  display: block;
+  margin: 0 auto;
+  padding: 8px 16px;
+}
+
+.favorites-back-button {
+  background-color: var(--surface);
+  color: var(--text);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0 auto;
+}
+
+.favorites-back-button:hover {
+  background-color: #f1f5f9;
+  transform: translateY(-1px);
+}

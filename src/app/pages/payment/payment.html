@@ -1,13 +1,23 @@
-<form [formGroup]="paymentForm" (ngSubmit)="pay()">
+<form class="payment-form" [formGroup]="paymentForm" (ngSubmit)="pay()">
 
   <label>Name</label>
   <input formControlName="name">
+  @if (paymentForm.get("name")?.hasError("required") && paymentForm.get("name")?.touched) {
+    <p class="payment-error">Name is required</p>
+  }
 
   <label>Email</label>
   <input
     type="email"
     formControlName="email"
   >
+  @if (paymentForm.get("email")?.hasError("required") && paymentForm.get("email")?.touched) {
+    <p class="payment-error">Email is required</p>
+  }
+
+  @if (paymentForm.get("email")?.hasError("email") && paymentForm.get("email")?.touched) {
+    <p class="payment-error">Email is invalid</p>
+  }
 
   @if (elementsOptions.clientSecret) {
 

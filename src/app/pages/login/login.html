@@ -1,26 +1,31 @@
-<form [formGroup]="loginForm">
-  <div>
+<form class="login-form" [formGroup]="loginForm">
+  <h1 class="login-title">Login</h1>
+  <div class="login-group">
     <label for="">E-mail</label>
-    <input formControlName="email">
+    <input  placeholder="Enter your email" formControlName="email">
     @if
     (this.loginForm.get("email")?.hasError("required") && this.loginForm.get("email")?.touched) {
-      <p>Email is required</p>
+      <p  class="login-error">Email is required</p>
     }
     @if (this.loginForm.get("email")?.hasError("email") && this.loginForm.get("email")?.touched) {
-      <p>Email is invalid</p>
+      <p  class="login-error">Email is invalid</p>
     }
   </div>
 
-  <div>
+  <div class="login-group">
     <label for="">Password</label>
-    <input formControlName="password">
+    <input  placeholder="Enter your password" formControlName="password">
     @if (this.loginForm.get("password")?.hasError("required") && this.loginForm.get("password")?.touched) {
-      <p>Password is required</p>
+      <p  class="login-error">Password is required</p>
     }
     @if (this.loginForm.get("password")?.hasError("minlength") && this.loginForm.get("password")?.touched) {
-      <p>Password is too small</p>
+      <p  class="login-error">Password is too small</p>
     }
   </div>
 
-  <button (click)="login()">Login</button>
+  <button class="login-button"  (click)="login()">Login</button>
+  <div class="login-register">
+    <span>Dont have an account?</span>
+    <a routerLink="/register" href="">Register</a>
+  </div>
 </form>

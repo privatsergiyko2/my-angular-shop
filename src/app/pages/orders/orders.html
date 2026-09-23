@@ -1,0 +1,57 @@
+<div class="orders-container">
+
+  <h1 class="orders-title">My orders</h1>
+
+  <button class="orders-back" routerLink="/">
+    Back to products
+  </button>
+
+  @if (orders.length > 0) {
+    <div class="orders-grid">
+    @for (order of orders; track order.id) {
+
+      <div class="order-card">
+
+
+        <p class="order-info">Order ID: {{ order.id }}</p>
+
+        <p class="order-info">
+          Order date: {{ order.id | date:'medium' }}
+        </p>
+
+        <p class="order-info">
+          Customer: {{ order.name }}
+        </p>
+
+        <p class="order-total">
+          Total: {{ order.total | currency }}
+        </p>
+
+        <button class="order-details-button" (click)="viewDetails(order)">
+          View details
+        </button>
+
+        @for (item of order.items; track item) {
+
+          <p class="order-product">
+            {{ item.product.title }}
+            - Quantity: {{ item.quantity }}
+            - {{ item.product.price | currency }}
+          </p>
+
+        }
+
+      </div>
+
+    }
+    </div>
+  } @else {
+
+    <p class="orders-empty">No orders yet</p>
+
+  }
+
+</div>
+
+
+

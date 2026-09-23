@@ -1,29 +1,36 @@
+<div class="products-toolbar">
+<div class="search-wrapper">
 <input type="text" class="form-control" placeholder="Search products..." [formControl]="searchInputControl">
-
-<button routerLink="/add-page">to Add Page</button>
-
-@if (searchInputControl.hasError('minlength')) {
-
-  <div class="text-danger">Введи більше 3-х символів</div>
+  @if (searchInputControl.hasError('minlength')) {
+      <div class="text-danger">Введи більше 3-х символів</div>
 }
-
-<!-- тут кнопки категорій -->
-<div class="mb-4">
-
-  @for (filterCategory of filterCategories; track $index) {
-    <button [class]="selectedCategory === filterCategory ? 'btn-primary' : 'btn btn-secondary'" class="btn"
-            (click)="showCategory(filterCategory)">{{ filterCategory }}
-    </button>
+</div>
+  @if (isLoggedIn) {
+    <button routerLink="/add-page">to Add Page</button>
   }
 </div>
 
+
+
+<div class="mb-4 categories">
+
+  @for (filterCategory of filterCategories; track $index) {
+    <button
+      class="category-button"
+      [class.active]="selectedCategory === filterCategory"
+      (click)="showCategory(filterCategory)"
+    >
+      {{ filterCategory }}
+    </button>
+  }
+</div>
 <div class="container">
-  <div class="row">
-    <div class="col-md-6" *ngFor="let product of filteredProducts">
+  <div class="products-grid">
+    <div  *ngFor="let product of filteredProducts">
       <app-product [showAddToCard]="true" [product]="product" (addToCart)="cartService.addToCart($event)" (remove)="removeFromProduct($event)"></app-product>
     </div>
     @if (filteredProducts.length === 0 && !isError && !isLoading) {
-      <div>Товарів не знайдено</div>
+      <div class="empty-products">Товарів не знайдено</div>
     }
   </div>
   @if (isError) {
@@ -31,6 +38,8 @@
     <button (click)="retry()">Спробувати ще раз</button>
   }
 </div>
+
+
 
 
 

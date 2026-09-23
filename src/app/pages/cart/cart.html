@@ -1,11 +1,21 @@
-@for(cartItem of cartService.cart; track $index) {
-  <app-product [showAddToCard]="false" [product]="cartItem.product" (remove)="removeFromCart($event)"></app-product>
-  <p>Quantity: {{ cartItem.quantity }}</p>
-  <p>Subtotal {{cartItem.product.price * cartItem.quantity}}</p>
-  <button (click)="cartService.increaseQuantity(cartItem.product.id)">+</button>
-  <button (click)="cartService.decreaseQuantity(cartItem.product.id)">-</button>
-} @empty {
-  Card is empty
-}
-<p>Total: {{ cartService.getTotalPrice() }}</p>
-<button (click)="pay()">Pay</button>
+<div class="cart-container">
+  <h1 class="cart-title">Your Cart</h1>
+  @for (cartItem of cartService.cart; track $index) {
+    <div class="cart-item">
+      <app-product [showAddToCard]="false" [product]="cartItem.product" (remove)="removeFromCart($event)"></app-product>
+      <p class="cart-subtotal">Subtotal {{ cartItem.product.price * cartItem.quantity }}</p>
+      <div class="quantity-controls">
+        <p>Quantity: {{ cartItem.quantity }}</p>
+        <button (click)="cartService.decreaseQuantity(cartItem.product.id)">-</button>
+        <button (click)="cartService.increaseQuantity(cartItem.product.id)">+</button>
+      </div>
+    </div>
+  } @empty {
+    <p class="cart-empty">Cart is empty</p>
+  }
+  <p class="cart-total">Total: {{ cartService.getTotalPrice() }}</p>
+  <button class="cart-pay-button" (click)="pay()">Pay</button>
+  <button class="cart-back-button" routerLink="/">
+    Back to products
+  </button>
+</div>

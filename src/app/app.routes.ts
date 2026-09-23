@@ -10,6 +10,9 @@ import {OrderSuccess} from './pages/order-success/order-success';
 import {Login} from './pages/login/login';
 import {Register} from './pages/register/register';
 import {authGuard} from './guards/auth-guard';
+import {OrdersPage} from './pages/orders/orders';
+import {OrderDetails} from './pages/order-details/order-details';
+import {Profile} from './pages/profile/profile';
 
 export const routes: Routes = [
   {
@@ -52,5 +55,18 @@ export const routes: Routes = [
   {
     path: 'register',
     component: Register,
+  },
+  {
+    path: 'orders',
+    component: OrdersPage,
+  },
+  {
+    path: 'orders/:id',
+    component: OrderDetails
+  },
+  {
+    path: 'profile',
+    component: Profile,
+    canActivate: [authGuard],
   }
 ];

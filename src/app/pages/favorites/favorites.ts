@@ -2,12 +2,14 @@ import {Component, inject, OnInit} from '@angular/core';
 import {Favorites} from '../../services/favorites';
 import {Product} from '../../models/product';
 import {ProductComponent} from '../../components/product/product';
+import {RouterLink} from '@angular/router';
 
 
 @Component({
   selector: 'app-favorites',
   imports: [
-    ProductComponent
+    ProductComponent,
+    RouterLink
   ],
   templateUrl: './favorites.html',
   styleUrl: './favorites.scss',

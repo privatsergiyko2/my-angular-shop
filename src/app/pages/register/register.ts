@@ -4,6 +4,8 @@ import {Validators} from '@angular/forms';
 import {minLength} from '@angular/forms/signals';
 import { AbstractControl } from '@angular/forms';
 import {Auth} from '../../services/auth';
+import {Router} from '@angular/router';
+
 
 
 @Component({
@@ -14,6 +16,7 @@ import {Auth} from '../../services/auth';
 })
 export class Register {
   _auth: Auth = inject(Auth);
+  router = inject(Router);
 
 
   registerForm = new FormGroup({
@@ -22,6 +25,7 @@ export class Register {
     password: new FormControl<string>('', [Validators.required, Validators.minLength(8)]),
     confirmPassword: new FormControl<string>('', [Validators.required, Validators.minLength(8)]),
   }, this.passwordMatchValidator);
+
   register() {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
@@ -31,6 +35,8 @@ export class Register {
     const { name, password, email } = this.registerForm.getRawValue();
 
     this._auth.register(name as string, password as string, email as string);
+
+    this.router.navigate(['/login']);
 
     console.log(this.registerForm.value);
   }

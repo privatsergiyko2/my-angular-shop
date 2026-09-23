@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+  margin: 0;
+
+}
+
+:root {
+  --radius: 12px;
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --accent: #2563eb;
+  --surface: #ffffff;
+  --border: #e5e7eb;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+body {
+  font-family: Inter, Arial, sans-serif;
+  background-color: #f8fafc;
+  color: #1f2937;
+}
+
+
+

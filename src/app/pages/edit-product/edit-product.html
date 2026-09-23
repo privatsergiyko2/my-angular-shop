@@ -1,43 +1,75 @@
 <p>Product exists: {{ !!product }}</p>
 
 @if (editForm) {
-  <form [formGroup]="editForm">
+  <form class="edit-form" [formGroup]="editForm">
 
-    <p>{{ product?.title }}</p>
+    <h1 class="edit-title">Edit Product</h1>
 
-    <input type="text" formControlName="title">
+    <div class="form-group">
+      <label for="title">Title:</label>
+      <input type="text" id="title" formControlName="title">
+    </div>
 
-    <input type="number" formControlName="price">
+    <div class="form-group">
+      <label for="price">Price:</label>
+      <input type="number" id="price" formControlName="price">
+    </div>
 
-    <textarea formControlName="description"></textarea>
+    <div class="form-group">
+      <label for="description">Description:</label>
+      <textarea id="description" formControlName="description"></textarea>
+    </div>
 
-    <input type="text" formControlName="category">
+    <div class="form-group">
+      <label for="category">Category:</label>
+      <input type="text" id="category" formControlName="category">
+    </div>
 
-    <input type="number" formControlName="rating">
+    <div class="form-group">
+      <label for="rating">Rating:</label>
+      <input type="number" id="rating" formControlName="rating">
+    </div>
 
-    <input type="text" formControlName="thumbnail">
+    <div class="form-group">
+      <label for="thumbnail">Thumbnail:</label>
+      <input type="text" id="thumbnail" formControlName="thumbnail">
+    </div>
 
     @if (editForm.get("title")?.invalid && editForm.get("title")?.touched) {
-      <p>Title is required</p>
+      <p class="edit-error">Title is required</p>
     }
 
     @if (editForm.get("price")?.errors?.["min"] && editForm.get("price")?.touched) {
-      <p>Price cannot be less than 0</p>
+      <p class="edit-error">Price cannot be less than 0</p>
     }
 
-    @if (editForm.get("price")?.errors?.['required'] && editForm.get("price")?.touched ) {
-      <p>Price is required</p>
+    @if (editForm.get("price")?.errors?.['required'] && editForm.get("price")?.touched) {
+      <p class="edit-error">Price is required</p>
     }
 
     @if (saveErrorMessage) {
-      <p>{{saveErrorMessage}}</p>
+      <p class="edit-error">{{ saveErrorMessage }}</p>
     }
 
+    <div class="edit-form-buttons">
+      <button
+        class="edit-save-button"
+        type="button"
+        [disabled]="isSaving"
+        (click)="save()"
+      >Save</button>
+      <button
+        class="edit-return-button"
+        routerLink="/"
+      >
+        Return
+      </button>
+    </div>
 
-    <button type="button" [disabled]="isSaving" (click)="save()">Save</button>
     @if (isSaved) {
-      <p>Товар успішно оновлено!</p>
+      <p class="edit-success">Товар успішно оновлено!</p>
     }
+
   </form>
 }
 

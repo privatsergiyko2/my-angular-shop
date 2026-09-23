@@ -2,6 +2,7 @@ import {Component, Input, Output, EventEmitter, InputSignal, input, inject} from
 import {Product} from '../../models/product';
 import {RouterLink} from '@angular/router';
 import {Favorites} from '../../services/favorites';
+import {Auth} from '../../services/auth';
 
 
 @Component({
@@ -14,7 +15,9 @@ import {Favorites} from '../../services/favorites';
 })
 export class ProductComponent {
   // showOrHideAddToCard: InputSignal<boolean> = input(true);
+  _auth = inject(Auth)
   private _favorite = inject(Favorites);
+  isLoggedIn = this._auth.userSubject.value;
   addToFavorites () {
     this._favorite.addToFavorites(this.product)
     console.log(this._favorite.favorites);

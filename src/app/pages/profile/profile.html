@@ -1,0 +1,86 @@
+<div class="profile-container">
+
+  <button class="profile-logout" (click)="logout()">Logout</button>
+
+  <form class="profile-form" [formGroup]="newUser" (ngSubmit)="save()">
+
+    <h2 class="profile-form-title">Personal information</h2>
+    <div>
+      <label for="">Name</label>
+      <input formControlName="name">
+
+      @if (this.newUser.get("name")?.touched &&
+      this.newUser.get("name")?.hasError("required")) {
+        <p  class="profile-error">Name is required</p>
+      }
+    </div>
+
+    <div>
+      <label for="">E-mail</label>
+      <input formControlName="email">
+
+      @if (this.newUser.get("email")?.hasError("required") && this.newUser.get("email")?.touched) {
+        <p  class="profile-error">Email is required</p>
+      }
+
+      @if (this.newUser.get("email")?.hasError("email") && this.newUser.get("email")?.touched) {
+        <p  class="profile-error">Email is invalid</p>
+      }
+    </div>
+
+    <button class="profile-save-button" type="submit">Save</button>
+  </form>
+
+  <form class="password-form" [formGroup]="password" (ngSubmit)="savePassword()">
+    <h2 class="profile-form-title">Change password</h2>
+    <div>
+      <label for="">Current Password</label>
+      <input formControlName="currentPassword">
+
+      @if (this.password.get("currentPassword")?.hasError("required") && this.password.get("currentPassword")?.touched) {
+        <p class="profile-error">Password is required</p>
+      }
+
+      @if (passwordError) {
+        <p class="profile-error">Current password is incorrect</p>
+      }
+    </div>
+
+    <div>
+      <label for="">New Password</label>
+      <input formControlName="newPassword">
+
+      @if (this.password.get("newPassword")?.hasError("required") && this.password.get("newPassword")?.touched) {
+        <p  class="profile-error">Password is required</p>
+      }
+
+      @if (this.password.get("newPassword")?.hasError("minlength") && this.password.get("newPassword")?.touched) {
+        <p  class="profile-error">Password is too small</p>
+      }
+    </div>
+
+    <div>
+      <label for="">Confirm Password</label>
+      <input formControlName="confirmPassword">
+
+      @if (this.password.get("confirmPassword")?.hasError("required") && this.password.get("confirmPassword")?.touched) {
+        <p  class="profile-error">Confirm password is required</p>
+      }
+
+      @if (this.password.get("confirmPassword")?.hasError("minlength") && this.password.get("confirmPassword")?.touched) {
+        <p  class="profile-error">Confirm password is too short</p>
+      }
+
+      @if (this.password.hasError("passwordMismatch") && this.password.get("confirmPassword")?.touched) {
+        <p  class="profile-error">Passwords do not match</p>
+      }
+    </div>
+
+    <button class="password-save-button" type="submit">Save password</button>
+  </form>
+
+  <button class="profile-back-button" routerLink="/">
+    Back to products
+  </button>
+
+</div>

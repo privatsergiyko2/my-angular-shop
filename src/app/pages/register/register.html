@@ -1,45 +1,46 @@
-<form [formGroup]="registerForm" (ngSubmit)="register()">
-  <div>
+<form class="register-form"  [formGroup]="registerForm" (ngSubmit)="register()">
+  <h1 class="register-title">Register</h1>
+  <div class="register-group">
   <label for="">Name</label>
   <input formControlName="name">
     @if (this.registerForm.get("name")?.touched &&
     this.registerForm.get("name")?.hasError("required")) {
-        <p>Name is required</p>
+        <p  class="register-error">Name is required</p>
     }
   </div>
-  <div>
+  <div class="register-group">
   <label for="">E-mail</label>
   <input formControlName="email">
     @if
     (this.registerForm.get("email")?.hasError("required") && this.registerForm.get("email")?.touched) {
-      <p>Email is required</p>
+      <p  class="register-error">Email is required</p>
     }
     @if (this.registerForm.get("email")?.hasError("email") && this.registerForm.get("email")?.touched) {
-      <p>Email is invalid</p>
+      <p  class="register-error">Email is invalid</p>
     }
   </div>
 
-  <div>
+  <div class="register-group">
   <label for="">Password</label>
-  <input formControlName="password">
+  <input type="password" formControlName="password">
     @if (this.registerForm.get("password")?.hasError("required") && this.registerForm.get("password")?.touched) {
-      <p>Password is required</p>
+      <p  class="register-error">Password is required</p>
     }
     @if (this.registerForm.get("password")?.hasError("minlength") && this.registerForm.get("password")?.touched) {
-      <p>Password is too small</p>
+      <p  class="register-error">Password is too small</p>
     }
   </div>
-  <div>
+  <div class="register-group">
   <label for="">Confirm Password</label>
-  <input formControlName="confirmPassword">
+  <input type="password" formControlName="confirmPassword">
     @if (this.registerForm.get("confirmPassword")?.hasError("required") && this.registerForm.get("confirmPassword")?.touched) {
-      <p>Confirm password is required<</p>
+      <p class="register-error">Confirm password is required</p>
     }
     @if (this.registerForm.get("confirmPassword")?.hasError("minlength") && this.registerForm.get("confirmPassword")?.touched) {
-      <p>Confirm password is too short</p>
+      <p  class="register-error">Confirm password is too short</p>
     }
     @if (this.registerForm.hasError("passwordMismatch") && this.registerForm.get("confirmPassword")?.touched) {
-      <p>Passwords do not match</p>
+      <p  class="register-error">Passwords do not match</p>
     }
   </div>
 

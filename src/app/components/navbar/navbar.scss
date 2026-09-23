@@ -1,0 +1,64 @@
+nav {
+  background-color: var(--surface);
+  padding: 16px 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+}
+
+nav button {
+  border: none;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  transition: background-color 0.2s ease;
+}
+
+nav button:hover {
+  background-color: #f1f5f9;
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+nav button:active {
+  transform: translateY(0);
+}
+
+nav button.primary {
+  background-color: var(--accent);
+  color: white;
+}
+
+nav button.logout {
+  color: #dc2626;
+}
+
+.logout:hover {
+  background-color: #fef2f2;
+}
+
+.cart-count {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 600;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 20px;
+}
+
+nav button.cart-button {
+  background-color: var(--accent);
+  color: white;
+  transition: all 0.2s ease;
+}
+
+nav button.cart-button:hover {
+  background-color: #1d4ed8;
+  color: white;
+}
+

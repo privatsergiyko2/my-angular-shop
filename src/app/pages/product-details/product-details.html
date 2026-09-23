@@ -1,17 +1,22 @@
-@let product =   productSignal();
+@let product = productSignal();
 <div class="container mt-4">
+  <div class="product-details-content">
+    <img class="product-details-image" src="{{product?.thumbnail}}">
+    <div class="product-details-info">
+      <h1>{{ product?.title }}</h1>
 
-  <h1>{{ product?.title }}</h1>
+      <p>{{ product?.description }}</p>
 
-  <p>{{ product?.description }}</p>
+      <p class="product-details-price">Price: ${{ product?.price }}</p>
 
-  <p>Price: ${{ product?.price }}</p>
+      <p class="product-details-category">Category: {{ product?.category }}</p>
 
-  <p>Category: {{ product?.category }}</p>
+      <p class="product-details-rating">⭐ {{ product?.rating }}</p>
 
-  <p>⭐ {{ product?.rating }}</p>
+    </div>
+  </div>
 
-  <button class="btn btn-secondary" routerLink="/">
+  <button class="product-details-back" routerLink="/">
     Back to products
   </button>
 </div>

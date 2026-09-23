@@ -1,4 +1,4 @@
-.order-success-container {
+.order-details-container {
   max-width: 600px;
   margin: 64px auto 0;
   background-color: var(--surface);
@@ -7,7 +7,7 @@
   box-shadow: var(--shadow);
 }
 
-.order-success-title {
+.order-details-title {
   color: var(--text);
   text-align: center;
   font-size: 32px;
@@ -15,22 +15,41 @@
   margin-bottom: 24px;
 }
 
-.order-success-info {
+.order-info {
   margin: 8px 0;
   color: #64748b;
   font-size: 14px;
   line-height: 1.5;
 }
 
-.order-success-product {
+
+.order-total {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 16px;
+}
+
+.order-products-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 28px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.order-product {
   padding: 12px 0;
+  margin: 0;
   border-bottom: 1px solid var(--border);
   color: #64748b;
   font-size: 14px;
   line-height: 1.5;
 }
 
-.order-success-back {
+.order-details-back {
   background-color: var(--surface);
   color: var(--text);
   border: 1px solid var(--border);
@@ -42,9 +61,8 @@
   margin: 24px auto 0;
 }
 
-.order-success-back:hover {
+.order-details-back:hover {
   background-color: #f1f5f9;
   transform: translateY(-1px);
 }
-
 

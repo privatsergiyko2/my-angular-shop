@@ -1,7 +1,13 @@
+<h1 class="favorites-title">Favorites</h1>
+<button class="favorites-back-button" routerLink="/">
+  Back to products
+</button>
+<div class="favorites-container">
 @for (favoriteProduct of favoritesProducts; track favoriteProduct.id) {
   <app-product [product]="favoriteProduct"></app-product>
 }
+</div>
 
 @if (favoritesProducts.length === 0) {
-  <p>Favorites is empty</p>
+  <p class="favorites-empty">Favorites is empty</p>
 }
