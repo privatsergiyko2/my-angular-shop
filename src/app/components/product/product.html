@@ -1,5 +1,13 @@
 <div class="product-card" style="width: 18rem;">
-  <img [src]="product.thumbnail" class="product-image" [alt]="product.title">
+  <div class="product-image-wrapper">
+    <img [src]="product.thumbnail" class="product-image" [alt]="product.title">
+
+    @if (isLoggedIn) {
+      <button type="button" class="favorite-btn" (click)="toggleFavorite()">
+        {{ isFavorite() ? '⭐️' : '✩' }}
+      </button>
+    }
+  </div>
   <div class="product-card-body">
     <h5 class="product-title">{{ product.title }}</h5>
 
@@ -11,16 +19,25 @@
       Price: {{ product.price }}
     </p>
 
-    <p class="product-rating">
-      ⭐ {{ product.rating }}
-    </p>
+    <!--    <p class="product-rating">-->
+    <!--      ⭐ {{ product.rating }}-->
+    <!--    </p>-->
+    <div class="product-rating">
+      @for (star of [1, 2, 3, 4, 5]; track star) {
+        <span>{{ isStarFilled(star) ? '★' : '☆' }}</span>
+      }
+      <span class="rating-value">({{ product.rating }})</span>
+    </div>
     <div class="products-actions">
       <button class="product-button product-button--primary" [routerLink]="['/products', product.id]">
         Details
       </button>
 
       @if (isLoggedIn) {
+        @if (isAdmin) {
         <button class="product-button product-button--secondary" [routerLink]="['/edit', product.id] ">Edit</button>
+        }
+
 
         @if (showAddToCard) {
           <button class="product-button product-button--primary" (click)="addToCart.emit(product)">
@@ -28,15 +45,9 @@
           </button>
         }
 
-        <button class="product-button product-button--secondary" (click)="addToFavorites()">
-          Add to Favorites
-        </button>
-
-        <button class="product-button product-button--danger" (click)="remove.emit(product)">Remove</button>
-
-        <button class="product-button product-button--secondary" (click)="removeFromFavorites(product.id)">Remove from
-          favorites
-        </button>
+        @if (isAdmin) {
+          <button class="product-button product-button--danger" (click)="remove.emit(product)">Remove</button>
+        }
       }
     </div>
   </div>

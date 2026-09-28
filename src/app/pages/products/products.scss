@@ -18,6 +18,11 @@
 
 }
 
+
+.category-button {
+  text-transform: capitalize;
+}
+
 .products-toolbar input:focus {
   outline: none;
   border-color: var(--accent);

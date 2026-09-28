@@ -59,7 +59,11 @@ export class ProductsService {
   }
 
   deleteProduct(id: number) {
-    return this._http.delete(`${apiUrl}/${environment.products}/${id}`);
+    return this._http.delete(`${apiUrl}/${environment.products}/${id}`).pipe(
+      tap((response) => {
+       this._productSubject.next( this._productSubject.value.filter((product) => product.id !== id))
+      })
+    )
   }
 
   updateProduct(id: number, data: Partial<Product>) {

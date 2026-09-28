@@ -1,0 +1,39 @@
+<div class="admin-panel">
+
+  <div class="admin-header">
+    <h1>Admin Panel</h1>
+    <button routerLink="/add-page">to Add Page</button>
+  </div>
+  <div class="admin-products">
+  @for (product of _products; track product) {
+
+      <div class="admin-product">
+
+    <span class="product-name">
+      {{ product.title }}
+    </span>
+
+        <span class="product-price">
+      {{ product.price }}
+    </span>
+
+        <div class="product-actions">
+          <button
+            class="product-button product-button--secondary"
+            [routerLink]="['/edit', product.id]"
+          >
+            Edit
+          </button>
+
+          <button
+            class="product-button product-button--danger"
+            (click)="removeProduct(product.id)"
+          >
+            Remove
+          </button>
+        </div>
+
+      </div>
+  }
+  </div>
+</div>

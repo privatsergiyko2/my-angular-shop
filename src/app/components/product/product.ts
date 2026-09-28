@@ -18,12 +18,32 @@ export class ProductComponent {
   _auth = inject(Auth)
   private _favorite = inject(Favorites);
   isLoggedIn = this._auth.userSubject.value;
-  addToFavorites () {
+  isAdmin = this._auth.isAdmin()
+
+  addToFavorites() {
     this._favorite.addToFavorites(this.product)
     console.log(this._favorite.favorites);
   }
 
-  removeFromFavorites (id: number) {
+  isFavorite(): boolean {
+    return this._favorite.favorites.some(item => item.id === this.product.id);
+  }
+
+
+  isStarFilled(star: number): boolean {
+    return star <= Math.round(this.product.rating);
+  }
+
+  toggleFavorite() {
+    if (this.isFavorite()) {
+      this._favorite.removeFromFavorite(this.product.id)
+    } else {
+      this._favorite.addToFavorites(this.product)
+    }
+  }
+
+
+  removeFromFavorites(id: number) {
     this._favorite.removeFromFavorite(id)
     console.log(this._favorite.favorites);
   }

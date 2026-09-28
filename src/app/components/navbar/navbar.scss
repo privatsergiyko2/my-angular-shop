@@ -1,64 +1,295 @@
+//nav {
+//  background-color: var(--surface);
+//  padding: 16px 24px;
+//  box-shadow: var(--shadow);
+//  display: flex;
+//  align-items: center;
+//  gap: 20px;
+//  justify-content: center;
+//}
+//
+//nav button {
+//  border: none;
+//  background: transparent;
+//  color: var(--text);
+//  cursor: pointer;
+//  padding: 10px 14px;
+//  border-radius: var(--radius);
+//  transition: background-color 0.2s ease;
+//}
+//
+//nav button:hover {
+//  background-color: #f1f5f9;
+//  color: var(--accent);
+//  transform: translateY(-1px);
+//}
+//
+//nav button:active {
+//  transform: translateY(0);
+//}
+//
+//nav button.primary {
+//  background-color: var(--accent);
+//  color: white;
+//}
+//
+//nav button.logout {
+//  color: #dc2626;
+//}
+//
+//.logout:hover {
+//  background-color: #fef2f2;
+//}
+//
+//.cart-count {
+//  color: var(--text);
+//  font-size: 14px;
+//  font-weight: 600;
+//  background-color: var(--surface);
+//  border: 1px solid var(--border);
+//  padding: 6px 10px;
+//  border-radius: 20px;
+//}
+//
+//nav button.cart-button {
+//  background-color: var(--accent);
+//  color: white;
+//  transition: all 0.2s ease;
+//}
+//
+//nav button.cart-button:hover {
+//  background-color: #1d4ed8;
+//  color: white;
+//}
+//
+//
+//
+//.logo {
+//  display: flex;
+//  align-items: center;
+//
+//  img {
+//    height: 36px; // або 40px, залежно від того, як краще виглядає
+//    width: auto;  // збереже пропорції зображення
+//    object-fit: contain;
+//  }
+//}
+
+
+
+
 nav {
-  background-color: var(--surface);
-  padding: 16px 24px;
-  box-shadow: var(--shadow);
-  display: flex;
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 0;
+
+
+  .navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  // Ліва та права частини
+  .navbar-left,
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .logo img {
+    height: 32px;
+    width: auto;
+    display: block;
+  }
+
+  // Стилі для іконок
+  .icon-link,
+  .profile-avatar {
+    font-size: 20px;
+    text-decoration: none;
+    color: #333333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+}
+
+  .navbar-left,
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+
+.navbar-right  {
+  gap: 16px;
+}
+
+.nav-link {
+  display: inline-flex;
   align-items: center;
-  gap: 20px;
-  justify-content: center;
-}
-
-nav button {
-  border: none;
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  padding: 10px 14px;
-  border-radius: var(--radius);
-  transition: background-color 0.2s ease;
-}
-
-nav button:hover {
-  background-color: #f1f5f9;
-  color: var(--accent);
-  transform: translateY(-1px);
-}
-
-nav button:active {
-  transform: translateY(0);
-}
-
-nav button.primary {
-  background-color: var(--accent);
-  color: white;
-}
-
-nav button.logout {
-  color: #dc2626;
-}
-
-.logout:hover {
-  background-color: #fef2f2;
-}
-
-.cart-count {
-  color: var(--text);
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
   font-size: 14px;
-  font-weight: 600;
-  background-color: var(--surface);
-  border: 1px solid var(--border);
-  padding: 6px 10px;
-  border-radius: 20px;
-}
-
-nav button.cart-button {
-  background-color: var(--accent);
-  color: white;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
   transition: all 0.2s ease;
+
+  .nav-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: #111827;
+    background-color: #f3f4f6;
+  }
+
+  &.active {
+    color: #0066ff;
+    background-color: #eff6ff;
+    font-weight: 600;
+
+    .nav-icon {
+      stroke: #0066ff;
+    }
+  }
 }
 
-nav button.cart-button:hover {
-  background-color: #1d4ed8;
-  color: white;
+
+
+
+
+nav {
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 0;
+
+  .navbar-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navbar-left,
+  .navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .logo img {
+    height: 32px;
+    width: auto;
+    display: block;
+  }
+
+  .nav-link {
+    text-decoration: none;
+    color: #374151;
+    font-weight: 500;
+    font-size: 15px;
+
+    &:hover {
+      color: #000000;
+    }
+  }
+
+  .icon-link,
+  .profile-avatar {
+    font-size: 20px;
+    text-decoration: none;
+    color: #374151;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+
+  button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+  }
+
+  .cart-button {
+    background-color: #2563eb;
+    color: white;
+
+    &:hover {
+      background-color: #1d4ed8;
+    }
+  }
 }
 
+
+.nav-orders-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  .orders-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    color: #111827;
+    background-color: #f3f4f6;
+  }
+
+
+  &.active {
+    color: #0066ff;
+    background-color: #eff6ff;
+    font-weight: 600;
+  }
+}

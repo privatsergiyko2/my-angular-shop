@@ -1,0 +1,53 @@
+.admin-panel {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 24px;
+}
+
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+  .admin-product {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+.product-name {
+  flex: 1;
+}
+
+.product-price {
+  font-weight: 600;
+  min-width: 80px;
+}
+
+.product-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-products {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-product {
+  transition: all 0.2s ease;
+}
+
+.admin-product:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+

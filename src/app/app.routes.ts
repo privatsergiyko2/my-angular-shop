@@ -9,10 +9,13 @@ import {Payment} from './pages/payment/payment';
 import {OrderSuccess} from './pages/order-success/order-success';
 import {Login} from './pages/login/login';
 import {Register} from './pages/register/register';
-import {authGuard} from './guards/auth-guard';
 import {OrdersPage} from './pages/orders/orders';
 import {OrderDetails} from './pages/order-details/order-details';
 import {Profile} from './pages/profile/profile';
+import {authGuard} from './guards/auth-guard';
+import {adminGuard} from './guards/admin-guard';
+import {Admin} from './pages/admin/admin';
+import {Reviews} from './pages/reviews/reviews';
 
 export const routes: Routes = [
   {
@@ -30,10 +33,12 @@ export const routes: Routes = [
   {
     path: 'add-page',
     component: AddPage,
+    canActivate: [adminGuard]
   },
   {
     path: 'edit/:id',
     component: EditProduct,
+    canActivate: [adminGuard]
   },
   {
     path: 'favorites',
@@ -68,5 +73,14 @@ export const routes: Routes = [
     path: 'profile',
     component: Profile,
     canActivate: [authGuard],
-  }
+  },
+  {
+    path: 'admin',
+    component: Admin,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'reviews',
+    component: Reviews,
+  },
 ];

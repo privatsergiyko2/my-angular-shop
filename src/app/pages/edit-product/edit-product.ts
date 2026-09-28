@@ -4,6 +4,7 @@ import { Product } from '../../models/product';
 import { ProductsService } from '../../services/products';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { catchError, take, tap, throwError } from 'rxjs';
+import {Auth} from '../../services/auth';
 
 @Component({
   selector: 'app-edit-product',
@@ -12,6 +13,8 @@ import { catchError, take, tap, throwError } from 'rxjs';
   styleUrl: './edit-product.scss',
 })
 export class EditProduct {
+  _auth = inject(Auth);
+  isAdmin = this._auth.isAdmin()
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _productService: ProductsService = inject(ProductsService);
   private _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);

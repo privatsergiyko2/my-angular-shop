@@ -42,6 +42,7 @@ export class Products implements OnInit {
 
   _auth = inject(Auth);
   isLoggedIn = this._auth.userSubject.value;
+  isAdmin = this._auth.isAdmin()
   selectedCategory = notSelectedFilter;
 
   isError = false;

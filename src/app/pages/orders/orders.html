@@ -1,57 +1,120 @@
 <div class="orders-container">
+  <div class="orders-header">
+    <div class="orders-title-group">
+      <h1 class="orders-title">My Orders</h1>
+      <p class="orders-subtitle">View and track all your orders</p>
+    </div>
 
-  <h1 class="orders-title">My orders</h1>
+    <div class="orders-sort">
+      <label for="sort">Sort by</label>
+      <select (change)="onSortChange($event)" id="sort" class="sort-select">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+      </select>
+    </div>
+  </div>
 
-  <button class="orders-back" routerLink="/">
-    Back to products
-  </button>
-
-  @if (orders.length > 0) {
+  @if (sortedOrders().length > 0) {
     <div class="orders-grid">
-    @for (order of orders; track order.id) {
+      @for (order of paginationOrders(); track order.id) {
+        <div class="order-card">
+          <div class="card-header">
+            <div class="header-main">
+              <h3 class="order-id">Order #{{ order.id }}</h3>
+              <span class="status-badge completed">Completed</span>
+            </div>
+            <p class="order-date">{{ order.id | date:'medium' }}</p>
+            <p class="order-customer">Customer: {{ order.name }}</p>
+          </div>
+          <div class="card-items">
+            @for (item of order.items; track item) {
+              <div class="item-row">
+                <div class="item-info">
+                  <img [src]="item.product.thumbnail || '/assets/beauty.png'"
+                       [alt]="item.product.title"
+                       class="item-img"/>
+                  <div class="item-details">
+                    <span class="item-title">{{ item.product.title }}</span>
+                    <span class="item-qty">Quantity: {{ item.quantity }}</span>
+                  </div>
+                </div>
+                <span class="item-price">{{ item.product.price | currency }}</span>
+              </div>
+            }
+          </div>
+          <div class="card-footer">
+            <div class="total-block">
+              <span class="total-label">Total</span>
+              <strong class="total-amount">{{ order.total | currency }}</strong>
+            </div>
 
-      <div class="order-card">
+            <button class="view-details-btn" (click)="viewDetails(order)">
+              View details &gt;
+            </button>
+          </div>
+        </div>
 
+      }
+    </div>
+    <div class="pagination">
+      @for (page of pages(); track page) {
+        <button (click)="changePage(page)" [class.active]="currentPage() === page">{{ page }}</button>
+      }
 
-        <p class="order-info">Order ID: {{ order.id }}</p>
-
-        <p class="order-info">
-          Order date: {{ order.id | date:'medium' }}
-        </p>
-
-        <p class="order-info">
-          Customer: {{ order.name }}
-        </p>
-
-        <p class="order-total">
-          Total: {{ order.total | currency }}
-        </p>
-
-        <button class="order-details-button" (click)="viewDetails(order)">
-          View details
-        </button>
-
-        @for (item of order.items; track item) {
-
-          <p class="order-product">
-            {{ item.product.title }}
-            - Quantity: {{ item.quantity }}
-            - {{ item.product.price | currency }}
-          </p>
-
-        }
-
-      </div>
-
-    }
     </div>
   } @else {
-
     <p class="orders-empty">No orders yet</p>
-
   }
 
 </div>
+
+
+<!--  @if (orders.length > 0) {-->
+<!--    <div class="orders-grid">-->
+<!--      @for (order of orders; track order.id) {-->
+
+<!--        <div class="order-card">-->
+
+
+<!--          <p class="order-info">Order ID: {{ order.id }}</p>-->
+
+<!--          <p class="order-info">-->
+<!--            Order date: {{ order.id | date:'medium' }}-->
+<!--          </p>-->
+
+<!--          <p class="order-info">-->
+<!--            Customer: {{ order.name }}-->
+<!--          </p>-->
+
+<!--          <p class="order-total">-->
+<!--            Total: {{ order.total | currency }}-->
+<!--          </p>-->
+
+<!--          <button class="order-details-button" (click)="viewDetails(order)">-->
+<!--            View details-->
+<!--          </button>-->
+
+<!--          @for (item of order.items; track item) {-->
+
+<!--            <p class="order-product">-->
+<!--              {{ item.product.title }}-->
+<!--              - Quantity: {{ item.quantity }}-->
+<!--              - {{ item.product.price | currency }}-->
+<!--            </p>-->
+
+<!--          }-->
+
+<!--        </div>-->
+
+<!--      }-->
+<!--    </div>-->
+<!--  } @else {-->
+
+<!--    <p class="orders-empty">No orders yet</p>-->
+
+<!--  }-->
+
+
 
 
 

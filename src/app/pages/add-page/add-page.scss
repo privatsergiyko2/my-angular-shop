@@ -91,3 +91,20 @@
   gap: 16px;
   justify-content: center;
 }
+
+.add-form-admin {
+  background-color: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-form-admin:hover {
+  background-color: #f1f5f9;
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}

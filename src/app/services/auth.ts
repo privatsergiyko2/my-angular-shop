@@ -10,9 +10,10 @@ export class Auth {
     name: string,
     password: string,
     email: string;
+    role: number;
   }[] = []
 
-  userSubject = new BehaviorSubject<string | null>(localStorage.getItem('user'));
+  userSubject:BehaviorSubject<string | null> = new BehaviorSubject<string | null>(localStorage.getItem('user'));
 
   constructor() {
    const saveUsers =  localStorage.getItem('users')
@@ -33,11 +34,23 @@ export class Auth {
     this.userSubject.next(null);
   }
 
+  isAdmin () {
+    const adminGet = localStorage.getItem('user')!;
+    const obj = JSON.parse(adminGet)
+
+    if (obj.role === 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   register(name: string, password: string, email: string) {
     const user = {
       name: name,
       password: password,
       email: email,
+      role: 2,
     }
 
     this.users.push(user);

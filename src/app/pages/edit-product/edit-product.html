@@ -62,6 +62,11 @@
       >
         Return
       </button>
+      @if (isAdmin) {
+        <button routerLink="/admin" class="edit-form-admin">
+          Back to Admin Panel
+        </button>
+      }
     </div>
 
     @if (isSaved) {

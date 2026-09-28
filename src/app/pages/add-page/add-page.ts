@@ -1,21 +1,25 @@
 import {Component, inject} from '@angular/core';
 import {ProductsService} from '../../services/products';
-import {RouterLink} from '@angular/router';
+import {RouterLink, RouterLinkActive} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ChangeDetectorRef} from '@angular/core';
 import {catchError, take, tap} from 'rxjs';
+import {Auth} from '../../services/auth';
 
 
 @Component({
   selector: 'app-add-page',
   imports: [
     RouterLink,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLinkActive
   ],
   templateUrl: './add-page.html',
   styleUrl: './add-page.scss',
 })
 export class AddPage {
+  _auth = inject(Auth);
+  isAdmin = this._auth.isAdmin()
   private _cdr = inject(ChangeDetectorRef)
   private fb: FormBuilder = inject(FormBuilder);
   private _productService: ProductsService = inject(ProductsService);

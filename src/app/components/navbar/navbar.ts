@@ -5,6 +5,7 @@ import {filter, map, take, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Auth} from '../../services/auth';
+import {Admin} from '../../pages/admin/admin';
 
 @Component({
   selector: 'app-navbar',
@@ -17,6 +18,7 @@ import {Auth} from '../../services/auth';
 })
 export class Navbar implements OnInit, OnDestroy {
   _auth = inject(Auth)
+  isAdmin = this._auth.isAdmin();
   private destroyRef: DestroyRef = inject(DestroyRef);
   private router: Router = inject(Router);
   userGet = this._auth.userSubject.asObservable();
