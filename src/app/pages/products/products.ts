@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
-import {NgForOf} from '@angular/common';
+import { AsyncPipe, NgForOf} from '@angular/common';
 import {ProductComponent} from '../../components/product/product';
 import {CartService} from '../../services/cart';
 import {notSelectedFilter} from '../../constants/products-constants';
@@ -12,42 +12,25 @@ import { catchError, take, tap, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-products',
-  imports: [
-    NgForOf,
-    ProductComponent,
-    ReactiveFormsModule,
-    RouterLink,
-  ],
+  imports: [NgForOf, ProductComponent, ReactiveFormsModule, RouterLink, AsyncPipe],
   templateUrl: './products.html',
   styleUrl: './products.scss',
 })
 export class Products implements OnInit {
-
-  searchInputControl = new FormControl('', [
-    Validators.minLength(3)
-  ]);
+  searchInputControl = new FormControl('', [Validators.minLength(3)]);
   private cdr = inject(ChangeDetectorRef);
   public cartService = inject(CartService);
   private _productsService = inject(ProductsService);
 
-  filterCategories = [
-    notSelectedFilter,
-    'beauty',
-    'fragrances',
-    'furniture',
-    'groceries'
-  ];
+  filterCategories = [notSelectedFilter, 'beauty', 'fragrances', 'furniture', 'groceries'];
   products: Product[] = [];
   filteredProducts: Product[] = [];
 
-  _auth = inject(Auth);
-  isLoggedIn = this._auth.userSubject.value;
-  isAdmin = this._auth.isAdmin()
+  auth: Auth = inject(Auth);
   selectedCategory = notSelectedFilter;
 
   isError = false;
   isLoading = true;
-
 
   constructor() {
     this._productsService
@@ -68,9 +51,8 @@ export class Products implements OnInit {
       .subscribe();
   }
 
-
   retry() {
-    this.isLoading = true
+    this.isLoading = true;
     this._productsService
       .getProducts()
       .pipe(
@@ -90,7 +72,6 @@ export class Products implements OnInit {
       .subscribe();
   }
 
-
   ngOnInit(): void {
     this.searchInputControl.valueChanges.subscribe(() => {
       if (this.searchInputControl.valid || !this.searchInputControl.value) {
@@ -100,38 +81,28 @@ export class Products implements OnInit {
   }
 
   filterProducts() {
-    console.log(this.products.find(product => product.id === 1));
-    const searchValue =
-      this.searchInputControl.value?.toLowerCase() || '';
-    this.filteredProducts = this.products.filter(product => {
+    console.log(this.products.find((product) => product.id === 1));
+    const searchValue = this.searchInputControl.value?.toLowerCase() || '';
+    this.filteredProducts = this.products.filter((product) => {
       const productTitle = product.title.toLowerCase();
 
       if (this.selectedCategory === notSelectedFilter) {
         return productTitle.includes(searchValue);
       }
-      return product.category === this.selectedCategory &&
-        productTitle.includes(searchValue);
+      return product.category === this.selectedCategory && productTitle.includes(searchValue);
     });
   }
-
 
   showCategory(category: string) {
     this.selectedCategory = category;
     this.filterProducts();
   }
 
-
   protected removeFromProduct(item: Product) {
-    this._productsService.deleteProduct(item.id).subscribe(response => {
+    this._productsService.deleteProduct(item.id).subscribe((response) => {
+      this.products = this.products.filter((product) => product.id !== item.id);
 
-      this.products = this.products.filter(
-        product => product.id !== item.id
-      );
-
-      this.filteredProducts = this.filteredProducts.filter(
-        product => product.id !== item.id
-      );
-
+      this.filteredProducts = this.filteredProducts.filter((product) => product.id !== item.id);
     });
   }
 }

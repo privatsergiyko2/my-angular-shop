@@ -5,22 +5,18 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {ChangeDetectorRef} from '@angular/core';
 import {catchError, take, tap} from 'rxjs';
 import {Auth} from '../../services/auth';
+import { AsyncPipe } from '@angular/common';
 
 
 @Component({
   selector: 'app-add-page',
-  imports: [
-    RouterLink,
-    ReactiveFormsModule,
-    RouterLinkActive
-  ],
+  imports: [RouterLink, ReactiveFormsModule, RouterLinkActive, AsyncPipe],
   templateUrl: './add-page.html',
   styleUrl: './add-page.scss',
 })
 export class AddPage {
-  _auth = inject(Auth);
-  isAdmin = this._auth.isAdmin()
-  private _cdr = inject(ChangeDetectorRef)
+  auth: Auth = inject(Auth);
+  private _cdr = inject(ChangeDetectorRef);
   private fb: FormBuilder = inject(FormBuilder);
   private _productService: ProductsService = inject(ProductsService);
 
@@ -33,29 +29,30 @@ export class AddPage {
     description: ['', Validators.required],
   });
 
-
   isLoading = false;
-
 
   onSubmit() {
     if (this.myForm.valid) {
       this.isLoading = true;
-      this._productService.addProductsToApi({
-        ...this.myForm.value
-      }).pipe(
-        take(1),
-        tap((response) => {
-          console.log(response);
-          this._productService.addProduct(response);
-          this.isLoading = false;
-          this._cdr.detectChanges();
-        }),
-        catchError((error) => {
-          console.log(error);
-          this.isLoading = false;
-          return error
+      this._productService
+        .addProductsToApi({
+          ...this.myForm.value,
         })
-      ).subscribe()
+        .pipe(
+          take(1),
+          tap((response) => {
+            console.log(response);
+            this._productService.addProduct(response);
+            this.isLoading = false;
+            this._cdr.detectChanges();
+          }),
+          catchError((error) => {
+            console.log(error);
+            this.isLoading = false;
+            return error;
+          }),
+        )
+        .subscribe();
     }
   }
 }

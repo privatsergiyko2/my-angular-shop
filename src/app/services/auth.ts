@@ -1,32 +1,35 @@
-import {inject, Injectable} from '@angular/core';
-import {Register} from '../pages/register/register';
-import { BehaviorSubject } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { Register } from '../pages/register/register';
+import { BehaviorSubject, map, Observable } from 'rxjs';
+import { IUser } from '../models/IUser';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Auth {
-  users: {
-    name: string,
-    password: string,
-    email: string;
-    role: number;
-  }[] = []
-
-  userSubject:BehaviorSubject<string | null> = new BehaviorSubject<string | null>(localStorage.getItem('user'));
+  users: IUser[] = [];
+  userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
+  isAdmin$: Observable<boolean> = this.userSubject.pipe(map((user: IUser | null) => user?.role === 1));
 
   constructor() {
-   const saveUsers =  localStorage.getItem('users')
-
-    if(saveUsers != null){
-    this.users = JSON.parse(saveUsers);
-    localStorage.setItem('users', JSON.stringify(this.users))
-    }
+    this.getAllRegisteredUsers();
+    this.getAuthenticatedUser();
   }
 
-  login(user: { name: string; password: string; email: string }) {
+  getAllRegisteredUsers() {
+    const savedUsers: string | null = localStorage.getItem('users');
+
+    this.users = JSON.parse(savedUsers ?? '[]') || [];
+  }
+
+  getAuthenticatedUser() {
+    const user: IUser | null = JSON.parse(localStorage.getItem('user')!);
+    this.userSubject.next(user);
+  }
+
+  login(user: IUser) {
     localStorage.setItem('user', JSON.stringify(user));
-    this.userSubject.next(JSON.stringify(user));
+    this.userSubject.next(user);
   }
 
   logout() {
@@ -34,26 +37,15 @@ export class Auth {
     this.userSubject.next(null);
   }
 
-  isAdmin () {
-    const adminGet = localStorage.getItem('user')!;
-    const obj = JSON.parse(adminGet)
-
-    if (obj.role === 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   register(name: string, password: string, email: string) {
-    const user = {
+    const user: IUser = {
       name: name,
       password: password,
       email: email,
-      role: 2,
-    }
+      role: 1,
+    };
 
     this.users.push(user);
-    localStorage.setItem('users', JSON.stringify(this.users))
+    localStorage.setItem('users', JSON.stringify(this.users));
   }
 }

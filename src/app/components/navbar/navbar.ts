@@ -9,23 +9,18 @@ import {Admin} from '../../pages/admin/admin';
 
 @Component({
   selector: 'app-navbar',
-  imports: [
-    RouterLink,
-    AsyncPipe
-  ],
+  imports: [RouterLink, AsyncPipe],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class Navbar implements OnInit, OnDestroy {
-  _auth = inject(Auth)
-  isAdmin = this._auth.isAdmin();
+  auth: Auth = inject(Auth);
   private destroyRef: DestroyRef = inject(DestroyRef);
   private router: Router = inject(Router);
-  userGet = this._auth.userSubject.asObservable();
 
   currentUrl = this.router.events.pipe(
     takeUntilDestroyed(this.destroyRef),
-    filter(event => event instanceof NavigationEnd),
+    filter((event) => event instanceof NavigationEnd),
     map(() => this.router.url),
   );
 
@@ -33,8 +28,8 @@ export class Navbar implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
-  logout () {
-    this._auth.logout();
+  logout() {
+    this.auth.logout();
     this.router.navigate(['/login']);
   }
 
@@ -42,12 +37,9 @@ export class Navbar implements OnInit, OnDestroy {
     this.router.navigate(['/register']);
   }
 
-  constructor(public cartService: CartService) {
-  }
+  constructor(public cartService: CartService) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  ngOnDestroy(): void {
-  }
+  ngOnDestroy(): void {}
 }

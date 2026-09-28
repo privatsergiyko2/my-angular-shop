@@ -62,7 +62,7 @@
       >
         Return
       </button>
-      @if (isAdmin) {
+      @if (auth.isAdmin$ | async) {
         <button routerLink="/admin" class="edit-form-admin">
           Back to Admin Panel
         </button>

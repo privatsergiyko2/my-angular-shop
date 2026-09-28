@@ -35,15 +35,4 @@ export class Login {
       console.log("not logged in")
     }
   }
-
-  isAdmin () {
-    const adminGet = localStorage.getItem('user')!;
-    const obj = JSON.parse(adminGet)
-
-    if (obj.role === 1) {
-      return true;
-    } else {
-      return false;
-    }
-  }
 }

@@ -5,16 +5,16 @@ import { ProductsService } from '../../services/products';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { catchError, take, tap, throwError } from 'rxjs';
 import {Auth} from '../../services/auth';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-edit-product',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, AsyncPipe],
   templateUrl: './edit-product.html',
   styleUrl: './edit-product.scss',
 })
 export class EditProduct {
-  _auth = inject(Auth);
-  isAdmin = this._auth.isAdmin()
+  auth: Auth = inject(Auth);
   private _route: ActivatedRoute = inject(ActivatedRoute);
   private _productService: ProductsService = inject(ProductsService);
   private _cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
@@ -23,7 +23,7 @@ export class EditProduct {
 
   private readonly _productId: number = Number(this._route.snapshot.paramMap.get('id'));
   saveErrorMessage: string = '';
-  isSaved: boolean   = false;
+  isSaved: boolean = false;
   isSaving: boolean = false;
 
   editForm: any = this._formBuilder.group({
