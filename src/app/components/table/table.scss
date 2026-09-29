@@ -1,0 +1,205 @@
+.table-container {
+  background-color: #ffffff;
+  border: 1px solid #f3f4f6;
+  border-radius: 16px;
+  overflow: visible; // Позволяет выпадающему меню не обрезаться границами картки
+
+  .products-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14px;
+
+    th {
+      background-color: #f9fafb;
+      color: #9ca3af;
+      font-weight: 600;
+      padding: 16px 20px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    td {
+      padding: 14px 20px;
+      border-bottom: 1px solid #f9fafb;
+      color: #374151;
+      vertical-align: middle;
+    }
+
+    /* Чекбоксы */
+    .checkbox-col {
+      width: 40px;
+      padding-right: 0;
+      text-align: center;
+
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        accent-color: #ec4899;
+        cursor: pointer;
+      }
+    }
+
+    /* Ячейка с картинкой и названием */
+    .product-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .product-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        object-fit: cover;
+        background-color: #f3f4f6;
+      }
+
+      .product-title {
+        font-weight: 600;
+        color: #1f2937;
+      }
+    }
+
+    /* Категории (овальные бейджи) */
+    .category-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      background-color: #f3f4f6;
+      color: #6b7280;
+      text-transform: capitalize;
+
+      &.beauty {
+        background-color: #fce7f3; /* Розовый */
+        color: #db2777;
+      }
+
+      &.fragrance {
+        background-color: #e0f2fe; /* Голубой */
+        color: #0284c7;
+      }
+    }
+
+    .price {
+      font-weight: 700;
+      color: #111827;
+    }
+
+    .stock {
+      color: #4b5563;
+      font-weight: 500;
+    }
+
+    /* Зеленый статус с точкой */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+
+      &.active {
+        background-color: #dcfce7;
+        color: #16a34a;
+
+        .dot {
+          font-size: 16px;
+          line-height: 0;
+        }
+      }
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    /* Выпадающее меню Actions */
+    .actions-dropdown {
+      position: relative;
+      display: inline-block;
+
+      /* Невидимая область-мост между кнопкой и меню, чтобы hover не слетал */
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 100%;
+        height: 8px;
+      }
+
+      .icon-btn {
+        background: transparent;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        color: #9ca3af;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: #f3f4f6;
+          color: #111827;
+        }
+      }
+
+      .dropdown-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 4px);
+        background-color: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        z-index: 100;
+        min-width: 120px;
+        padding: 6px 0;
+
+        .dropdown-item {
+          width: 100%;
+          display: block;
+          text-align: left;
+          padding: 8px 16px;
+          background: transparent;
+          border: none;
+          font-size: 14px;
+          color: #374151;
+          cursor: pointer;
+          pointer-events: auto;
+
+          &:hover {
+            background-color: #f9fafb;
+          }
+
+          &.delete {
+            color: #ef4444;
+
+            &:hover {
+              background-color: #fef2f2;
+            }
+          }
+        }
+      }
+
+      &:hover .dropdown-menu {
+        display: block;
+      }
+    }
+
+    .empty-msg {
+      text-align: center;
+      color: #9ca3af;
+      padding: 32px;
+    }
+  }
+}

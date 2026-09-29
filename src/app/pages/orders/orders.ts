@@ -10,7 +10,6 @@ import {RouterLink} from '@angular/router';
   imports: [
     CurrencyPipe,
     DatePipe,
-    RouterLink
   ],
   templateUrl: './orders.html',
   styleUrl: './orders.scss',

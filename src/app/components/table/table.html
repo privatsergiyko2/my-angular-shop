@@ -1,0 +1,65 @@
+<div class="table-container">
+  <table class="products-table">
+    <thead>
+    <tr>
+      <th class="checkbox-col">
+        <input
+          type="checkbox"
+          (change)="toggleAllProducts($any($event.target).checked)"
+        />
+      </th>
+      <th>Product</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Status</th>
+      <th class="text-right">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (product of paginationProducts(); track product?.id) {
+        <tr>
+          <td class="checkbox-col">
+            <input type="checkbox"
+                   [checked]="selectedProducts()?.includes(product.id)"
+                   (change)="toggle(product)"/>
+          </td>
+          <td class="product-cell">
+            <img [src]="product.thumbnail || product.thumbnail?.[0]" [alt]="product.title" class="product-img"/>
+            <span class="product-title">{{ product.title }}</span>
+          </td>
+          <td>
+            <span class="category-badge"
+                  [class.beauty]="product.category === 'beauty' || product.category === 'beauty-products'"
+                  [class.fragrance]="product.category === 'fragrance'">
+              {{ product.category }}
+            </span>
+          </td>
+          <td class="price">${{ product.price }}</td>
+          <td>
+            <span class="status-badge active">
+              <span class="dot">•</span> Active
+            </span>
+          </td>
+          <td class="text-right">
+            <div class="actions-dropdown">
+              <button class="icon-btn">...</button>
+              <div class="dropdown-menu">
+                <button (click)="edit(product)" class="dropdown-item">Edit</button>
+                <button class="dropdown-item delete" (click)="remove(product.id)">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="7" class="empty-msg">No products found</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  <app-pagination [currentPage]="currentPage()" [pages]="pages()" (change)="changePage($event)"></app-pagination>
+
+</div>

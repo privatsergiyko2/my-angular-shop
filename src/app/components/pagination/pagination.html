@@ -1,0 +1,24 @@
+<div class="pagination">
+  <button
+    class="nav-btn"
+    [disabled]="currentPage() === 1"
+    (click)="changePage(currentPage() - 1)">
+    ‹
+  </button>
+
+  @for (page of pages(); track page) {
+    <button
+      class="page-num"
+      (click)="changePage(page)"
+      [class.active]="currentPage() === page">
+      {{ page }}
+    </button>
+  }
+
+  <button
+    class="nav-btn"
+    [disabled]="currentPage() === pages().length"
+    (click)="changePage(currentPage() + 1)">
+    ›
+  </button>
+</div>

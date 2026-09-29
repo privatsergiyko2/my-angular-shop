@@ -56,12 +56,18 @@
 
       }
     </div>
+
+
+
     <div class="pagination">
       @for (page of pages(); track page) {
         <button (click)="changePage(page)" [class.active]="currentPage() === page">{{ page }}</button>
       }
 
     </div>
+
+
+
   } @else {
     <p class="orders-empty">No orders yet</p>
   }
