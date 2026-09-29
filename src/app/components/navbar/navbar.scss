@@ -293,3 +293,10 @@ nav {
     font-weight: 600;
   }
 }
+
+.nav-link.active {
+  background-color: #fbcfe8; /* більш насичений рожевий фон */
+  color: #db2777;            /* глибокий рожевий колір тексту/іконки */
+  border-radius: 8px;
+  font-weight: 600;
+}

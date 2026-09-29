@@ -42,7 +42,7 @@ export class Auth {
       name: name,
       password: password,
       email: email,
-      role: 1,
+      role: 2,
     };
 
     this.users.push(user);

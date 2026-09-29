@@ -1,6 +1,6 @@
 import {Component, DestroyRef, inject, OnDestroy, OnInit} from '@angular/core';
 import {CartService} from '../../services/cart';
-import {NavigationEnd, Router, RouterLink} from '@angular/router';
+import {NavigationEnd, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {filter, map, take, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
@@ -9,7 +9,7 @@ import {Admin} from '../../pages/admin/admin';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, AsyncPipe],
+  imports: [RouterLink, AsyncPipe, RouterLinkActive],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
