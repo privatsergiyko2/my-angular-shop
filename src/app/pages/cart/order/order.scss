@@ -1,9 +1,15 @@
+:host {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  color: #1a1a1a;
+}
+
 
 .cart-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: #1a1a1a;
 }
 
@@ -473,10 +479,3 @@
     }
   }
 }
-
-
-
-
-
-
-

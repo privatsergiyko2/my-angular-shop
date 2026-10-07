@@ -1,27 +1,20 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
-import {CartService} from '../../services/cart';
-import {ProductComponent} from '../../components/product/product';
-import {Product} from '../../models/product';
+import {MatStep} from "@angular/material/stepper";
 import {HttpClient} from '@angular/common/http';
-import {PaymentResponse} from '../../payment-response';
-import {Router} from '@angular/router';
-import {RouterLink} from '@angular/router';
-import { MatStepperModule } from '@angular/material/stepper';
-import {Order} from './order/order';
-
+import {Product} from '../../../models/product';
+import {CartService} from '../../../services/cart';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
-  selector: 'app-cart',
+  selector: 'app-order',
   imports: [
-    ProductComponent,
-    RouterLink,
-    MatStepperModule,
-    Order
+    MatStep,
+    RouterLink
   ],
-  templateUrl: './cart.html',
-  styleUrl: './cart.scss',
+  templateUrl: './order.html',
+  styleUrl: './order.scss',
 })
-export class Cart implements OnInit {
+export class Order implements OnInit {
   public _http = inject(HttpClient);
   recommendedProducts = signal<Product[]>([]);
   public cartService: CartService = inject(CartService);

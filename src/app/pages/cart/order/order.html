@@ -1,0 +1,133 @@
+
+<div class="cart-content-grid">
+  <div class="cart-main-card">
+    <div class="cart-actions">
+      <label class="select-all">
+        <input (change)="selectAll($any($event.target).checked)" type="checkbox"/>
+        <span>Select all ({{ cartService.cart.length }} items)</span>
+      </label>
+      <button type="button" class="remove-selected-btn" (click)="removeAll()">
+        🗑️ Remove selected
+      </button>
+    </div>
+
+    <div class="cart-item-list">
+      @for (item of cartService.cart; track item.product.id) {
+        <div class="cart-item">
+          <input type="checkbox" [checked]="selectedProducts.includes(item.product.id)" class="item-checkbox"
+                 (change)="selectCheckBox($any($event.target).checked, item.product.id)"/>
+
+          <div class="item-image-wrapper">
+            <img [src]="item.product.thumbnail" [alt]="item.product.title" class="item-image"/>
+          </div>
+
+          <div class="item-info">
+            <h3 class="item-title">{{ item.product.title }}</h3>
+            <p class="item-description">{{ item.product.description }}</p>
+            <span class="item-stock">In stock</span>
+          </div>
+
+          <div class="item-price">
+            ${{ item.product.price }}
+          </div>
+
+          <div class="item-quantity">
+            <button type="button" (click)="cartService.decreaseQuantity(item.product.id)">-</button>
+            <span>{{ item.quantity }}</span>
+            <button type="button" (click)="cartService.increaseQuantity(item.product.id)">+</button>
+          </div>
+
+          <button type="button" class="remove-btn" (click)="cartService.removeProduct(item.product.id)">
+            🗑️
+          </button>
+        </div>
+      } @empty {
+        <p class="empty-cart-message">Your cart is empty.</p>
+      }
+    </div>
+
+    <div class="cart-footer-actions">
+      <button type="button" class="continue-btn" [routerLink]="['/']">&larr; Continue shopping</button>
+    </div>
+  </div>
+
+  <div class="cart-summary">
+    <h3 class="summary-title">Order Summary</h3>
+
+    <div class="summary-details">
+      <div class="summary-row">
+        <span>Items ({{ cartService.cart.length }})</span>
+        <span>${{ cartService.getTotalPrice() }}</span>
+      </div>
+      <div class="summary-row discount">
+        <span>Discount</span>
+        <span>-$0.00</span>
+      </div>
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span class="muted-text">Calculated at next step</span>
+      </div>
+    </div>
+
+    <div class="summary-total">
+      <span>Subtotal</span>
+      <span class="total-price">${{ cartService.getTotalPrice() }}</span>
+    </div>
+
+    <button type="button" class="checkout-btn" (click)="pay()">
+      Proceed to Checkout &rarr;
+    </button>
+
+    <div class="secure-notice">
+      🔒 Secure checkout
+    </div>
+
+    <div class="summary-benefits">
+      <div class="benefit-card pink-card">
+        <span class="benefit-icon">🚚</span>
+        <div>
+          <strong>Free shipping</strong>
+          <p>On orders over $50</p>
+        </div>
+      </div>
+
+      <div class="benefit-card blue-card">
+        <span class="benefit-icon">📦</span>
+        <div>
+          <strong>Easy returns</strong>
+          <p>30-day return policy</p>
+        </div>
+      </div>
+
+      <div class="benefit-card green-card">
+        <span class="benefit-icon">🛡️</span>
+        <div>
+          <strong>Secure payment</strong>
+          <p>Your data is protected</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+@if (recommendedProducts().length > 0) {
+  <div class="recommended-section">
+    <h2 class="recommended-title">You might also like</h2>
+    <div class="recommended-grid">
+      @for (rec of recommendedProducts(); track rec.id) {
+        <div class="recommended-card">
+          <button type="button" class="wishlist-btn">♡</button>
+          <div class="recommended-image-wrapper">
+            <img [src]="rec.thumbnail" [alt]="rec.title" class="recommended-image" />
+          </div>
+          <div class="recommended-info">
+            <h4 class="recommended-item-title">{{ rec.title }}</h4>
+            <span class="recommended-price">${{ rec.price }}</span>
+          </div>
+          <button type="button" class="add-to-cart-btn" (click)="cartService.addToCart(rec)">
+            🛒 Add to Cart
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+}

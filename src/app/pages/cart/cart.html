@@ -1,21 +1,36 @@
+<!--<div class="cart-container">-->
+<!--  <h1 class="cart-title">Your Cart</h1>-->
+<!--  @for (cartItem of cartService.cart; track $index) {-->
+<!--    <div class="cart-item">-->
+<!--      <app-product [showAddToCard]="false" [product]="cartItem.product" (remove)="removeFromCart($event)"></app-product>-->
+<!--      <p class="cart-subtotal">Subtotal {{ cartItem.product.price * cartItem.quantity }}</p>-->
+<!--      <div class="quantity-controls">-->
+<!--        <p>Quantity: {{ cartItem.quantity }}</p>-->
+<!--        <button (click)="cartService.decreaseQuantity(cartItem.product.id)">-</button>-->
+<!--        <button (click)="cartService.increaseQuantity(cartItem.product.id)">+</button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  } @empty {-->
+<!--    <p class="cart-empty">Cart is empty</p>-->
+<!--  }-->
+<!--  <p class="cart-total">Total: {{ cartService.getTotalPrice() }}</p>-->
+<!--  <button class="cart-pay-button" (click)="pay()">Pay</button>-->
+<!--  <button class="cart-back-button" routerLink="/">-->
+<!--    Back to products-->
+<!--  </button>-->
+<!--</div>-->
 <div class="cart-container">
-  <h1 class="cart-title">Your Cart</h1>
-  @for (cartItem of cartService.cart; track $index) {
-    <div class="cart-item">
-      <app-product [showAddToCard]="false" [product]="cartItem.product" (remove)="removeFromCart($event)"></app-product>
-      <p class="cart-subtotal">Subtotal {{ cartItem.product.price * cartItem.quantity }}</p>
-      <div class="quantity-controls">
-        <p>Quantity: {{ cartItem.quantity }}</p>
-        <button (click)="cartService.decreaseQuantity(cartItem.product.id)">-</button>
-        <button (click)="cartService.increaseQuantity(cartItem.product.id)">+</button>
-      </div>
-    </div>
-  } @empty {
-    <p class="cart-empty">Cart is empty</p>
-  }
-  <p class="cart-total">Total: {{ cartService.getTotalPrice() }}</p>
-  <button class="cart-pay-button" (click)="pay()">Pay</button>
-  <button class="cart-back-button" routerLink="/">
-    Back to products
-  </button>
+  <div class="cart-header-section">
+    <h1 class="cart-title">Your Order</h1>
+    <p class="cart-subtitle">Review your items, update quantities, and proceed to checkout.</p>
+    <mat-stepper [selectedIndex]="0" [linear]="false" class="custom-stepper">
+      <mat-step label="Order">
+       <app-order></app-order>
+      </mat-step>
+      <mat-step label="Shipping"><p>hui</p></mat-step>
+      <mat-step label="Payment"></mat-step>
+      <mat-step label="Review"></mat-step>
+    </mat-stepper>
+  </div>
 </div>
+
