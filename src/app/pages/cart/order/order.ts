@@ -8,7 +8,6 @@ import {Router, RouterLink} from '@angular/router';
 @Component({
   selector: 'app-order',
   imports: [
-    MatStep,
     RouterLink
   ],
   templateUrl: './order.html',
