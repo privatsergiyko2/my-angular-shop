@@ -5,7 +5,7 @@ import {filter, map, take, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {Auth} from '../../services/auth';
-import {Admin} from '../../pages/admin/admin';
+import {Admin} from '../../pages/admin-wrapper/admin/admin';
 
 @Component({
   selector: 'app-navbar',

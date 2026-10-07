@@ -1,20 +1,15 @@
 import {ChangeDetectorRef, Component, computed, inject, signal} from '@angular/core';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {Pagination} from '../../components/pagination/pagination';
-import {ReviewsService} from '../../services/reviews';
-import {Review} from '../../models/review';
+import {Pagination} from '../../../components/pagination/pagination';
+import {ReviewsService} from '../../../services/reviews';
+import {Review} from '../../../models/review';
 import {DatePipe} from '@angular/common';
-import {Sort} from '../../components/sort/sort';
+import {Sort} from '../../../components/sort/sort';
+import { AdminSidebar } from '../../../components/admin-sidebar/admin-sidebar';
 
 @Component({
   selector: 'app-admin-reviews',
-  imports: [
-    RouterLink,
-    RouterLinkActive,
-    Pagination,
-    DatePipe,
-    Sort
-  ],
+  imports: [RouterLink, RouterLinkActive, Pagination, DatePipe, Sort, AdminSidebar],
   templateUrl: './admin-reviews.html',
   styleUrl: './admin-reviews.scss',
 })
@@ -24,15 +19,15 @@ export class AdminReviews {
   menuOpen: number | null = null;
   reviews = signal<Review[]>([]);
   selectedReview: Review | null = null;
-  sort = signal("newest")
+  sort = signal('newest');
 
   sortOptions = [
-    {label: 'Newest', value: 'newest'},
-    {label: 'Oldest', value: 'oldest'},
-    {label: 'Rating: High → Low', value: 'rating-desc'},
-    {label: 'Rating: Low → High', value: 'rating-asc'},
-    {label: 'Product: A → Z', value: 'product-asc'},
-    {label: 'Product: Z → A', value: 'product-desc'}
+    { label: 'Newest', value: 'newest' },
+    { label: 'Oldest', value: 'oldest' },
+    { label: 'Rating: High → Low', value: 'rating-desc' },
+    { label: 'Rating: Low → High', value: 'rating-asc' },
+    { label: 'Product: A → Z', value: 'product-asc' },
+    { label: 'Product: Z → A', value: 'product-desc' },
   ];
 
   sortedProducts = computed(() => {
@@ -62,18 +57,17 @@ export class AdminReviews {
 
     if (this.sort() === 'rating-desc') {
       const products = [...this.reviews()];
-      products.sort((a, b) => b.rating - a.rating)
+      products.sort((a, b) => b.rating - a.rating);
       return products;
     }
-
 
     if (this.sort() === 'rating-asc') {
       const products = [...this.reviews()];
-      products.sort((a, b) => a.rating - b.rating)
+      products.sort((a, b) => a.rating - b.rating);
       return products;
     }
 
-    return this.reviews()
+    return this.reviews();
   });
 
   currentPage = signal<number>(1);
@@ -84,10 +78,7 @@ export class AdminReviews {
     return pagesQuantity;
   });
 
-  pages = computed(() => Array.from(
-    {length: this.quantityPages()},
-    (_, i) => i + 1
-  ));
+  pages = computed(() => Array.from({ length: this.quantityPages() }, (_, i) => i + 1));
 
   changePage(page: number) {
     this.currentPage.set(page);
@@ -105,7 +96,6 @@ export class AdminReviews {
     this.reviews.set(this._reviewService.getReviews());
   }
 
-
   toggleMenu(id: number) {
     if (this.menuOpen === id) {
       this.menuOpen = null;
@@ -114,13 +104,12 @@ export class AdminReviews {
     }
   }
 
-
   closeMenu() {
     this.menuOpen = null;
   }
 
   deleteReview(id: number) {
-    this._reviewService.deleteReview(id)
+    this._reviewService.deleteReview(id);
     this.reviews.set(this._reviewService.getReviews());
   }
 
@@ -131,7 +120,6 @@ export class AdminReviews {
   closeModal() {
     this.selectedReview = null;
   }
-
 
   getStars(rating: number): string {
     return '★'.repeat(rating) + '☆'.repeat(5 - rating);

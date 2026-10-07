@@ -14,12 +14,18 @@ import {OrderDetails} from './pages/order-details/order-details';
 import {Profile} from './pages/profile/profile';
 import {authGuard} from './guards/auth-guard';
 import {adminGuard} from './guards/admin-guard';
-import {Admin} from './pages/admin/admin';
+import {Admin} from './pages/admin-wrapper/admin/admin';
 import {Reviews} from './pages/reviews/reviews';
-import {Customers} from './pages/customers/customers';
-import {AdminReviews} from './pages/admin-reviews/admin-reviews';
+import {Customers} from './pages/admin-wrapper/customers/customers';
+import {AdminReviews} from './pages/admin-wrapper/admin-reviews/admin-reviews';
+import { adminRoutes } from './pages/admin-wrapper/admin.routes';
+import { AdminWrapper } from './pages/admin-wrapper/admin-wrapper';
 
 export const routes: Routes = [
+  {
+    path: '',
+    component: Products,
+  },
   {
     path: 'products/:id',
     component: ProductDetails,
@@ -29,18 +35,14 @@ export const routes: Routes = [
     component: Cart,
   },
   {
-    path: '',
-    component: Products,
-  },
-  {
     path: 'add-page',
     component: AddPage,
-    canActivate: [adminGuard]
+    canActivate: [adminGuard],
   },
   {
     path: 'edit/:id',
     component: EditProduct,
-    canActivate: [adminGuard]
+    canActivate: [adminGuard],
   },
   {
     path: 'favorites',
@@ -69,7 +71,7 @@ export const routes: Routes = [
   },
   {
     path: 'orders/:id',
-    component: OrderDetails
+    component: OrderDetails,
   },
   {
     path: 'profile',
@@ -77,21 +79,20 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'admin',
-    component: Admin,
-    canActivate: [authGuard],
-  },
-  {
     path: 'reviews',
     component: Reviews,
   },
+  // TODO: TOT OPTIMIZED
+  // {
+  //   path: 'admin',
+  //   component: AdminWrapper,
+  //   canActivate: [authGuard, adminGuard],
+  //   children: adminRoutes,
+  // },
   {
-    path: 'customers',
-    component: Customers,
-  },
-  {
-    path: 'admin/reviews',
-    component: AdminReviews,
-    canActivate: [authGuard, adminGuard]
+    path: 'admin',
+    loadComponent: () => import('./pages/admin-wrapper/admin-wrapper').then((m) => m.AdminWrapper),
+    loadChildren: () => import('./pages/admin-wrapper/admin.routes').then((m) => m.adminRoutes),
+    canActivate: [authGuard, adminGuard],
   },
 ];

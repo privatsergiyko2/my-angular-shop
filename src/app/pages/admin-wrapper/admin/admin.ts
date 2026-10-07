@@ -1,16 +1,14 @@
 import {ChangeDetectorRef, Component, computed, inject, signal} from '@angular/core'
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {ProductsService} from '../../services/products';
-import {Product} from '../../models/product';
-import {HttpClient} from '@angular/common/http';
-import { Pagination } from '../../components/pagination/pagination';
-import { Table } from '../../components/table/table';
-import {AdminSidebar} from '../../components/admin-sidebar/admin-sidebar';
-import {Sort} from '../../components/sort/sort';
+import {ProductsService} from '../../../services/products';
+import {Product} from '../../../models/product';
+import { Table } from '../../../components/table/table';
+import {Sort} from '../../../components/sort/sort';
+import { AdminSidebar } from '../../../components/admin-sidebar/admin-sidebar';
 
 @Component({
   selector: 'app-admin',
-  imports: [RouterLink, RouterLinkActive, Pagination, Table, AdminSidebar, Sort],
+  imports: [RouterLink, RouterLinkActive, Table, Sort, AdminSidebar],
   templateUrl: './admin.html',
   styleUrl: './admin.scss',
 })
@@ -20,7 +18,7 @@ export class Admin {
   _productService: ProductsService = inject(ProductsService);
   _products = signal<Product[]>([]);
   selectedProducts: number[] = [];
-  sort = signal("newest")
+  sort = signal('newest');
 
   constructor() {
     this._productService.getProducts().subscribe((products) => {
@@ -36,7 +34,7 @@ export class Admin {
     { label: 'Price: Low → High', value: 'price-asc' },
     { label: 'Price: High → Low', value: 'price-desc' },
     { label: 'Name: A → Z', value: 'name-asc' },
-    { label: 'Name: Z → A', value: 'name-desc' }
+    { label: 'Name: Z → A', value: 'name-desc' },
   ];
 
   sortedProducts = computed(() => {
@@ -76,7 +74,7 @@ export class Admin {
       return products;
     }
 
-    return  this._products()
+    return this._products();
   });
 
   toggleProduct(product: Product) {
