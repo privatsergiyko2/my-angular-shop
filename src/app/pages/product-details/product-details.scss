@@ -68,3 +68,167 @@
   object-fit: cover;
   border-radius: var(--radius);
 }
+
+
+
+/* Блок зі списком відгуків */
+.reviews {
+  margin-top: 36px;
+
+  .review-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 20px;
+  }
+
+  .empty-review {
+    color: #9ca3af;
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  .review-card {
+    background-color: #ffffff;
+    border: 1px solid #f3f4f6;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+
+    .review-username {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 4px 0;
+    }
+
+    .rating-stars {
+      color: #fbbf24;
+      font-size: 15px;
+      letter-spacing: 2px;
+      margin: 0 0 10px 0;
+    }
+
+    .review-comment {
+      color: #374151;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0 0 8px 0;
+      background-color: #f9fafb;
+      padding: 10px 14px;
+      border-radius: 8px;
+    }
+
+    .review-date {
+      color: #9ca3af;
+      font-size: 12px;
+      margin: 0;
+    }
+  }
+}
+
+/* Блок створення відгуку */
+.review-write {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 40px;
+  margin-bottom: 16px;
+}
+
+form {
+  background-color: #ffffff;
+  border: 1px solid #f3f4f6;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+  margin-bottom: 24px;
+
+  .stars-rating {
+    display: flex;
+    gap: 4px;
+
+    .review-button {
+      background: transparent;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 2px;
+      opacity: 0.35;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+
+      &:hover,
+      &.active-star {
+        opacity: 1;
+        transform: scale(1.15);
+      }
+    }
+  }
+
+  .comment-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 4px;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: #ec4899;
+      box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
+    }
+  }
+
+  .submit-button {
+    align-self: flex-start;
+    background-color: #ec4899;
+    color: #ffffff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #db2777;
+    }
+  }
+}
+
+.product-details-back {
+  background-color: #ffffff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+  }
+}
+
+
+

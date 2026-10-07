@@ -16,6 +16,47 @@
     </div>
   </div>
 
+  <div class="reviews">
+    <h2 class="review-title">Reviews</h2>
+
+    @if (reviews.length === 0) {
+      <p class="empty-review">No reviews yet.</p>
+    }
+
+    @for (review of reviews; track review.id) {
+      <!-- Додали клас review-card замість порожнього class="" -->
+      <div class="review-card">
+        <h3 class="review-username">{{ review.userName }}</h3>
+        <p class="rating-stars">
+          {{ getStars(review.rating) }}
+        </p>
+        <p class="review-comment">{{ review.comment }}</p>
+        <p class="review-date">{{ review.date | date:'mediumDate' }}</p>
+      </div>
+    }
+  </div>
+
+  <h2 class="review-write">Write a review</h2>
+
+  <form (ngSubmit)="submitReview()" [formGroup]="reviewForm">
+    <div class="stars-rating">
+      @for (star of [1, 2, 3, 4, 5]; track star) {
+        <button
+          type="button"
+          class="review-button"
+          [class.active-star]="(reviewForm.value.rating ?? 0) >= star"
+          (click)="reviewForm.patchValue({ rating: star })">
+          ⭐
+        </button>
+      }
+    </div>
+
+    <label class="comment-label">Comment</label>
+    <textarea formControlName="comment" placeholder="Write your feedback..."></textarea>
+
+    <button type="submit" class="submit-button">Submit review</button>
+  </form>
+
   <button class="product-details-back" routerLink="/">
     Back to products
   </button>

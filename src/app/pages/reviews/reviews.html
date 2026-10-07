@@ -1,1 +1,35 @@
-<p>reviews works!</p>
+<div class="reviews-page">
+  <h1 class="review-title">Reviews</h1>
+
+  @if (reviews.length === 0) {
+    <p>No reviews yet</p>
+  }
+
+  @for (review of reviews; track review.id) {
+    <div class="review-card">
+
+      <h3 >{{ review.userName }}</h3>
+
+      <p class="review-card-title">
+        Product: {{ review.productTitle }}
+      </p>
+
+      <p class="review-rating">
+        {{ getStars(review.rating) }}
+      </p>
+
+      <p class="review-comment">
+        {{ review.comment }}
+      </p>
+
+      @if (isAdmin) {
+        <button type="button" class="delete-button" (click)="deleteReview(review.id)">Delete</button>
+      }
+
+      <p>
+        Date: {{ review.date | date:'mediumDate' }}
+      </p>
+
+    </div>
+  }
+</div>

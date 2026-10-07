@@ -1,0 +1,88 @@
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-title">Admin Panel</div>
+
+    <a routerLink="/admin" routerLinkActive="active">Products</a>
+    <a routerLink="/customers" routerLinkActive="active">Customers</a>
+    <a routerLink="/admin/reviews" routerLinkActive="active">Reviews</a>
+  </aside>
+
+  <main class="admin-main">
+    <div class="content-header">
+      <div>
+        <h1>Customers</h1>
+        <p>Manage your BeautyStore customers</p>
+        @if (message) {
+          <p class="success-message">{{ message }}</p>
+        }
+      </div>
+    </div>
+    <table>
+      <thead>
+      <tr>
+        <th>Customer</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      @for (user of users; track user.email) {
+        <tr>
+          <td class="product-cell">
+            <span class="product-name">{{ user.name }}</span>
+          </td>
+          <td class="email">{{ user.email }}</td>
+          <td class="role">
+          <span class="role-badge">
+          @if (user.role === 1) {
+            Admin
+          } @else {
+            User
+          }
+            </span>
+          </td>
+          <td>
+             <span class="status-badge active">
+              <span class="dot">•</span> Active
+            </span>
+          <td class="actions-cell">
+            <button
+              (click)="menuOpen = menuOpen === user.email ? null : user.email"
+              class="actions-btn">
+              ⋮
+            </button>
+
+            @if (menuOpen === user.email) {
+              <div class="actions-menu">
+                <button (click)="viewUser(user.email); menuOpen = null">View</button>
+                <button (click)="deleteUser(user.email); menuOpen = null">Delete</button>
+              </div>
+            }
+          </td>
+        </tr>
+      }
+    </table>
+    @if (selectedUser) {
+      <div class="modal-overlay">
+        <div class="customer-modal">
+          <h2>Customer details</h2>
+          <p>Name: {{ selectedUser.name }}</p>
+          <p>Email: {{ selectedUser.email }}</p>
+          <p> role:
+            @if (selectedUser.role === 1) {
+              Admin
+            } @else {
+              User
+            }
+          </p>
+          <p>Status: Active</p>
+          <button (click)="closeModal()">Close</button>
+        </div>
+      </div>
+    }
+    @if (users.length === 0) {
+      <p class="empty-message">No customers found</p>
+    }
+  </main>
+</div>

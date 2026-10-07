@@ -16,6 +16,8 @@ import {authGuard} from './guards/auth-guard';
 import {adminGuard} from './guards/admin-guard';
 import {Admin} from './pages/admin/admin';
 import {Reviews} from './pages/reviews/reviews';
+import {Customers} from './pages/customers/customers';
+import {AdminReviews} from './pages/admin-reviews/admin-reviews';
 
 export const routes: Routes = [
   {
@@ -82,5 +84,14 @@ export const routes: Routes = [
   {
     path: 'reviews',
     component: Reviews,
+  },
+  {
+    path: 'customers',
+    component: Customers,
+  },
+  {
+    path: 'admin/reviews',
+    component: AdminReviews,
+    canActivate: [authGuard, adminGuard]
   },
 ];

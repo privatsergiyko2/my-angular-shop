@@ -1,0 +1,4 @@
+<select (change)="sortChange.emit($any($event.target).value)">
+  @for (item of sort; track $index) {
+    <option [value]="item.value">{{ item.label }}</option>
+} </select>

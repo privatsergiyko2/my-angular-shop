@@ -1,0 +1,115 @@
+<div class="admin-layout" (click)="closeMenu()">
+
+  <aside class="admin-sidebar">
+    <div class="admin-title">Admin Panel</div>
+
+    <a
+      routerLink="/admin"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      Products
+    </a>
+    <a routerLink="/customers" routerLinkActive="active">Customers</a>
+    <a routerLink="/admin/reviews" routerLinkActive="active">Reviews</a>
+  </aside>
+
+  <main class="admin-main">
+
+    <div class="content-header">
+      <div>
+        <h1>Reviews</h1>
+        <p>Manage customer reviews</p>
+      </div>
+    </div>
+    <div class="sort-wrapper">
+      <span>Sort by:</span>
+      <app-sort [sort]="sortOptions" (sortChange)="sort.set($event)"></app-sort>
+    </div>
+
+    <div class="table-container">
+      @if (reviews().length > 0) {
+        <table class="products-table">
+          <thead>
+          <tr>
+            <th class="checkbox-col">
+              <input
+                type="checkbox"
+              />
+            </th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Rating</th>
+            <th>Comment</th>
+            <th>Date</th>
+            <th class="text-right">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (review of paginationReviews(); track review.id) {
+              <tr>
+                <td class="checkbox-col">
+                  <input type="checkbox">
+                </td>
+                <td>{{ review.userName }}</td>
+                <td>{{ review.productTitle }}</td>
+                <td class="review-rating">
+                  {{ getStars(review.rating) }}
+                </td>
+                <td class="review-comment">{{ review.comment }}</td>
+                <td>{{ review.date | date:'mediumDate' }}</td>
+                <td class="text-right">
+                  <div class="actions-dropdown">
+                    <button (click)="toggleMenu(review.id); $event.stopPropagation()" class="icon-btn">...</button>
+
+                    @if (menuOpen === review.id) {
+                      <div class="dropdown-menu">
+                        <button
+                          (click)="viewReview(review); menuOpen = null"
+                          class="dropdown-item"
+                        >
+                          View
+                        </button>
+
+                        <button
+                          (click)="deleteReview(review.id); menuOpen = null"
+                          class="dropdown-item delete"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      } @else {
+        <p class="empty-message">No reviews yet</p>
+      }
+      @if (selectedReview) {
+        <div class="modal-overlay">
+          <div class="customer-modal">
+            <h2>Review details</h2>
+
+            <p><strong>Customer:</strong> {{ selectedReview.userName }}</p>
+            <p><strong>Product:</strong> {{ selectedReview.productTitle }}</p>
+            <p><strong>Rating:</strong> <span class="review-modal-rating">{{ getStars(selectedReview.rating) }}</span>
+            </p>
+            <p><strong>Comment:</strong> {{ selectedReview.comment }}</p>
+            <p>
+              <strong>Date:</strong>
+              {{ selectedReview.date | date:'mediumDate' }}
+            </p>
+
+            <button type="button" (click)="closeModal()">Close</button>
+          </div>
+        </div>
+      }
+      <app-pagination [currentPage]="currentPage()" [pages]="pages()" (change)="changePage($event)"></app-pagination>
+    </div>
+
+  </main>
+
+</div>

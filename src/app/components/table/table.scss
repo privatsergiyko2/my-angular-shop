@@ -2,7 +2,7 @@
   background-color: #ffffff;
   border: 1px solid #f3f4f6;
   border-radius: 16px;
-  overflow: visible; // Позволяет выпадающему меню не обрезаться границами картки
+  overflow: visible;
 
   .products-table {
     width: 100%;
@@ -28,7 +28,7 @@
       vertical-align: middle;
     }
 
-    /* Чекбоксы */
+
     .checkbox-col {
       width: 40px;
       padding-right: 0;
@@ -43,7 +43,7 @@
       }
     }
 
-    /* Ячейка с картинкой и названием */
+
     .product-cell {
       display: flex;
       align-items: center;
@@ -63,7 +63,7 @@
       }
     }
 
-    /* Категории (овальные бейджи) */
+
     .category-badge {
       display: inline-block;
       padding: 4px 12px;
@@ -95,7 +95,7 @@
       font-weight: 500;
     }
 
-    /* Зеленый статус с точкой */
+
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -120,12 +120,11 @@
       text-align: right;
     }
 
-    /* Выпадающее меню Actions */
     .actions-dropdown {
       position: relative;
       display: inline-block;
 
-      /* Невидимая область-мост между кнопкой и меню, чтобы hover не слетал */
+
       &::after {
         content: '';
         position: absolute;

@@ -42,8 +42,10 @@
 <div class="admin-layout">
   <aside class="admin-sidebar">
     <div class="admin-title">Admin Panel</div>
+
     <a routerLink="/admin" routerLinkActive="active">Products</a>
     <a routerLink="/customers" routerLinkActive="active">Customers</a>
+    <a routerLink="/admin/reviews" routerLinkActive="active">Reviews</a>
   </aside>
 
   <main class="admin-main">
@@ -61,10 +63,14 @@
         Delete selected
       </button>
     </div>
+    <div class="sort-wrapper">
+      <span>Sort by:</span>
+      <app-sort [sort]="sortOptions" (sortChange)="sort.set($event)"></app-sort>
+    </div>
 
 
     <app-table
-      [products]="_products()"
+      [products]="sortedProducts()"
       [selectedProducts]="selectedProducts"
       (toggleProduct)="toggleProduct($event)"
       (toggleAll)="toggleAllProducts($event)"
