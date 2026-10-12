@@ -74,7 +74,7 @@
       <span class="total-price">${{ cartService.getTotalPrice() }}</span>
     </div>
 
-    <button type="button" class="checkout-btn" (click)="pay()">
+    <button type="button" class="checkout-btn" (click)="onProceedToCheckout()">
       Proceed to Checkout &rarr;
     </button>
 
@@ -115,7 +115,6 @@
     <div class="recommended-grid">
       @for (rec of recommendedProducts(); track rec.id) {
         <div class="recommended-card">
-          <button type="button" class="wishlist-btn">♡</button>
           <div class="recommended-image-wrapper">
             <img [src]="rec.thumbnail" [alt]="rec.title" class="recommended-image" />
           </div>

@@ -1,14 +1,17 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {MatStep} from "@angular/material/stepper";
+import {Component, inject, Input, OnInit, signal} from '@angular/core';
+import {MatStep, MatStepper, MatStepperNext} from "@angular/material/stepper";
 import {HttpClient} from '@angular/common/http';
 import {Product} from '../../../models/product';
 import {CartService} from '../../../services/cart';
 import {Router, RouterLink} from '@angular/router';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-order',
   imports: [
-    RouterLink
+    RouterLink,
+    MatStepperNext,
+    MatButton
   ],
   templateUrl: './order.html',
   styleUrl: './order.scss',
@@ -19,6 +22,11 @@ export class Order implements OnInit {
   public cartService: CartService = inject(CartService);
   private router = inject(Router);
   selectedProducts: number[] = [];
+  @Input() stepper?: MatStepper; // <--- Приймаємо посилання на степер з батька
+
+  onProceedToCheckout() {
+    this.stepper?.next(); // <--- Переключаємо на крок Shipping!
+  }
 
   protected removeFromCart($event: Product) {
     this.cartService.removeProduct($event.id)

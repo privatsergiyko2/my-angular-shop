@@ -5,8 +5,8 @@ import {Products} from './pages/products/products';
 import {AddPage} from './pages/add-page/add-page';
 import {EditProduct} from './pages/edit-product/edit-product';
 import {FavoritesComponent} from './pages/favorites/favorites';
-import {Payment} from './pages/payment/payment';
-import {OrderSuccess} from './pages/order-success/order-success';
+import {Payment} from './pages/cart/payment/payment';
+import {OrderSuccess} from './pages/cart/order-success/order-success';
 import {Login} from './pages/login/login';
 import {Register} from './pages/register/register';
 import {OrdersPage} from './pages/orders/orders';
@@ -20,6 +20,8 @@ import {Customers} from './pages/admin-wrapper/customers/customers';
 import {AdminReviews} from './pages/admin-wrapper/admin-reviews/admin-reviews';
 import { adminRoutes } from './pages/admin-wrapper/admin.routes';
 import { AdminWrapper } from './pages/admin-wrapper/admin-wrapper';
+import {Order} from '@stripe/stripe-js';
+import {Shipping} from './pages/cart/shipping/shipping';
 
 export const routes: Routes = [
   {
@@ -33,6 +35,10 @@ export const routes: Routes = [
   {
     path: 'cart',
     component: Cart,
+  },
+  {
+    path: 'shipping',
+    component: Shipping,
   },
   {
     path: 'add-page',

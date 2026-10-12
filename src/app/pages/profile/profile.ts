@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Auth} from '../../services/auth';
 import {Router} from '@angular/router';
@@ -10,12 +10,15 @@ import {RouterLink} from '@angular/router';
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class Profile {
+export class Profile implements OnInit {
   router = inject(Router);
   _auth = inject(Auth);
+
   newUser = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    firstName: new FormControl('', [Validators.required]),
+    lastName: new FormControl('', [Validators.required]),
+    email: new FormControl({value: "", disabled: true}),
+    phone: new FormControl(''),
   });
 
   password = new FormGroup(
@@ -27,15 +30,26 @@ export class Profile {
     this.passwordMatchValidator,
   );
 
+  ngOnInit() {
+    const userGet = localStorage.getItem('user')
+
+    if (userGet) {
+      const userParse = JSON.parse(userGet);
+      this.user = userParse;
+      this.newUser.patchValue({
+        firstName: userParse.firstName || userParse.name?.split(' ')[0] || '',
+        lastName: userParse.lastName || userParse.name?.split(' ')[1] || '',
+        email: this.user.email,
+        phone: this.user.phone,
+      })
+    }
+
+
+  }
+
   passwordError = '';
   user = JSON.parse(localStorage.getItem('user')!);
 
-  constructor() {
-    this.newUser.patchValue({
-      name: this.user.name,
-      email: this.user.email,
-    });
-  }
 
   passwordMatchValidator(form: AbstractControl) {
     const newPassword = form.get('newPassword');
@@ -72,7 +86,7 @@ export class Profile {
     }
     this.user = {
       ...this.user,
-      ...this.newUser.value,
+      ...this.newUser.getRawValue(),
     };
     localStorage.setItem('user', JSON.stringify(this.user));
   }

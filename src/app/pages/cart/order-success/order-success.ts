@@ -1,7 +1,8 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, Input} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
-import {Order} from '../../models/order';
-import {Orders} from '../../services/orders';
+import {Order} from '../../../models/order';
+import {Orders} from '../../../services/orders';
+import {MatStepper} from '@angular/material/stepper';
 
 @Component({
   selector: 'app-order-success',
@@ -12,6 +13,7 @@ import {Orders} from '../../services/orders';
   styleUrl: './order-success.scss',
 })
 export class OrderSuccess {
+  @Input() stepper?: MatStepper;
   private _order = inject(Orders);
 
   order: Order = this._order.orders[this._order.orders.length - 1];

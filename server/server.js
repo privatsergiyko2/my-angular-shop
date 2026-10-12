@@ -5,16 +5,16 @@ const Stripe = require('stripe');
 require('dotenv').config();
 const cors = require('cors');
 const app = express();
+
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-
 app.use(cors());
-
 app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello from server');
 });
+
 app.post("/create-payment-intent", async (req, res) => {
   const amount = req.body.amount;
   const currency = req.body.currency;
@@ -30,7 +30,6 @@ app.post("/create-payment-intent", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-
     res.status(500).json({
       error: error.message
     });

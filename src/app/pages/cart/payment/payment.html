@@ -1,0 +1,61 @@
+<div class="payment-page-layout">
+  <div class="payment-card">
+    <div class="card-header">
+      <h2>Payment Details</h2>
+      <p>Complete your purchase securely with card or alternative payment methods.</p>
+    </div>
+
+    <form class="payment-form" [formGroup]="paymentForm" (ngSubmit)="pay()">
+      <!-- Контактні дані платника -->
+      <div class="form-row">
+        <div class="form-field">
+          <label>Full Name</label>
+          <input formControlName="name" placeholder="John Doe">
+          @if (paymentForm.get("name")?.hasError("required") && paymentForm.get("name")?.touched) {
+            <p class="payment-error">Name is required</p>
+          }
+        </div>
+
+        <div class="form-field">
+          <label>Email Address</label>
+          <input type="email" formControlName="email" placeholder="john@example.com">
+          @if (paymentForm.get("email")?.hasError("required") && paymentForm.get("email")?.touched) {
+            <p class="payment-error">Email is required</p>
+          }
+          @if (paymentForm.get("email")?.hasError("email") && paymentForm.get("email")?.touched) {
+            <p class="payment-error">Email is invalid</p>
+          }
+        </div>
+      </div>
+
+      <div class="stripe-container">
+        <label class="stripe-label">Card & Payment Method</label>
+        @if (elementsOptions.clientSecret) {
+          <ngx-stripe-payment
+            [stripe]="stripe"
+            [elementsOptions]="elementsOptions"
+            [options]="paymentElementOptions"
+          />
+        } @else {
+          <div class="stripe-loading">
+            <span>Loading payment options...</span>
+          </div>
+        }
+      </div>
+
+
+      <div class="payment-actions">
+        <button type="button" class="btn-back" (click)="goBack()">
+          ← Back to Shipping
+        </button>
+
+        <button type="submit" class="btn-submit" [disabled]="paymentForm.invalid || !elementsOptions.clientSecret">
+          Pay Now
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Сайдбар Order Summary -->
+  <app-order-summary></app-order-summary>
+</div>
