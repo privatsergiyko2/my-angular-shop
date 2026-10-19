@@ -1,0 +1,185 @@
+<main class="products-layout">
+
+  <aside class="sidebar">
+
+    <div class="sidebar-header">
+      <h2>Filters</h2>
+      <button type="button" class="btn-clear" (click)="resetFilters()">Clear all</button>
+    </div>
+
+
+    <div class="filter-group">
+      <div class="group-title">
+        <h3>Category</h3>
+      </div>
+
+      <div class="filter-list">
+        @for (filterCategory of filterCategories; track $index) {
+          <button
+            type="button"
+            class="category-item"
+            [class.active]="selectedCategory === filterCategory"
+            (click)="selectCategory(filterCategory)"
+          >
+            <span class="cat-name">{{ filterCategory }}</span>
+            <span class="count-badge">{{ getCategoryCount(filterCategory) }}</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="filter-group">
+      <div class="group-title">
+        <h3>Price range</h3>
+      </div>
+
+      <div class="price-range-label">
+        ${{ minPrice || 0 }} — ${{ maxPrice || 2500 }}
+      </div>
+
+      <div class="slider-container">
+        <mat-slider min="0" max="2500" step="10">
+          <input matSliderStartThumb [(ngModel)]="minPrice" (input)="filterProducts()">
+          <input matSliderEndThumb [(ngModel)]="maxPrice" (input)="filterProducts()">
+        </mat-slider>
+      </div>
+
+      <div class="price-inputs-row">
+        <div class="price-box">
+          <span class="currency">$</span>
+          <input type="number" [(ngModel)]="minPrice" (input)="filterProducts()">
+        </div>
+        <div class="price-box">
+          <span class="currency">$</span>
+          <input type="number" [(ngModel)]="maxPrice" (input)="filterProducts()">
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+
+    <div class="filter-group">
+      <div class="group-title">
+        <h3>Rating</h3>
+      </div>
+
+      <div class="checkbox-list">
+        <label class="custom-checkbox" [class.active]="minRating === 4.5" (click)="selectRating(4.5)">
+          <input type="checkbox" [checked]="minRating === 4.5" readonly>
+          <span class="checkmark"></span>
+          <span class="stars">★★★★★</span>
+          <span class="label-text">4.5 & up <span class="count">({{ getRatingCount(4.5) }})</span></span>
+        </label>
+
+        <label class="custom-checkbox" [class.active]="minRating === 4.0" (click)="selectRating(4.0)">
+          <input type="checkbox" [checked]="minRating === 4.0" readonly>
+          <span class="checkmark"></span>
+          <span class="stars">★★★★☆</span>
+          <span class="label-text">4.0 & up <span class="count">({{ getRatingCount(4.0) }})</span></span>
+        </label>
+
+        <label class="custom-checkbox" [class.active]="minRating === 3.0" (click)="selectRating(3.0)">
+          <input type="checkbox" [checked]="minRating === 3.0" readonly>
+          <span class="checkmark"></span>
+          <span class="stars">★★★☆☆</span>
+          <span class="label-text">3.0 & up <span class="count">({{ getRatingCount(3.0) }})</span></span>
+        </label>
+
+        <label class="custom-checkbox" [class.active]="minRating === 2.0" (click)="selectRating(2.0)">
+          <input type="checkbox" [checked]="minRating === 2.0" readonly>
+          <span class="checkmark"></span>
+          <span class="stars">★★☆☆☆</span>
+          <span class="label-text">2.0 & up <span class="count">({{ getRatingCount(2.0) }})</span></span>
+        </label>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="filter-group">
+      <div class="group-title">
+        <h3>Availability</h3>
+      </div>
+
+      <div class="checkbox-list">
+        <label class="custom-checkbox" [class.active]="availability === 'inStock'"
+               (click)="selectAvailability('inStock')">
+          <input type="checkbox" [checked]="availability === 'inStock'" readonly>
+          <span class="checkmark"></span>
+          <span class="label-text">In Stock <span class="count">({{ getAvailabilityCount('inStock') }})</span></span>
+        </label>
+
+        <label class="custom-checkbox" [class.active]="availability === 'lowStock'"
+               (click)="selectAvailability('lowStock')">
+          <input type="checkbox" [checked]="availability === 'lowStock'" readonly>
+          <span class="checkmark"></span>
+          <span class="label-text">Low Stock <span class="count">({{ getAvailabilityCount('lowStock') }})</span></span>
+        </label>
+      </div>
+    </div>
+
+    <button type="button" class="btn-apply" (click)="filterProducts()">Apply Filters</button>
+  </aside>
+
+
+  <main class="products-content">
+    <div class="products-toolbar">
+      <div class="toolbar-info">
+        <h1 class="products-title">
+          Products <span class="products-count">({{ sortedProducts().length }})</span>
+        </h1>
+        <p class="products-subtext">
+          Showing 1–{{ sortedProducts().length }} of {{ sortedProducts().length }} products
+        </p>
+      </div>
+      <div class="toolbar-actions">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="Search products..." [formControl]="searchInputControl">
+        @if (searchInputControl.hasError('minlength')) {
+          <div class="text-danger">Введи більше 3-х символів</div>
+        }
+      </div>
+
+
+        <div class="sort-wrapper">
+          <span class="sort-label">Sort by:</span>
+          <app-sort [sort]="sortOptions" (sortChange)="sort.set($event)"></app-sort>
+        </div>
+
+        @if (auth.isAdmin$ | async) {
+          <button type="button" class="btn-admin-add" routerLink="/add-page">
+            + Add Page
+          </button>
+        }
+      </div>
+    </div>
+
+
+      <div class="products-grid">
+        @for (product of sortedProducts(); track product.id) {
+          <app-product
+            [showAddToCard]="true"
+            [product]="product"
+            (addToCart)="cartService.addToCart($event)"
+            (remove)="removeFromProduct($event)">
+          </app-product>
+        }
+        @if (filteredProducts().length === 0 && !isError && !isLoading) {
+          <div class="empty-products">Товарів не знайдено</div>
+        }
+      </div>
+
+      @if (isError) {
+        <div>Не вдалося завантажити товари</div>
+        <button (click)="retry()">Спробувати ще раз</button>
+      }
+</main>
+
+
+
+
+

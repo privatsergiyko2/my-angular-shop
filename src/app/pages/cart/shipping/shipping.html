@@ -1,0 +1,211 @@
+<div class="shipping-page-layout">
+  <div class="shipping-main" [formGroup]="shippingForm">
+    <div class="card-block">
+      <div class="card-header">
+        <h2>Shipping Address</h2>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>First name <span>*</span></label>
+          <input type="text" formControlName="firstName" placeholder="First name">
+          @if (shippingForm.get('firstName')?.invalid && shippingForm.get('firstName')?.touched) {
+            <small class="error-text">First name is required</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Last name <span>*</span></label>
+          <input type="text" formControlName="lastName" placeholder="Last name"/>
+          @if (shippingForm.get('lastName')?.invalid && shippingForm.get('lastName')?.touched) {
+            <small class="error-text">Last name is required</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Country <span>*</span></label>
+          <select formControlName="country">
+            <option value="Romania">Romania</option>
+            <option value="Ukraine">Ukraine</option>
+            <option value="Poland">Poland</option>
+          </select>
+          @if (shippingForm.get('country')?.invalid && shippingForm.get('country')?.touched) {
+            <small class="error-text">Country is required</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Phone number <span>*</span></label>
+          <input type="tel" formControlName="phone" placeholder="+40 712 345 678"/>
+          @if (shippingForm.get('phone')?.invalid && shippingForm.get('phone')?.touched) {
+            <small class="error-text">Phone is required</small>
+          }
+        </div>
+
+        <div class="form-group full-width">
+          <label>Address <span>*</span></label>
+          <input type="text" formControlName="address" placeholder="Str. Mihai Eminescu, 12"/>
+          @if (shippingForm.get('address')?.invalid && shippingForm.get('address')?.touched) {
+            <small class="error-text">Address is required</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>City <span>*</span></label>
+          <input type="text" formControlName="city" placeholder="Suceava"/>
+          @if (shippingForm.get('city')?.invalid && shippingForm.get('city')?.touched) {
+            <small class="error-text">City is required</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Postal code <span>*</span></label>
+          <input type="text" formControlName="postalCode" placeholder="720001"/>
+          @if (shippingForm.get('postalCode')?.invalid && shippingForm.get('postalCode')?.touched) {
+            <small class="error-text">Postal code is required</small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>State / County <span>*</span></label>
+          <input type="text" formControlName="region" placeholder="Suceava"/>
+          @if (shippingForm.get('region')?.invalid && shippingForm.get('region')?.touched) {
+            <small class="error-text">State / County is required</small>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="card-block">
+      <h2>Delivery method</h2>
+
+      <div class="delivery-list">
+        @for (option of deliveryOptions; track option.value) {
+          <div
+            class="delivery-card"
+            [class.active]="selectedDelivery === option.value"
+            (click)="selectDelivery(option.value)">
+
+            <div class="radio-circle">
+              <div class="inner-dot"></div>
+            </div>
+
+            <div class="delivery-info">
+              <div class="title">{{ option.label }}</div>
+              <div class="desc">{{ option.description }}</div>
+            </div>
+
+            <div class="delivery-price-time">
+              <div class="price">
+                @if (option.price === 0) {
+                  Free
+                } @else {
+                  ${{ option.price.toFixed(2) }}
+                }
+              </div>
+
+              <div class="time">
+                {{ option.time }}
+              </div>
+            </div>
+
+          </div>
+        }
+      </div>
+
+      <div class="actions-row">
+        <button type="button" class="btn-back" (click)="goBack()">
+          &larr; Back to Cart
+        </button>
+
+        <button type="button" class="btn-next" (click)="goNext()">
+          Continue to Payment &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <app-order-summary [selectedDelivery]="selectedDelivery"></app-order-summary>
+
+<!--  <aside class="order-summary-sidebar">-->
+<!--    <div class="summary-card">-->
+<!--      <div class="summary-header">-->
+<!--        <h3>Order Summary</h3>-->
+<!--      </div>-->
+
+<!--      <div class="cart-items-list">-->
+<!--        @for (item of cartItems; track item.product?.id || $index) {-->
+<!--          <div class="cart-item">-->
+<!--            <img-->
+<!--              [src]="item.product?.thumbnail || item.thumbnail || 'assets/placeholder.png'"-->
+<!--              [alt]="item.product?.thumbnail || item.thumbnail"-->
+<!--              class="item-img"-->
+<!--            />-->
+
+<!--            <div class="item-info">-->
+<!--              <div class="item-title">{{ item.product?.title || item.title }}</div>-->
+<!--              <div class="item-qty">Qty: {{ item.quantity }}</div>-->
+<!--            </div>-->
+
+<!--            <div class="item-price">-->
+<!--              ${{ ((item.product?.price || item.price || 0) * item.quantity).toFixed(2) }}-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        }-->
+<!--      </div>-->
+
+<!--      <hr class="divider"/>-->
+
+<!--      <div class="summary-details">-->
+<!--        <div class="summary-row">-->
+<!--          <span>Items ({{ totalItemsCount }})</span>-->
+<!--          <span>${{ subtotalPrice.toFixed(2) }}</span>-->
+<!--        </div>-->
+
+<!--        <div class="summary-row">-->
+<!--          <span>Discount</span>-->
+<!--          <span class="discount">-${{ discountAmount.toFixed(2) }}</span>-->
+<!--        </div>-->
+
+<!--        <div class="summary-row">-->
+<!--          <span>Shipping</span>-->
+<!--          <span>-->
+<!--            @if (deliveryPrice === 0) {-->
+<!--              Free-->
+<!--            } @else {-->
+<!--              ${{ deliveryPrice.toFixed(2) }}-->
+<!--            }-->
+<!--          </span>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--      <hr class="divider"/>-->
+
+<!--      <div class="summary-total">-->
+<!--        <span>Total</span>-->
+<!--        <span class="total-price">-->
+<!--          ${{ (subtotalPrice - discountAmount + deliveryPrice).toFixed(2) }}-->
+<!--        </span>-->
+<!--      </div>-->
+
+<!--      @if (subtotalPrice >= 50) {-->
+<!--        <div class="badge-box free-shipping">-->
+<!--          <div class="badge-icon">🚚</div>-->
+<!--          <div class="badge-text">-->
+<!--            <strong>Free shipping</strong>-->
+<!--            <p>On orders over $50</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      }-->
+
+<!--      <div class="badge-box secure-payout">-->
+<!--        <div class="badge-icon">🛡️</div>-->
+<!--        <div class="badge-text">-->
+<!--          <strong>Secure payout</strong>-->
+<!--          <p>Your data is protected</p>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </aside>-->
+</div>
+

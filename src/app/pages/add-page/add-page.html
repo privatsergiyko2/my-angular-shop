@@ -1,0 +1,39 @@
+<form class="add-form" [formGroup]="myForm" (ngSubmit)="onSubmit()">
+  <h1>Add Product</h1>
+  <div class="form-group">
+    <label for="name">Name:</label>
+    <input type="text" id="name" formControlName="title">
+  </div>
+  <div class="form-group">
+    <label for="price">Price:</label>
+    <input type="number" id="price" formControlName="price">
+  </div>
+  <div class="form-group">
+    <label for="category">Category:</label>
+    <input type="text" id="category" formControlName="category">
+  </div>
+  <div class="form-group">
+    <label for="imageUrl">ImageUrl:</label>
+    <input type="text" id="imageUrl" formControlName="thumbnail">
+  </div>
+  <div class="form-group">
+    <label for="rating">Rating:</label>
+    <input type="number" id="rating" formControlName="rating">
+  </div>
+  <div class="form-group">
+    <label for="description">description:</label>
+    <input type="text" id="description" formControlName="description">
+  </div>
+  <div class="add-form-buttons">
+    <button class="add-form-submit" type="submit" [disabled]="myForm.invalid || isLoading">Submit</button>
+    <button class="add-form-return" routerLink="/">Return</button>
+    @if (auth.isAdmin$ | async) {
+      <button routerLink="/admin" class="add-form-admin">
+        Back to Admin Panel
+      </button>
+    }
+  </div>
+  @if (isLoading) {
+    <p>тест</p>
+  }
+</form>

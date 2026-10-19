@@ -1,0 +1,170 @@
+<div class="profile-container">
+
+  <aside class="sidebar">
+    <div class="user-card">
+      <div class="user-avatar">
+        {{ newUser.get('firstName')?.value?.charAt(0) || '' }}{{ newUser.get('lastName')?.value?.charAt(0) || '' }}
+      </div>
+      <div class="user-info">
+        <h3>{{ newUser.get('firstName')?.value }} {{ newUser.get('lastName')?.value }}</h3>
+        <p>{{ user.email }}</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-menu">
+      <a class="menu-item active">
+        <span>👤</span> Personal information
+      </a>
+      <a class="menu-item">
+        <span>🔒</span> Security
+      </a>
+      <a class="menu-item">
+        <span>📍</span> Addresses
+      </a>
+      <a class="menu-item">
+        <span>📦</span> My Orders
+      </a>
+      <a class="menu-item">
+        <span>🤍</span> Favorites
+      </a>
+      <a class="menu-item">
+        <span>🔔</span> Notifications
+      </a>
+    </nav>
+
+    <button class="profile-logout" (click)="logout()">Logout</button>
+  </aside>
+
+  <div class="profile-content">
+    <div class="profile-header">
+      <h1>Account Settings</h1>
+      <p>Manage your personal information, security settings and preferences.</p>
+    </div>
+
+    <!-- Форма особистої інформації -->
+    <form class="profile-form" [formGroup]="newUser" (ngSubmit)="save()">
+
+      <div class="form-header">
+        <div class="form-icon">👤</div>
+        <div class="header-text">
+          <h2>Personal Information</h2>
+          <p>Update your personal details and contact information.</p>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First name</label>
+          <input formControlName="firstName">
+          @if (newUser.get("firstName")?.touched && newUser.get("firstName")?.hasError("required")) {
+            <p class="profile-error">First name is required</p>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Last name</label>
+          <input formControlName="lastName">
+          @if (newUser.get("lastName")?.touched && newUser.get("lastName")?.hasError("required")) {
+            <p class="profile-error">Last name is required</p>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Email address</label>
+        <input formControlName="email">
+        <span class="field-hint">ℹ To change your email address, please contact support.</span>
+
+        @if (newUser.get("email")?.hasError("required") && newUser.get("email")?.touched) {
+          <p class="profile-error">Email is required</p>
+        }
+
+        @if (newUser.get("email")?.hasError("email") && newUser.get("email")?.touched) {
+          <p class="profile-error">Email is invalid</p>
+        }
+      </div>
+
+      <div class="form-group">
+        <label>Phone number</label>
+        <input formControlName="phone" placeholder="+40 712 345 678">
+      </div>
+
+      <button class="profile-save-button" type="submit">Save changes</button>
+    </form>
+
+
+    <form class="password-form" [formGroup]="password" (ngSubmit)="savePassword()">
+
+      <div class="form-header">
+        <div class="form-icon">🔒</div>
+        <div class="header-text">
+          <h2>Change Password</h2>
+          <p>Set a new password to keep your account secure.</p>
+        </div>
+      </div>
+
+      <div class="password-body">
+        <div class="password-fields">
+          <div class="form-group">
+            <label>Current password</label>
+            <input formControlName="currentPassword" placeholder="Enter your current password">
+
+            @if (password.get("currentPassword")?.hasError("required") && password.get("currentPassword")?.touched) {
+              <p class="profile-error">Password is required</p>
+            }
+
+            @if (passwordError) {
+              <p class="profile-error">Current password is incorrect</p>
+            }
+          </div>
+
+          <div class="form-group">
+            <label>New password</label>
+            <input formControlName="newPassword" placeholder="Enter a new password">
+
+            @if (password.get("newPassword")?.hasError("required") && password.get("newPassword")?.touched) {
+              <p class="profile-error">Password is required</p>
+            }
+
+            @if (password.get("newPassword")?.hasError("minlength") && password.get("newPassword")?.touched) {
+              <p class="profile-error">Password is too small</p>
+            }
+          </div>
+
+          <div class="form-group">
+            <label>Confirm new password</label>
+            <input formControlName="confirmPassword" placeholder="Confirm your new password">
+
+            @if (password.get("confirmPassword")?.hasError("required") && password.get("confirmPassword")?.touched) {
+              <p class="profile-error">Confirm password is required</p>
+            }
+
+            @if (password.get("confirmPassword")?.hasError("minlength") && password.get("confirmPassword")?.touched) {
+              <p class="profile-error">Confirm password is too short</p>
+            }
+
+            @if (password.hasError("passwordMismatch") && password.get("confirmPassword")?.touched) {
+              <p class="profile-error">Passwords do not match</p>
+            }
+          </div>
+        </div>
+
+        <div class="password-requirements">
+          <div class="req-header">
+            <span class="shield-icon">🛡️</span>
+            <span>Password requirements</span>
+          </div>
+          <ul>
+            <li>At least 8 characters</li>
+            <li>One uppercase letter</li>
+            <li>One lowercase letter</li>
+            <li>One number</li>
+            <li>One special character (e.g. !@#$%)</li>
+          </ul>
+        </div>
+      </div>
+
+      <button class="password-save-button" type="submit">Update password</button>
+    </form>
+  </div>
+</div>

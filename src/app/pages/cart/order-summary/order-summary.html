@@ -1,0 +1,72 @@
+<div class="summary-card">
+  <div class="summary-header">
+    <h3>Order Summary</h3>
+  </div>
+
+  <div class="items-list">
+    @for (item of cartItems; track item.id || item._id) {
+      <div class="summary-item">
+        <div class="item-image">
+          <img [src]="item.thumbnail || item.product?.thumbnail" [alt]="item.title || item.product?.title" />
+        </div>
+        <div class="item-details">
+          <p class="item-title">{{ item.title || item.product?.title }}</p>
+          <p class="item-qty">Qty: {{ item.quantity || 1 }}</p>
+        </div>
+        <div class="item-price">
+          ${{ ((item.price || item.product?.price || 0) * (item.quantity || 1)) | number:'1.2-2' }}
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="summary-rows">
+    <div class="summary-row">
+      <span>Items ({{ totalItemsCount }})</span>
+      <span>${{ subtotalPrice | number:'1.2-2' }}</span>
+    </div>
+
+    <div class="summary-row">
+      <span>Discount</span>
+      <span class="discount">-${{ discountAmount | number:'1.2-2' }}</span>
+    </div>
+
+    <div class="summary-row">
+      <span>Shipping</span>
+      <span>
+        @if (deliveryPrice === 0) {
+          Free
+        } @else {
+          ${{ deliveryPrice | number:'1.2-2' }}
+        }
+      </span>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="summary-row total-row">
+      <span>Total</span>
+      <span class="total-price">${{ totalPrice | number:'1.2-2' }}</span>
+    </div>
+  </div>
+
+  <div class="summary-info-boxes">
+    <div class="info-box pink">
+      <span class="icon">🚚</span>
+      <div class="info-text">
+        <strong>Free shipping</strong>
+        <p>On orders over $50</p>
+      </div>
+    </div>
+
+    <div class="info-box green">
+      <span class="icon">🛡️</span>
+      <div class="info-text">
+        <strong>Secure payment</strong>
+        <p>Your data is protected with SSL encryption.</p>
+      </div>
+    </div>
+  </div>
+</div>

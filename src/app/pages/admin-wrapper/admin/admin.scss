@@ -1,0 +1,113 @@
+:host {
+  width: 100%;
+}
+
+.admin-sidebar {
+  width: 240px;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .admin-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    padding-left: 12px;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 8px;
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #f9fafb;
+      color: #111827;
+    }
+
+    &.active {
+      background-color: #fbcfe8;
+      color: #db2777;
+      font-weight: 600;
+    }
+  }
+}
+
+.admin-main {
+  flex: 1;
+  background-color: #f9fafb;
+  padding: 32px 70px 32px 90px;
+}
+
+.delete-btn {
+  background-color: #fff;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #fef2f2;
+    border-color: #fca5a5;
+  }
+
+  &:active {
+    background-color: #fee2e2;
+  }
+}
+
+.content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  width: 100%;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
+
+  .add-btn {
+    background-color: #ec4899;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #db2777;
+    }
+  }
+}
+
+
+
+

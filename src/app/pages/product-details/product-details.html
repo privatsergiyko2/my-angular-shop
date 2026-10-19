@@ -1,0 +1,165 @@
+@if (productSignal(); as product) {
+
+  <nav class="breadcrumbs">
+    <ul>
+      <li><a routerLink="/">Home</a></li>
+      <li><span>{{ product.category }}</span></li>
+      @if (product.brand) {
+        <li><span>{{ product.brand }}</span></li>
+      }
+      <li><span>{{ product.title }}</span></li>
+    </ul>
+  </nav>
+  <div class="product-top-section">
+    <div class="product-card image-card">
+      <div class="main-image-container">
+        <img [src]="product.thumbnail" [alt]="product.title" class="product-details-image">
+      </div>
+    </div>
+
+    <div class="product-card info-card">
+      <span class="category-badge">{{ product.category }}</span>
+      <h1>{{ product.title }}</h1>
+      <span class="brand-name">{{ product.brand }}</span>
+
+      <div class="rating-container">
+        <span class="stars">{{ getStars(product.rating || 0) }}</span>
+        <span class="rating-text">{{ product.rating }} ({{ reviews.length }} reviews)</span>
+      </div>
+
+      <p class="description">{{ product.description }}</p>
+
+      <div class="price-container">
+        <span class="current-price">${{ product.price }}</span>
+        <span class="stock-status">In Stock ({{ product.stock }} available)</span>
+      </div>
+    </div>
+
+
+    <div class="product-card purchase-card">
+      <button type="button" class="add-to-cart-btn" (click)="addToCart()">
+        🛒 Add to Cart
+      </button>
+      <div class="quantity-controls">
+        <button type="button" (click)="decrementQuantity()">-</button>
+        <span>{{ quantity }}</span>
+        <button type="button" (click)="incrementQuantity()">+</button>
+      </div>
+      <div class="specs-table">
+        <div class="spec-row">
+          <span class="spec-label">Category</span>
+          <span class="spec-value">{{ product.category }}</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-label">Brand</span>
+          <span class="spec-value">{{ product.brand }}</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-value">In Stock: {{ product.stock }} </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="product-card reviews-section">
+    <div class="reviews-header">
+      <h2>Reviews ({{ reviews.length }})</h2>
+      <button type="button" class="write-review-btn">Write a review</button>
+    </div>
+
+    @if (reviews.length === 0) {
+      <p class="empty-review">No reviews yet.</p>
+    } @else {
+      <div class="reviews-list">
+        @for (review of reviews; track $index) {
+          <div class="review-card">
+            <div class="review-user-info">
+              <div class="avatar">{{ review.userName ? review.userName[0] : 'U' }}</div>
+              <div>
+                <span class="user-name">{{ review.userName }}</span>
+                <div class="stars-date">
+                  <span class="stars">{{ getStars(review.rating) }}</span>
+                  <span class="review-date">{{ review.date | date }}</span>
+                </div>
+              </div>
+            </div>
+            <p class="comment">{{ review.comment }}</p>
+          </div>
+        }
+      </div>
+    }
+
+
+    <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="review-form">
+      <h3>Write a review</h3>
+
+      <div class="form-row">
+        <div class="rating-picker">
+          <label>Rating</label>
+          <div class="stars-rating">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <button
+                type="button"
+                class="review-button"
+                [class.active-star]="(reviewForm.value.rating ?? 0) >= star"
+                (click)="reviewForm.patchValue({ rating: star })">
+                ★
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="comment-picker">
+          <label class="comment-label">Comment</label>
+          <textarea
+            formControlName="comment"
+            placeholder="Write your feedback..."
+            rows="3">
+          </textarea>
+        </div>
+
+        <button type="submit" class="submit-button" [disabled]="reviewForm.invalid">
+          Submit review
+        </button>
+      </div>
+    </form>
+  </div>
+
+
+  <button type="button" class="product-details-back" routerLink="/">
+    ← Back to products
+  </button>
+
+  <div class="recommended-section">
+    <h2>You may also like</h2>
+
+    <div class="recommended-grid">
+      @for (product of similarProducts(); track product.id) {
+        <div class="recommended-card">
+          <img [src]="product.thumbnail" [alt]="product.title" class="recommended-product-image">
+
+          <div class="recommended-info">
+            <h3>{{ product.title }}</h3>
+            <span class="price">${{ product.price }}</span>
+            <span class="rating">★ {{ product.rating }}</span>
+          </div>
+
+          <button
+            type="button"
+            class="favorite-btn"
+            [class.active]="isFavorite(product.id)"
+            (click)="toggleFavorite(product)"
+            aria-label="Toggle favorites">
+            {{ isFavorite(product.id) ? '♥' : '♡' }}
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+
+}
+
+
+
+

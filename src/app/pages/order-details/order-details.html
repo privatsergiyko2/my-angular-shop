@@ -1,0 +1,25 @@
+<div class="order-details-container">
+  <h1 class="order-details-title">Order details</h1>
+
+  @if (order) {
+    <p class="order-info">Order ID: {{ order.id }}</p>
+    <p class="order-info">Order date: {{ order.id | date:'medium' }}</p>
+    <p class="order-info">Customer: {{ order.name }}</p>
+    <p class="order-total">Total: {{ order.total | currency }}</p>
+
+    <h2 class="order-products-title">Products</h2>
+
+    @for (item of order.items; track item) {
+      <p class="order-product">
+        {{ item.product.title }}
+        - Quantity: {{ item.quantity }}
+        - {{ item.product.price | currency }}
+      </p>
+    }
+  } @else {
+    <p>Order not found</p>
+  }
+
+  <button class="order-details-back" routerLink="/orders">Back to orders</button>
+</div>
+

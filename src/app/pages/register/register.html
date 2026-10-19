@@ -1,0 +1,48 @@
+<form class="register-form"  [formGroup]="registerForm" (ngSubmit)="register()">
+  <h1 class="register-title">Register</h1>
+  <div class="register-group">
+  <label for="">Name</label>
+  <input formControlName="name">
+    @if (this.registerForm.get("name")?.touched &&
+    this.registerForm.get("name")?.hasError("required")) {
+        <p  class="register-error">Name is required</p>
+    }
+  </div>
+  <div class="register-group">
+  <label for="">E-mail</label>
+  <input formControlName="email">
+    @if
+    (this.registerForm.get("email")?.hasError("required") && this.registerForm.get("email")?.touched) {
+      <p  class="register-error">Email is required</p>
+    }
+    @if (this.registerForm.get("email")?.hasError("email") && this.registerForm.get("email")?.touched) {
+      <p  class="register-error">Email is invalid</p>
+    }
+  </div>
+
+  <div class="register-group">
+  <label for="">Password</label>
+  <input type="password" formControlName="password">
+    @if (this.registerForm.get("password")?.hasError("required") && this.registerForm.get("password")?.touched) {
+      <p  class="register-error">Password is required</p>
+    }
+    @if (this.registerForm.get("password")?.hasError("minlength") && this.registerForm.get("password")?.touched) {
+      <p  class="register-error">Password is too small</p>
+    }
+  </div>
+  <div class="register-group">
+  <label for="">Confirm Password</label>
+  <input type="password" formControlName="confirmPassword">
+    @if (this.registerForm.get("confirmPassword")?.hasError("required") && this.registerForm.get("confirmPassword")?.touched) {
+      <p class="register-error">Confirm password is required</p>
+    }
+    @if (this.registerForm.get("confirmPassword")?.hasError("minlength") && this.registerForm.get("confirmPassword")?.touched) {
+      <p  class="register-error">Confirm password is too short</p>
+    }
+    @if (this.registerForm.hasError("passwordMismatch") && this.registerForm.get("confirmPassword")?.touched) {
+      <p  class="register-error">Passwords do not match</p>
+    }
+  </div>
+
+  <button>Register</button>
+</form>
