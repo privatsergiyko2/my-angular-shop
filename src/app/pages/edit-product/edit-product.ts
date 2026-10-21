@@ -27,13 +27,14 @@ export class EditProduct {
   isSaving: boolean = false;
 
   editForm: any = this._formBuilder.group({
-    id: [0, Validators.required],
+    _id: [0, Validators.required],
     title: ['', Validators.required],
     price: [0, [Validators.required, Validators.min(0)]],
     description: ['', Validators.required],
     category: ['', Validators.required],
     rating: [0, Validators.required],
     thumbnail: ['', Validators.required],
+    test: [''],
   });
 
   constructor() {
@@ -42,7 +43,7 @@ export class EditProduct {
       .pipe(
         tap((product: Product) => {
           this.editForm.patchValue({
-            id: product?._id,
+            _id: product?._id,
             title: product?.title,
             price: product?.price,
             description: product?.description,

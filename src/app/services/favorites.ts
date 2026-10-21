@@ -7,6 +7,7 @@ import {HttpClient} from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
+
 export class Favorites {
   favorites: Product[] = [];
   private _favoritesSubject = new BehaviorSubject<Product[]>([]);
