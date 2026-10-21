@@ -10,6 +10,7 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Auth} from '../../services/auth';
 import {CartService} from '../../services/cart';
 import {Favorites} from '../../services/favorites';
+import { tap } from 'rxjs';
 
 
 @Component({
@@ -60,11 +61,17 @@ export class ProductDetails {
   toggleFavorite(product: Product) {
     if (!product._id) return;
 
-    if (this.isFavorite(product._id)) {
-      this.favoritesService.removeFromFavorite(product._id);
-    } else {
-      this.favoritesService.addToFavorites(product);
-    }
+    this.favoritesService.toggleFavorites(product).pipe(
+      tap((data) => {
+        debugger;
+      })
+    ).subscribe()
+
+    // if (this.isFavorite(product._id)) {
+    //   this.favoritesService.removeFromFavorite(product._id);
+    // } else {
+    //   this.favoritesService.addToFavorites(product);
+    // }
   }
 
   incrementQuantity() {

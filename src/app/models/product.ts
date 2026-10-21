@@ -1,6 +1,7 @@
 export interface Product {
   _id?: string;
   title: string;
+  favorite: boolean;
   description: string;
   category: string;
   price: number;

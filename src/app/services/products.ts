@@ -1,9 +1,9 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Product } from '../models/product';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, catchError, throwError, tap, map } from 'rxjs';
+import { BehaviorSubject, catchError, throwError, tap, map, take } from 'rxjs';
 import { apiUrl, environment } from '../../environments/environments';
-
+import { toSignal } from '@angular/core/rxjs-interop';
 
 interface ProductsResponse {
   products: Product[];
@@ -17,29 +17,39 @@ interface ProductsResponse {
 })
 export class ProductsService {
   private _http: HttpClient = inject(HttpClient);
-  private _productSubject = new BehaviorSubject<Product[]>([]);
-
+  productsFromApi = signal(<Product[]>[]);
 
   getProducts() {
-    if (this._productSubject.getValue().length) {
-      return this._productSubject.asObservable();
-    } else {
-      return this._http.get<ProductsResponse>(`${apiUrl}/${environment.products}`).pipe(
-        tap((response) => {
-          this._productSubject.next(response.products);
-        }),
-        map((response) => {
-          return response.products;
-        }),
-        catchError((error) => {
-          return throwError(() => error);
-        }),
-      );
-    }
+    // if (this._productSubject.getValue().length) {
+    //   return this._productSubject.asObservable();
+    // } else {
+    //   return this._http.get<ProductsResponse>(`${apiUrl}/${environment.products}`).pipe(
+    //     tap((response) => {
+    //       this._productSubject.next(response.products);
+    //     }),
+    //     map((response) => {
+    //       return response.products;
+    //     }),
+    //     catchError((error) => {
+    //       return throwError(() => error);
+    //     }),
+    //   );
+    // }
+
+    return this._http.get<ProductsResponse>(`${apiUrl}/${environment.products}`).pipe(
+      take(1),
+      map((response) => response.products),
+      tap((products) => {
+        this.productsFromApi.set(products);
+      }),
+      catchError((error) => {
+        return throwError(() => error);
+      }),
+    );
   }
 
   updateProductInList(updatedProduct: Product) {
-    const updatedProducts = this._productSubject.value.map((product) => {
+    const updatedProducts = this.productsFromApi().map((product) => {
       if (product._id === updatedProduct._id) {
         return updatedProduct;
       } else {
@@ -48,7 +58,7 @@ export class ProductsService {
     });
 
     console.log(updatedProducts);
-    this._productSubject.next(updatedProducts);
+    this.productsFromApi.set(updatedProducts);
   }
 
   getProductById(id: string | null) {
@@ -62,9 +72,9 @@ export class ProductsService {
   deleteProduct(id: string) {
     return this._http.delete(`${apiUrl}/${environment.products}/${id}`).pipe(
       tap((response) => {
-       this._productSubject.next( this._productSubject.value.filter((product) => product._id !== id))
-      })
-    )
+        this.productsFromApi.set(this.productsFromApi().filter((product) => product._id !== id));
+      }),
+    );
   }
 
   updateProduct(id: string | null, data: Partial<Product>) {
@@ -72,8 +82,8 @@ export class ProductsService {
   }
 
   addProduct(product: Product) {
-    const newProduct = [product, ...this._productSubject.getValue()];
+    const newProduct = [product, ...this.productsFromApi()];
 
-    this._productSubject.next(newProduct);
+    this.productsFromApi.set(newProduct);
   }
 }

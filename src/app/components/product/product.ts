@@ -4,6 +4,8 @@ import {RouterLink} from '@angular/router';
 import {Favorites} from '../../services/favorites';
 import {Auth} from '../../services/auth';
 import {AsyncPipe, DecimalPipe} from '@angular/common';
+import { concatMap, tap } from 'rxjs';
+import { ProductsService } from '../../services/products';
 
 
 @Component({
@@ -13,6 +15,8 @@ import {AsyncPipe, DecimalPipe} from '@angular/common';
   styleUrl: './product.scss',
 })
 export class ProductComponent {
+  private readonly _favoritesService: Favorites = inject(Favorites);
+  private readonly _productsService: ProductsService = inject(ProductsService);
   // showOrHideAddToCard: InputSignal<boolean> = input(true);
   auth: Auth = inject(Auth);
   private _favorite = inject(Favorites);
@@ -32,7 +36,9 @@ export class ProductComponent {
   }
 
   isFavorite(): boolean {
-    return this._favorite.favorites.some((item) => item._id === this.product._id);
+    // return this._favorite.favorites.some((item) => item._id === this.product._id);
+
+    return this.product.favorite;
   }
 
   isStarFilled(star: number): boolean {
@@ -40,11 +46,22 @@ export class ProductComponent {
   }
 
   toggleFavorite() {
-    if (this.isFavorite()) {
-      this._favorite.removeFromFavorite(this.product._id);
-    } else {
-      this._favorite.addToFavorites(this.product);
-    }
+    this._favoritesService
+      .toggleFavorites({
+        ...this.product,
+        favorite: !this.product.favorite
+      })
+      .pipe(
+        concatMap(() => {
+          return this._productsService.getProducts()
+        }),
+      ).subscribe();
+
+    // if (this.isFavorite()) {
+    //   this._favorite.removeFromFavorite(this.product._id);
+    // } else {
+    //   this._favorite.addToFavorites(this.product);
+    // }
   }
 
   removeFromFavorites(id: string) {
