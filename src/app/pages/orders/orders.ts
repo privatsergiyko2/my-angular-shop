@@ -31,8 +31,8 @@ export class OrdersPage {
     const list = [...(this.orders || [])];
 
     return list.sort((a, b) => {
-      const timeA = new Date(a.id).getTime();
-      const timeB = new Date(b.id).getTime();
+      const timeA = new Date(a._id).getTime();
+      const timeB = new Date(b._id).getTime();
 
       if (this.sortOrder() === 'newest') {
         return timeB - timeA;
@@ -76,7 +76,7 @@ export class OrdersPage {
   }
 
   viewDetails (order: Order) {
-    this.router.navigate(['/orders', order.id]);
+    this.router.navigate(['/orders', order._id]);
   }
 
   protected readonly Array = Array;

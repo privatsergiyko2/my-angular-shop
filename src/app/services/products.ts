@@ -40,7 +40,7 @@ export class ProductsService {
 
   updateProductInList(updatedProduct: Product) {
     const updatedProducts = this._productSubject.value.map((product) => {
-      if (product.id === updatedProduct.id) {
+      if (product._id === updatedProduct._id) {
         return updatedProduct;
       } else {
         return product;
@@ -51,7 +51,7 @@ export class ProductsService {
     this._productSubject.next(updatedProducts);
   }
 
-  getProductById(id: number) {
+  getProductById(id: string | null) {
     return this._http.get<Product>(`${apiUrl}/${environment.products}/${id}`);
   }
 
@@ -59,15 +59,15 @@ export class ProductsService {
     return this._http.post<Product>(`${apiUrl}/${environment.addProduct}`, product);
   }
 
-  deleteProduct(id: number) {
+  deleteProduct(id: string) {
     return this._http.delete(`${apiUrl}/${environment.products}/${id}`).pipe(
       tap((response) => {
-       this._productSubject.next( this._productSubject.value.filter((product) => product.id !== id))
+       this._productSubject.next( this._productSubject.value.filter((product) => product._id !== id))
       })
     )
   }
 
-  updateProduct(id: number, data: Partial<Product>) {
+  updateProduct(id: string | null, data: Partial<Product>) {
     return this._http.patch<Product>(`${apiUrl}/${environment.products}/${id}`, data);
   }
 

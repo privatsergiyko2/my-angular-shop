@@ -16,13 +16,14 @@ export class Favorites {
   }
 
   addToFavorites (product: Product) {
-    const existingFavorites =   this.favorites.find(favorite => favorite.id === product.id);
+    const existingFavorites =   this.favorites.find(favorite => favorite._id === product._id);
     if (!existingFavorites) {
       this.favorites.push(product);
       this._favoritesSubject.next(this.favorites);
       this.favoritesSave()
     }
   }
+
   favoritesSave () {
     localStorage.setItem('favorites', JSON.stringify(this.favorites));
   }
@@ -41,8 +42,8 @@ export class Favorites {
     return this._favoritesSubject.asObservable()
   }
 
-  removeFromFavorite (id: number)  {
-    this.favorites = this.favorites.filter(favorite => favorite.id !== id);
+  removeFromFavorite (id: string)  {
+    this.favorites = this.favorites.filter(favorite => favorite._id !== id);
     this._favoritesSubject.next(this.favorites);
     this.favoritesSave()
   }

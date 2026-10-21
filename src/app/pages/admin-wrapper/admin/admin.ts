@@ -17,7 +17,7 @@ export class Admin {
   _cdr = inject(ChangeDetectorRef);
   _productService: ProductsService = inject(ProductsService);
   _products = signal<Product[]>([]);
-  selectedProducts: number[] = [];
+  selectedProducts: string[] = [];
   sort = signal('newest');
 
   constructor() {
@@ -40,13 +40,13 @@ export class Admin {
   sortedProducts = computed(() => {
     if (this.sort() === 'newest') {
       const products = [...this._products()];
-      products.sort((a, b) => b.id - a.id);
+      products.sort((a, b) => b._id!.localeCompare(a._id!));
       return products;
     }
 
     if (this.sort() === 'oldest') {
       const products = [...this._products()];
-      products.sort((a, b) => a.id - b.id);
+      products.sort((a, b) => a._id!.localeCompare(b._id!));
       return products;
     }
 
@@ -78,18 +78,18 @@ export class Admin {
   });
 
   toggleProduct(product: Product) {
-    if (this.selectedProducts.includes(product.id)) {
+    if (this.selectedProducts.includes(product._id)) {
       this.selectedProducts = this.selectedProducts.filter((id) => {
-        return id !== product.id;
+        return id !== product._id;
       });
     } else {
-      this.selectedProducts.push(product.id);
+      this.selectedProducts.push(product._id);
     }
   }
 
   toggleAllProducts(checked: boolean) {
     if (checked) {
-      this.selectedProducts = this._products().map((product) => product.id);
+      this.selectedProducts = this._products().map((product) => product._id);
     } else {
       this.selectedProducts = [];
     }
@@ -102,7 +102,7 @@ export class Admin {
       });
 
       this._products.set(
-        this._products().filter((product) => !this.selectedProducts.includes(product.id)),
+        this._products().filter((product) => !this.selectedProducts.includes(product._id)),
       );
 
       this.selectedProducts = [];
@@ -112,12 +112,12 @@ export class Admin {
   }
 
   editProduct(product: Product) {
-    this.router.navigate(['/edit', product.id]);
+    this.router.navigate(['/edit', product._id]);
   }
 
-  removeProduct(id: number) {
+  removeProduct(id: string) {
     this._productService.deleteProduct(id).subscribe(() => {
-      this._products.set(this._products().filter((product) => product.id !== id));
+      this._products.set(this._products().filter((product) => product._id !== id));
       this._cdr.detectChanges();
     });
   }

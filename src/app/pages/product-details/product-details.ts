@@ -14,58 +14,57 @@ import {Favorites} from '../../services/favorites';
 
 @Component({
   selector: 'app-product-details',
-  imports: [
-    RouterLink,
-    DatePipe,
-    ReactiveFormsModule,
-    DecimalPipe
-  ],
+  imports: [RouterLink, DatePipe, ReactiveFormsModule, DecimalPipe],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })
 export class ProductDetails {
   fb = inject(FormBuilder);
-  private route: ActivatedRoute = inject(ActivatedRoute)
+  private route: ActivatedRoute = inject(ActivatedRoute);
   private _productService = inject(ProductsService);
   reviewService = inject(ReviewsService);
   cartService = inject(CartService);
   auth = inject(Auth);
-  similarProducts = signal<Product[]>([])
+  similarProducts = signal<Product[]>([]);
   reviews: Review[] = [];
-  favoritesService = inject(Favorites)
-  quantity = 1
+  favoritesService = inject(Favorites);
+  quantity = 1;
   id: string = this.route.snapshot.paramMap.get('id') || '';
-
 
   reviewForm = this.fb.group({
     rating: [0, [Validators.required, Validators.min(1)]],
-    comment: ["", Validators.required]
-  })
+    comment: ['', Validators.required],
+  });
 
   constructor() {
-    this.reviews = this.reviewService.getReviewsByProduct(Number(this.id));
+    this.reviews = this.reviewService.getReviewsByProduct(this.id);
 
     effect(() => {
       const prod = this.productSignal();
       if (prod) {
         this._productService.getProducts().subscribe((products: Product[]) => {
-          this.similarProducts.set(products.filter(
-            (item: Product) => item.category === prod.category && item.id !== prod.id))
-        })
+          this.similarProducts.set(
+            products.filter(
+              (item: Product) => item.category === prod.category && item._id !== prod._id,
+            ),
+          );
+        });
       }
     });
   }
 
-  isFavorite (productId: number):boolean {
-    return this.favoritesService.favorites.some(item => item.id == productId);
+  isFavorite(productId: string): boolean {
+    return this.favoritesService.favorites.some((item) => item._id == productId);
   }
 
-  toggleFavorite (product: Product) {
-   if(this.isFavorite(product.id)) {
-     this.favoritesService.removeFromFavorite(product.id);
-   } else {
-     this.favoritesService.addToFavorites(product);
-   }
+  toggleFavorite(product: Product) {
+    if (!product._id) return;
+
+    if (this.isFavorite(product._id)) {
+      this.favoritesService.removeFromFavorite(product._id);
+    } else {
+      this.favoritesService.addToFavorites(product);
+    }
   }
 
   incrementQuantity() {
@@ -78,10 +77,8 @@ export class ProductDetails {
     }
   }
 
-
-
   addToCart() {
-    const currentProduct = this.productSignal()
+    const currentProduct = this.productSignal();
     if (currentProduct) {
       for (let i = 0; i < this.quantity; i++) {
         this.cartService.addToCart(currentProduct);
@@ -89,19 +86,17 @@ export class ProductDetails {
     }
   }
 
-
   submitReview() {
     if (this.reviewForm.invalid) {
-      return
+      return;
     }
     if (!this.auth.userSubject.value) {
-      return
+      return;
     }
     const user = this.auth.userSubject.value;
     const review: Review = {
-      id: Date.now(),
       userName: user.name,
-      productId: Number(this.id),
+      productId: this.id,
       productTitle: this.productSignal()?.title!,
       rating: this.reviewForm.value.rating!,
       comment: this.reviewForm.value.comment!,
@@ -109,20 +104,17 @@ export class ProductDetails {
     };
     this.reviewService.addReview(review);
     this.reviewForm.reset({
-        rating: 0,
-        comment: ''
-      }
-    );
-    this.reviews = this.reviewService.getReviewsByProduct(Number(this.id));
+      rating: 0,
+      comment: '',
+    });
+    this.reviews = this.reviewService.getReviewsByProduct(this.id);
   }
 
   getStars(rating: number): string {
     return '★'.repeat(rating) + '☆'.repeat(5 - rating);
   }
 
-  productSignal = toSignal(
-    this._productService.getProductById(Number(this.id))
-  )
+  productSignal = toSignal(this._productService.getProductById(this.id));
 
   product: Product | null = null;
 }

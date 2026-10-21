@@ -18,11 +18,11 @@ export class ProductComponent {
   private _favorite = inject(Favorites);
 
   get originalPrice(): number {
-    if(!this.product.discountPercentage) {
+    if (!this.product.discountPercentage) {
       return this.product.price;
     }
 
-    const original = this.product.price * (1 - this.product.discountPercentage/100);
+    const original = this.product.price * (1 - this.product.discountPercentage / 100);
     return Number(original.toFixed(2));
   }
 
@@ -32,7 +32,7 @@ export class ProductComponent {
   }
 
   isFavorite(): boolean {
-    return this._favorite.favorites.some((item) => item.id === this.product.id);
+    return this._favorite.favorites.some((item) => item._id === this.product._id);
   }
 
   isStarFilled(star: number): boolean {
@@ -41,13 +41,13 @@ export class ProductComponent {
 
   toggleFavorite() {
     if (this.isFavorite()) {
-      this._favorite.removeFromFavorite(this.product.id);
+      this._favorite.removeFromFavorite(this.product._id);
     } else {
       this._favorite.addToFavorites(this.product);
     }
   }
 
-  removeFromFavorites(id: number) {
+  removeFromFavorites(id: string) {
     this._favorite.removeFromFavorite(id);
     console.log(this._favorite.favorites);
   }

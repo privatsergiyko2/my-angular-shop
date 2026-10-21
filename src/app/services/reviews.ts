@@ -21,12 +21,12 @@ export class ReviewsService {
     localStorage.setItem('reviews', JSON.stringify(this.reviews))
   }
 
-  deleteReview(id: number) {
-    this.reviews = this.reviews.filter((review) => review.id !== id)
+  deleteReview(id: string) {
+    this.reviews = this.reviews.filter((review) => review._id !== id)
     localStorage.setItem('reviews', JSON.stringify(this.reviews))
   }
 
-  getReviewsByProduct(productId: number) {
+  getReviewsByProduct(productId: string) {
     return this.reviews.filter((review) => review.productId === productId)
   }
 

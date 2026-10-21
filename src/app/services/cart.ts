@@ -28,7 +28,7 @@ export class CartService {
 
   addToCart(product: Product) {
     const existingItem = this.cart.find(
-      cartItem => cartItem.product.id === product.id
+      cartItem => cartItem.product._id === product._id
     );
 
     if (existingItem) {
@@ -43,14 +43,14 @@ export class CartService {
     console.log(this.cart);
   }
 
-  removeProduct(id: number) {
-    this.cart = this.cart.filter(product => product.product.id !== id)
+  removeProduct(id: string) {
+    this.cart = this.cart.filter(product => product.product._id !== id)
     this.saveCart();
   }
 
-  increaseQuantity(id: number) {
+  increaseQuantity(id: string) {
     const item = this.cart.find(
-      cartItem => cartItem.product.id === id
+      cartItem => cartItem.product._id === id
     );
 
     if (item) {
@@ -59,9 +59,9 @@ export class CartService {
     this.saveCart();
   }
 
-  decreaseQuantity(id: number) {
+  decreaseQuantity(id: string) {
     const item = this.cart.find(
-      cartItem => cartItem.product.id === id
+      cartItem => cartItem.product._id === id
     );
 
 

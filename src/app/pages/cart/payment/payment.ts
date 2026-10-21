@@ -119,7 +119,7 @@ export class Payment implements OnInit {
 
         const order: Order = {
           name: name ?? '',
-          id: Date.now(),
+          _id: Date.now(),
           items: this._cartService.cart,
           total: this._cartService.getTotalPrice()
         };

@@ -3,7 +3,7 @@
   Back to products
 </button>
 <div class="favorites-container">
-@for (favoriteProduct of favoritesProducts; track favoriteProduct.id) {
+@for (favoriteProduct of favoritesProducts; track favoriteProduct._id) {
   <app-product [product]="favoriteProduct"></app-product>
 }
 </div>

@@ -160,7 +160,7 @@
 
 
       <div class="products-grid">
-        @for (product of sortedProducts(); track product.id) {
+        @for (product of sortedProducts(); track product._id) {
           <app-product
             [showAddToCard]="true"
             [product]="product"

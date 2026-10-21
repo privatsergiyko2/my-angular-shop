@@ -17,7 +17,7 @@ import {CurrencyPipe, DatePipe} from '@angular/common';
 export class OrderDetails {
   route = inject(ActivatedRoute);
   _ordersService = inject(Orders);
-  orderId = Number(this.route.snapshot.paramMap.get('id'));
+  orderId: any = this.route.snapshot.paramMap.get('id');
 
 
   constructor() {
@@ -25,6 +25,6 @@ export class OrderDetails {
   console.log(this.order);
   }
 
-  order = this._ordersService.orders.find(order => order.id === this.orderId);
+  order = this._ordersService.orders.find(order => order._id === this.orderId);
 
 }

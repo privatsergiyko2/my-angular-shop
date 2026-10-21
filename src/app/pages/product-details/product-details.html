@@ -135,7 +135,7 @@
     <h2>You may also like</h2>
 
     <div class="recommended-grid">
-      @for (product of similarProducts(); track product.id) {
+      @for (product of similarProducts(); track product._id) {
         <div class="recommended-card">
           <img [src]="product.thumbnail" [alt]="product.title" class="recommended-product-image">
 
@@ -148,10 +148,10 @@
           <button
             type="button"
             class="favorite-btn"
-            [class.active]="isFavorite(product.id)"
+            [class.active]="isFavorite(product?._id)"
             (click)="toggleFavorite(product)"
             aria-label="Toggle favorites">
-            {{ isFavorite(product.id) ? '♥' : '♡' }}
+            {{ isFavorite(product?._id) ? '♥' : '♡' }}
           </button>
         </div>
       }

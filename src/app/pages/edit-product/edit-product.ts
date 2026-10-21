@@ -21,7 +21,7 @@ export class EditProduct {
   private _formBuilder: FormBuilder = inject(FormBuilder);
   private _router: Router = inject(Router);
 
-  private readonly _productId: number = Number(this._route.snapshot.paramMap.get('id'));
+  private readonly _productId: string | null = this._route.snapshot.paramMap.get('id');
   saveErrorMessage: string = '';
   isSaved: boolean = false;
   isSaving: boolean = false;
@@ -42,7 +42,7 @@ export class EditProduct {
       .pipe(
         tap((product: Product) => {
           this.editForm.patchValue({
-            id: product?.id,
+            id: product?._id,
             title: product?.title,
             price: product?.price,
             description: product?.description,

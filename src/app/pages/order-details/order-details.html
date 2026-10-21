@@ -2,8 +2,8 @@
   <h1 class="order-details-title">Order details</h1>
 
   @if (order) {
-    <p class="order-info">Order ID: {{ order.id }}</p>
-    <p class="order-info">Order date: {{ order.id | date:'medium' }}</p>
+    <p class="order-info">Order ID: {{ order._id }}</p>
+    <p class="order-info">Order date: {{ order._id | date:'medium' }}</p>
     <p class="order-info">Customer: {{ order.name }}</p>
     <p class="order-total">Total: {{ order.total | currency }}</p>
 

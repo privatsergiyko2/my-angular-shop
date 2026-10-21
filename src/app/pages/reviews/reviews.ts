@@ -6,20 +6,18 @@ import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-reviews',
-  imports: [
-    DatePipe
-  ],
+  imports: [DatePipe],
   templateUrl: './reviews.html',
   styleUrl: './reviews.scss',
 })
 export class Reviews {
   auth = inject(Auth);
-  isAdmin = this.auth.userSubject.value?.role ===  1;
+  isAdmin = this.auth.userSubject.value?.role === 1;
   reviews: Review[] = [];
   reviewsService: ReviewsService = inject(ReviewsService);
 
-  deleteReview (id: number) {
-    this.reviewsService.deleteReview(id)
+  deleteReview(id: string) {
+    this.reviewsService.deleteReview(id);
     this.reviews = this.reviewsService.getReviews();
   }
 

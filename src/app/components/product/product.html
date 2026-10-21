@@ -19,7 +19,7 @@
   </div>
 
   <div class="product-card-body">
-    <h5 class="product-title" [routerLink]="['/products', product.id]">{{ product.title }}</h5>
+    <h5 class="product-title" [routerLink]="['/products', product._id]">{{ product.title }}</h5>
 
     @if (product.brand) {
       <span class="product-brand">{{ product.brand }}</span>
@@ -56,7 +56,7 @@
 
       @if (isLoggedIn && isAdmin) {
         <div class="admin-actions">
-          <button type="button" class="btn-admin-edit" [routerLink]="['/edit', product.id]">Edit</button>
+          <button type="button" class="btn-admin-edit" [routerLink]="['/edit', product._id]">Edit</button>
           <button type="button" class="btn-admin-remove" (click)="remove.emit(product)">Remove</button>
         </div>
       }

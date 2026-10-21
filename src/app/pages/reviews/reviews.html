@@ -5,7 +5,7 @@
     <p>No reviews yet</p>
   }
 
-  @for (review of reviews; track review.id) {
+  @for (review of reviews; track review._id) {
     <div class="review-card">
 
       <h3 >{{ review.userName }}</h3>
@@ -23,7 +23,7 @@
       </p>
 
       @if (isAdmin) {
-        <button type="button" class="delete-button" (click)="deleteReview(review.id)">Delete</button>
+        <button type="button" class="delete-button" (click)="deleteReview(review._id)">Delete</button>
       }
 
       <p>

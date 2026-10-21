@@ -16,7 +16,7 @@ import { AdminSidebar } from '../../../components/admin-sidebar/admin-sidebar';
 export class AdminReviews {
   _cdr = inject(ChangeDetectorRef);
   _reviewService: ReviewsService = inject(ReviewsService);
-  menuOpen: number | null = null;
+  menuOpen: string | null = null;
   reviews = signal<Review[]>([]);
   selectedReview: Review | null = null;
   sort = signal('newest');
@@ -96,7 +96,7 @@ export class AdminReviews {
     this.reviews.set(this._reviewService.getReviews());
   }
 
-  toggleMenu(id: number) {
+  toggleMenu(id: string) {
     if (this.menuOpen === id) {
       this.menuOpen = null;
     } else {
@@ -108,7 +108,7 @@ export class AdminReviews {
     this.menuOpen = null;
   }
 
-  deleteReview(id: number) {
+  deleteReview(id: string) {
     this._reviewService.deleteReview(id);
     this.reviews.set(this._reviewService.getReviews());
   }

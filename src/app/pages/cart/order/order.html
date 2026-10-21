@@ -12,10 +12,10 @@
     </div>
 
     <div class="cart-item-list">
-      @for (item of cartService.cart; track item.product.id) {
+      @for (item of cartService.cart; track item.product._id) {
         <div class="cart-item">
-          <input type="checkbox" [checked]="selectedProducts.includes(item.product.id)" class="item-checkbox"
-                 (change)="selectCheckBox($any($event.target).checked, item.product.id)"/>
+          <input type="checkbox" [checked]="selectedProducts.includes(item.product._id)" class="item-checkbox"
+                 (change)="selectCheckBox($any($event.target).checked, item.product._id)"/>
 
           <div class="item-image-wrapper">
             <img [src]="item.product.thumbnail" [alt]="item.product.title" class="item-image"/>
@@ -32,12 +32,12 @@
           </div>
 
           <div class="item-quantity">
-            <button type="button" (click)="cartService.decreaseQuantity(item.product.id)">-</button>
+            <button type="button" (click)="cartService.decreaseQuantity(item.product._id)">-</button>
             <span>{{ item.quantity }}</span>
-            <button type="button" (click)="cartService.increaseQuantity(item.product.id)">+</button>
+            <button type="button" (click)="cartService.increaseQuantity(item.product._id)">+</button>
           </div>
 
-          <button type="button" class="remove-btn" (click)="cartService.removeProduct(item.product.id)">
+          <button type="button" class="remove-btn" (click)="cartService.removeProduct(item.product._id)">
             🗑️
           </button>
         </div>
@@ -113,7 +113,7 @@
   <div class="recommended-section">
     <h2 class="recommended-title">You might also like</h2>
     <div class="recommended-grid">
-      @for (rec of recommendedProducts(); track rec.id) {
+      @for (rec of recommendedProducts(); track rec._id) {
         <div class="recommended-card">
           <div class="recommended-image-wrapper">
             <img [src]="rec.thumbnail" [alt]="rec.title" class="recommended-image" />

@@ -31,7 +31,7 @@
           </tr>
           </thead>
           <tbody>
-            @for (review of paginationReviews(); track review.id) {
+            @for (review of paginationReviews(); track review._id) {
               <tr>
                 <td class="checkbox-col">
                   <input type="checkbox">
@@ -45,9 +45,9 @@
                 <td>{{ review.date | date:'mediumDate' }}</td>
                 <td class="text-right">
                   <div class="actions-dropdown">
-                    <button (click)="toggleMenu(review.id); $event.stopPropagation()" class="icon-btn">...</button>
+                    <button (click)="toggleMenu(review._id); $event.stopPropagation()" class="icon-btn">...</button>
 
-                    @if (menuOpen === review.id) {
+                    @if (menuOpen === review._id) {
                       <div class="dropdown-menu">
                         <button
                           (click)="viewReview(review); menuOpen = null"
@@ -57,7 +57,7 @@
                         </button>
 
                         <button
-                          (click)="deleteReview(review.id); menuOpen = null"
+                          (click)="deleteReview(review._id); menuOpen = null"
                           class="dropdown-item delete"
                         >
                           Delete

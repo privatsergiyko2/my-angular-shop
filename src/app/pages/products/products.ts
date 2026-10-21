@@ -135,7 +135,6 @@ export class Products implements OnInit {
   }
 
   filterProducts() {
-    console.log(this.products.find((product) => product.id === 1));
     const searchValue = this.searchInputControl.value?.toLowerCase() || '';
     this.filteredProducts.set(this.products.filter((product) => {
       const productTitle = product.title.toLowerCase();
@@ -208,10 +207,12 @@ export class Products implements OnInit {
   }
 
   protected removeFromProduct(item: Product) {
-    this._productsService.deleteProduct(item.id).subscribe((response) => {
-      this.products = this.products.filter((product) => product.id !== item.id);
+    if (!item._id) return;
 
-      this.filteredProducts.set(this.filteredProducts().filter((product) => product.id !== item.id))
+    this._productsService.deleteProduct(item?._id).subscribe((response) => {
+      this.products = this.products.filter((product) => product._id !== item._id);
+
+      this.filteredProducts.set(this.filteredProducts().filter((product) => product._id !== item._id))
     });
   }
 }

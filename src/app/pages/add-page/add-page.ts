@@ -1,13 +1,13 @@
-import {Component, inject} from '@angular/core';
-import {ProductsService} from '../../services/products';
-import {RouterLink, RouterLinkActive} from '@angular/router';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ChangeDetectorRef} from '@angular/core';
-import {catchError, take, tap} from 'rxjs';
-import {Auth} from '../../services/auth';
+import { Component, inject } from '@angular/core';
+import { ProductsService } from '../../services/products';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectorRef } from '@angular/core';
+import { catchError, take, tap } from 'rxjs';
+import { Auth } from '../../services/auth';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-add-page',
@@ -22,13 +22,31 @@ export class AddPage {
   private fb: FormBuilder = inject(FormBuilder);
   private _productService: ProductsService = inject(ProductsService);
 
-  myForm: FormGroup = this.fb.group({
+  myForm = this.fb.group({
     title: ['', Validators.required],
-    price: [0, Validators.required],
-    category: ['', Validators.required],
-    thumbnail: ['assets/images/product.png', Validators.required],
-    rating: [0, Validators.required],
     description: ['', Validators.required],
+    category: ['', Validators.required],
+    price: [0, Validators.required],
+    discountPercentage: [0],
+    rating: [0, Validators.required],
+    stock: [0],
+    tags: [[]],
+    brand: [''],
+    sku: [''],
+    weight: [0],
+    dimensions: this.fb.group({
+      width: [0],
+      height: [0],
+      depth: [0],
+    }),
+    warrantyInformation: [''],
+    shippingInformation: [''],
+    availabilityStatus: ['In Stock'],
+    reviews: [[]],
+    returnPolicy: [''],
+    minimumOrderQuantity: [1],
+    images: [[]],
+    thumbnail: ['https://blocks.astratic.com/img/general-img-landscape.png', Validators.required],
   });
 
   isLoading = false;
@@ -39,7 +57,7 @@ export class AddPage {
       this._productService
         .addProductsToApi({
           ...this.myForm.value,
-        })
+        } as Product)
         .pipe(
           take(1),
           tap((response) => {
