@@ -20,7 +20,6 @@ export class ProductsService {
   private _productSubject = new BehaviorSubject<Product[]>([]);
 
 
-
   getProducts() {
     if (this._productSubject.getValue().length) {
       return this._productSubject.asObservable();
@@ -74,7 +73,6 @@ export class ProductsService {
 
   addProduct(product: Product) {
     const newProduct = [product, ...this._productSubject.getValue()];
-
 
     this._productSubject.next(newProduct);
   }

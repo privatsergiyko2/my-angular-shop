@@ -14,6 +14,7 @@ export class Favorites {
   constructor() {
     this.favoritesParse()
   }
+
   addToFavorites (product: Product) {
     const existingFavorites =   this.favorites.find(favorite => favorite.id === product.id);
     if (!existingFavorites) {

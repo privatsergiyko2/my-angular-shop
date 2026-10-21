@@ -22,10 +22,10 @@ export class Order implements OnInit {
   public cartService: CartService = inject(CartService);
   private router = inject(Router);
   selectedProducts: number[] = [];
-  @Input() stepper?: MatStepper; // <--- Приймаємо посилання на степер з батька
+  @Input() stepper?: MatStepper;
 
   onProceedToCheckout() {
-    this.stepper?.next(); // <--- Переключаємо на крок Shipping!
+    this.stepper?.next();
   }
 
   protected removeFromCart($event: Product) {
@@ -80,9 +80,5 @@ export class Order implements OnInit {
     this.selectedProducts.forEach((id) => {
       this.cartService.removeProduct(id)
     });
-  }
-
-  pay() {
-    this.router.navigate(['/payment']);
   }
 }

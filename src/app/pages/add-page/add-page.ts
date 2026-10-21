@@ -6,6 +6,7 @@ import {ChangeDetectorRef} from '@angular/core';
 import {catchError, take, tap} from 'rxjs';
 import {Auth} from '../../services/auth';
 import { AsyncPipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -16,6 +17,7 @@ import { AsyncPipe } from '@angular/common';
 })
 export class AddPage {
   auth: Auth = inject(Auth);
+  router = inject(Router);
   private _cdr = inject(ChangeDetectorRef);
   private fb: FormBuilder = inject(FormBuilder);
   private _productService: ProductsService = inject(ProductsService);
@@ -44,6 +46,7 @@ export class AddPage {
             console.log(response);
             this._productService.addProduct(response);
             this.isLoading = false;
+            this.router.navigateByUrl('/');
             this._cdr.detectChanges();
           }),
           catchError((error) => {

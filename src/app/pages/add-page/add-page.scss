@@ -1,78 +1,129 @@
-.add-form {
-  background-color: var(--surface);
-  padding: 32px;
-  border-radius: var(--radius);
-  width: 600px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  margin: 0 auto;
-  margin-top: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+
+.add-page {
+  width: min(100% - 32px, 850px);
+  margin: 40px auto 64px;
 }
 
-.add-form input:focus {
-  outline: none;
-  border: 1px solid var(--accent);
+.page-header {
+  margin-bottom: 24px;
+  text-align: center;
+
+  h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0 0 8px;
+    letter-spacing: -0.5px;
+  }
+
+  p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+  }
+}
+
+.add-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  width: 100%;
+  margin: 0;
+  padding: 32px;
+
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-width: 0;
 }
 
-.add-form h1 {
-  font-size: 32px;
-  font-weight: 700;
+.add-form label {
   color: var(--text);
-  text-align: center;
-  margin-bottom: 24px;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .add-form input {
   width: 100%;
   height: 48px;
-  padding: 0 16px;
+  padding: 0 14px;
+
   background-color: var(--surface);
-  border-radius: var(--radius);
-  color: var(--text);
   border: 1px solid var(--border);
-}
+  border-radius: 10px;
 
-
-
-.add-form label {
   color: var(--text);
   font-size: 14px;
-  font-weight: 500;
-  gap: 16px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.add-form input:hover {
+  border-color: #cbd5e1;
+}
+
+.add-form input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.add-form input::placeholder {
+  color: #94a3b8;
+}
+
+.add-form-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.add-form-buttons button {
+  min-height: 44px;
+  padding: 0 20px;
+
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .add-form-submit {
   background-color: var(--accent);
-  color: white;
-  border-radius: var(--radius);
-  padding: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 30%;
+  color: #ffffff;
+  border: 1px solid var(--accent);
 }
 
-.add-form-return {
-  background-color: var(--surface);
-  color: var(--text);
-  border:1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  width: 30%;
-}
-
-.add-form-return:hover {
-  background-color: #f1f5f9;
-  transform: translateY(-1px)
+.add-form-submit:hover:not(:disabled) {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+  transform: translateY(-1px);
 }
 
 .add-form-submit:disabled {
@@ -80,31 +131,53 @@
   cursor: not-allowed;
 }
 
-
-.add-form-submit:hover {
-  background-color: #1d4ed8;
-  transform: translateY(-1px);
-}
-
-.add-form-buttons {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-}
-
+.add-form-return,
 .add-form-admin {
   background-color: var(--surface);
   color: var(--text);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+}
+
+.add-form-return:hover,
+.add-form-admin:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
 }
 
 .add-form-admin:hover {
-  background-color: #f1f5f9;
   color: var(--accent);
   border-color: var(--accent);
-  transform: translateY(-1px);
 }
+
+@media (max-width: 600px) {
+  .add-page {
+    width: calc(100% - 24px);
+    margin: 24px auto 40px;
+  }
+
+  .page-header h1 {
+    font-size: 26px;
+  }
+
+  .add-form {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .add-form-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .add-form-buttons button {
+    width: 100%;
+  }
+}
+
+

@@ -1,25 +1,3 @@
-<!--<p>Cart: {{ cartService.cart.length }}</p>-->
-<!--<nav>-->
-<!--@if ((currentUrl | async) !== '/cart') {-->
-<!--  <button [routerLink]="'/cart'">Open Cart</button>-->
-<!--}-->
-
-
-<!--<button [routerLink]="'/favorites'">Open favorites</button>-->
-
-<!--<button routerLink="/orders">My orders</button>-->
-
-<!--<button routerLink="/profile">Profile</button>-->
-
-<!--@if (userGet | async) {-->
-<!--  <button (click)="logout()">Logout</button>-->
-<!--} @else {-->
-<!--  <button (click)="login()">Login</button>-->
-<!--  <button (click)="register()" class="primary">Register</button>-->
-<!--}-->
-<!--</nav>-->
-
-
 <nav>
   <div class="navbar-container">
     <div class="navbar-left">
@@ -54,7 +32,7 @@
           <span>Reviews</span>
         </a>
 
-        @if ((currentUrl | async) !== '/cart') {
+        @if (auth.userSubject | async) {
           <a routerLink="/cart" routerLinkActive="active" class="nav-link">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                  stroke-linecap="round" stroke-linejoin="round">

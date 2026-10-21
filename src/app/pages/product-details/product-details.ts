@@ -78,6 +78,8 @@ export class ProductDetails {
     }
   }
 
+
+
   addToCart() {
     const currentProduct = this.productSignal()
     if (currentProduct) {

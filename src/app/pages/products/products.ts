@@ -150,8 +150,6 @@ export class Products implements OnInit {
       } else if (this.availability === "lowStock") {
         matchesAvailability = product.stock > 0 && product.stock <= 5;
       }
-
-
       return matchesSearch && matchesCategory && matchesPrice && matchesRating && matchesAvailability;
     }))
   }
