@@ -3,9 +3,13 @@
   Back to products
 </button>
 <div class="favorites-container">
-@for (favoriteProduct of favoritesProducts; track favoriteProduct._id) {
-  <app-product [product]="favoriteProduct"></app-product>
-}
+  @for (favoriteProduct of favoritesProducts; track favoriteProduct._id) {
+    <app-product
+      [product]="favoriteProduct"
+      (favoriteChange)="onFavoriteChanged($event)"
+    >
+    </app-product>
+  }
 </div>
 
 @if (favoritesProducts.length === 0) {

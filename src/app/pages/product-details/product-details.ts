@@ -43,7 +43,7 @@ export class ProductDetails {
     effect(() => {
       const prod = this.productSignal();
       if (prod) {
-        this._productService.getProducts().subscribe((products: Product[]) => {
+        this._productService.getProducts({}).subscribe((products: Product[]) => {
           this.similarProducts.set(
             products.filter(
               (item: Product) => item.category === prod.category && item._id !== prod._id,

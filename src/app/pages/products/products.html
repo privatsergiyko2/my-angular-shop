@@ -129,10 +129,10 @@
     <div class="products-toolbar">
       <div class="toolbar-info">
         <h1 class="products-title">
-          Products <span class="products-count">({{ sortedProducts().length }})</span>
+          Products <span class="products-count">({{ productsService.productsFromApi().length }})</span>
         </h1>
         <p class="products-subtext">
-          Showing 1–{{ sortedProducts().length }} of {{ sortedProducts().length }} products
+          Showing 1–{{  productsService.productsFromApi().length }} of {{ productsService.productsFromApi().length }} products
         </p>
       </div>
       <div class="toolbar-actions">

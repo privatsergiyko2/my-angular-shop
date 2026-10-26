@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { Product } from '../models/product';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import { BehaviorSubject, catchError, throwError, tap, map, take } from 'rxjs';
 import { apiUrl, environment } from '../../environments/environments';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -19,7 +19,7 @@ export class ProductsService {
   private _http: HttpClient = inject(HttpClient);
   productsFromApi = signal(<Product[]>[]);
 
-  getProducts() {
+  getProducts(params) {
     // if (this._productSubject.getValue().length) {
     //   return this._productSubject.asObservable();
     // } else {
@@ -36,7 +36,9 @@ export class ProductsService {
     //   );
     // }
 
-    return this._http.get<ProductsResponse>(`${apiUrl}/${environment.products}`).pipe(
+    return this._http.get<ProductsResponse>(`${apiUrl}/${environment.products}`, {
+      params: params
+    }).pipe(
       take(1),
       map((response) => response.products),
       tap((products) => {

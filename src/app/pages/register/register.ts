@@ -34,11 +34,17 @@ export class Register {
 
     const { name, password, email } = this.registerForm.getRawValue();
 
-    this._auth.register(name as string, password as string, email as string);
+    this._auth.register(name as string, password as string, email as string).subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
 
-    this.router.navigate(['/login']);
 
-    console.log(this.registerForm.value);
+
   }
 
 

@@ -56,7 +56,7 @@ export class Products implements OnInit {
 
   constructor() {
     this.productsService
-      .getProducts()
+      .getProducts({})
       .pipe(
         tap((products) => {
           // this.products = products;
@@ -121,7 +121,7 @@ export class Products implements OnInit {
   retry() {
     this.isLoading = true;
     this.productsService
-      .getProducts()
+      .getProducts({})
       .pipe(
         take(1),
         tap((products) => {

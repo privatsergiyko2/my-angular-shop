@@ -41,7 +41,8 @@ export class Favorites {
   }
 
   getFavorites() {
-    return this._favoritesSubject.asObservable();
+    // return this._favoritesSubject.asObservable();
+    return this._productsService.getProducts({favorites: 1});
   }
 
   removeFromFavorite(id: string) {
@@ -50,11 +51,14 @@ export class Favorites {
     // this.favoritesSave()
   }
 
-  toggleFavorites(product) {
+
+
+  toggleFavorites(product: Product) {
     return this._productsService
       .updateProduct(product._id, {
-        favorite: product.favorite,
+        favorite: !product.favorite,
       })
       .pipe(take(1));
   }
+
 }

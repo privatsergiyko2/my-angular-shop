@@ -8,6 +8,7 @@ import { concatMap, tap } from 'rxjs';
 import { ProductsService } from '../../services/products';
 
 
+
 @Component({
   selector: 'app-product',
   imports: [RouterLink, AsyncPipe, DecimalPipe],
@@ -15,6 +16,7 @@ import { ProductsService } from '../../services/products';
   styleUrl: './product.scss',
 })
 export class ProductComponent {
+  @Output() favoriteChange = new EventEmitter<Product>();
   private readonly _favoritesService: Favorites = inject(Favorites);
   private readonly _productsService: ProductsService = inject(ProductsService);
   // showOrHideAddToCard: InputSignal<boolean> = input(true);
@@ -47,15 +49,12 @@ export class ProductComponent {
 
   toggleFavorite() {
     this._favoritesService
-      .toggleFavorites({
-        ...this.product,
-        favorite: !this.product.favorite
+      .toggleFavorites(this.product)
+      .subscribe((updatedProduct) => {
+        this._productsService.updateProductInList(updatedProduct);
+        this.favoriteChange.emit(updatedProduct);
       })
-      .pipe(
-        concatMap(() => {
-          return this._productsService.getProducts()
-        }),
-      ).subscribe();
+
 
     // if (this.isFavorite()) {
     //   this._favorite.removeFromFavorite(this.product._id);

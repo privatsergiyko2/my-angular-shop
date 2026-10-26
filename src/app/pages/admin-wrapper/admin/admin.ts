@@ -21,7 +21,7 @@ export class Admin {
   sort = signal('newest');
 
   constructor() {
-    this._productService.getProducts().subscribe((products) => {
+    this._productService.getProducts({}).subscribe((products) => {
       console.log(products.length);
       this._products.set(products);
       this._cdr.detectChanges();
