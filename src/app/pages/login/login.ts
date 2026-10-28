@@ -15,7 +15,7 @@ export class Login {
   _auth: Auth = inject(Auth)
 
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required,Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
 
@@ -27,12 +27,18 @@ export class Login {
     const email = this.loginForm.get('email')?.value;
     const password = this.loginForm.get('password')?.value;
 
-    const user = this._auth.users.find(e => e.email === email && e.password === password);
-    if (user) {
-      this._auth.login(user);
+    this._auth.login(email!, password!).subscribe(response => {
+      console.log(response.name);
+      this._auth.setAuthenticatedUser(response);
       this.router.navigate(['/']);
-    } else {
-      console.log("not logged in")
-    }
+    })
+
+    // const user = this._auth.users.find(e => e.email === email && e.password === password);
+    // if (user) {
+    //   this._auth.login(user);
+    //   this.router.navigate(['/']);
+    // } else {
+    //   console.log("not logged in")
+    // }
   }
 }

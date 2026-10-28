@@ -3,6 +3,7 @@ import {Register} from '../pages/register/register';
 import {BehaviorSubject, map, Observable} from 'rxjs';
 import {IUser} from '../models/IUser';
 import {HttpClient} from '@angular/common/http';
+import {ILoginResponse} from '../models/ilogin-response';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,18 @@ export class Auth {
     this.getAuthenticatedUser();
   }
 
+  setAuthenticatedUser(user: ILoginResponse) {
+    localStorage.setItem('token', user.access_token);
+
+    localStorage.setItem('user', JSON.stringify({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    }));
+
+    this.userSubject.next(user);
+  }
+
   getAllRegisteredUsers() {
     const savedUsers: string | null = localStorage.getItem('users');
 
@@ -29,13 +42,18 @@ export class Auth {
     this.userSubject.next(user);
   }
 
-  login(user: IUser) {
-    localStorage.setItem('user', JSON.stringify(user));
-    this.userSubject.next(user);
+  login(email: string, password: string) {
+    return this.http.post<ILoginResponse>('http://localhost:3000/auth/login', {
+      email: email,
+      password: password,
+    })
+    // localStorage.setItem('user', JSON.stringify(user));
+    // this.userSubject.next(user);
   }
 
   logout() {
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     this.userSubject.next(null);
   }
 
