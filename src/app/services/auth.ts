@@ -4,11 +4,13 @@ import {BehaviorSubject, map, Observable} from 'rxjs';
 import {IUser} from '../models/IUser';
 import {HttpClient} from '@angular/common/http';
 import {ILoginResponse} from '../models/ilogin-response';
+import {CartService} from './cart';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Auth {
+  private cartService = inject(CartService);
   private http = inject(HttpClient);
   users: IUser[] = [];
   userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
@@ -43,17 +45,20 @@ export class Auth {
   }
 
   login(email: string, password: string) {
-    return this.http.post<ILoginResponse>('http://localhost:3000/auth/login', {
-      email: email,
-      password: password,
-    })
-    // localStorage.setItem('user', JSON.stringify(user));
-    // this.userSubject.next(user);
+    return this.http.post<ILoginResponse>(
+      'http://localhost:3000/auth/login',
+      {
+        email: email,
+        password: password,
+      }
+    );
   }
 
   logout() {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+
+    this.cartService.resetCart();
     this.userSubject.next(null);
   }
 

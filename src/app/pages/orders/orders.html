@@ -13,61 +13,156 @@
       </select>
     </div>
   </div>
+<!--  @if (sortedBackendOrders().length > 0) {-->
+<!--    <div class="orders-grid">-->
+<!--      @for (order of paginationBackendOrders(); track order._id) {-->
+<!--        <div class="order-card">-->
+<!--          <div class="card-header">-->
+<!--            <div class="header-main">-->
+<!--              <h3 class="order-id">Order #{{ order._id }}</h3>-->
+<!--              <span class="status-badge completed">Completed</span>-->
+<!--            </div>-->
+<!--            <p class="order-date">{{ order._id | date:'medium' }}</p>-->
+<!--            <p class="order-customer">Customer: {{ order.name }}</p>-->
+<!--          </div>-->
+<!--          <div class="card-items">-->
+<!--            @for (item of order.items; track item) {-->
+<!--              <div class="item-row">-->
+<!--                <div class="item-info">-->
+<!--                  <img [src]="item.product.thumbnail || '/assets/beauty.png'"-->
+<!--                       [alt]="item.product.title"-->
+<!--                       class="item-img"/>-->
+<!--                  <div class="item-details">-->
+<!--                    <span class="item-title">{{ item.product.title }}</span>-->
+<!--                    <span class="item-qty">Quantity: {{ item.quantity }}</span>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <span class="item-price">{{ item.price | currency }}</span>-->
+<!--              </div>-->
+<!--            }-->
+<!--          </div>-->
+<!--          <div class="card-footer">-->
+<!--            <div class="total-block">-->
+<!--              <span class="total-label">Total</span>-->
+<!--              <strong class="total-amount">{{ order.total | currency }}</strong>-->
+<!--            </div>-->
 
-  @if (sortedOrders().length > 0) {
+<!--            <button class="view-details-btn" (click)="viewDetails(order)">-->
+<!--              View details &gt;-->
+<!--            </button>-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--      }-->
+<!--    </div>-->
+
+
+
+<!--    <div class="pagination">-->
+<!--      @for (page of pages(); track page) {-->
+<!--        <button (click)="changePage(page)" [class.active]="currentPage() === page">{{ page }}</button>-->
+<!--      }-->
+
+<!--    </div>-->
+
+
+  @if (sortedBackendOrders().length > 0) {
     <div class="orders-grid">
-      @for (order of paginationOrders(); track order._id) {
+      @for (order of paginationBackendOrders(); track order._id) {
         <div class="order-card">
           <div class="card-header">
             <div class="header-main">
-              <h3 class="order-id">Order #{{ order._id }}</h3>
-              <span class="status-badge completed">Completed</span>
+
+              <h3 class="order-id">
+                Order #{{ order._id }}
+              </h3>
+
+              <span
+                class="status-badge"
+                [class.completed]="order.paymentStatus === 'paid'"
+              >
+              {{
+                  order.paymentStatus === 'paid'
+                    ? 'Paid'
+                    : order.paymentStatus === 'pending'
+                      ? 'Pending'
+                      : 'Failed'
+                }}
+            </span>
+
             </div>
-            <p class="order-date">{{ order._id | date:'medium' }}</p>
-            <p class="order-customer">Customer: {{ order.name }}</p>
+
+            <p class="order-date">
+              {{ order.createdAt | date:'medium' }}
+            </p>
+
+            <p class="order-customer">
+              Customer:
+              {{ order.shippingAddress.firstName }}
+              {{ order.shippingAddress.lastName }}
+            </p>
           </div>
+
           <div class="card-items">
-            @for (item of order.items; track item) {
+            @for (item of order.items; track $index) {
               <div class="item-row">
+
                 <div class="item-info">
-                  <img [src]="item.product.thumbnail || '/assets/beauty.png'"
-                       [alt]="item.product.title"
-                       class="item-img"/>
+                  <img
+                    src="/assets/beauty.png"
+                    alt="Product"
+                    class="item-img"
+                  />
+
                   <div class="item-details">
-                    <span class="item-title">{{ item.product.title }}</span>
-                    <span class="item-qty">Quantity: {{ item.quantity }}</span>
+                  <span class="item-title">
+                    Product ID: {{ item.productId }}
+                  </span>
+
+                    <span class="item-qty">
+                    Quantity: {{ item.quantity }}
+                  </span>
                   </div>
                 </div>
-                <span class="item-price">{{ item.product.price | currency }}</span>
+
+                <span class="item-price">
+                {{ item.price | currency }}
+              </span>
+
               </div>
             }
           </div>
+
           <div class="card-footer">
             <div class="total-block">
               <span class="total-label">Total</span>
-              <strong class="total-amount">{{ order.total | currency }}</strong>
+
+              <strong class="total-amount">
+                {{ order.total | currency }}
+              </strong>
             </div>
 
-            <button class="view-details-btn" (click)="viewDetails(order)">
+            <button
+              class="view-details-btn"
+              (click)="viewDetails(order)"
+            >
               View details &gt;
             </button>
           </div>
         </div>
-
       }
     </div>
-
-
 
     <div class="pagination">
       @for (page of pages(); track page) {
-        <button (click)="changePage(page)" [class.active]="currentPage() === page">{{ page }}</button>
+        <button
+          (click)="changePage(page)"
+          [class.active]="currentPage() === page"
+        >
+          {{ page }}
+        </button>
       }
-
     </div>
-
-
-
   } @else {
     <p class="orders-empty">No orders yet</p>
   }

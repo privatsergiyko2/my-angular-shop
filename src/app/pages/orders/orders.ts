@@ -1,9 +1,10 @@
-import {Component, computed, inject, signal} from '@angular/core';
+import {Component, computed, inject, OnInit, signal} from '@angular/core';
 import {Orders} from '../../services/orders';
 import {CurrencyPipe, DatePipe} from '@angular/common';
 import {Order} from '../../models/order';
 import {Router} from '@angular/router';
 import {RouterLink} from '@angular/router';
+import {BackendOrder} from '../../models/backend-order';
 
 @Component({
   selector: 'app-orders',
@@ -14,17 +15,53 @@ import {RouterLink} from '@angular/router';
   templateUrl: './orders.html',
   styleUrl: './orders.scss',
 })
-export class OrdersPage {
+export class OrdersPage implements OnInit {
   _ordersService = inject(Orders)
   orders = this._ordersService.orders;
   protected readonly Date = Date;
   router = inject(Router);
+  backendOrders = signal<BackendOrder[]>([])
+
+
+  ngOnInit() {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+
+    this._ordersService.getMyOrders(token).subscribe({
+      next: (orders) => {
+        this.backendOrders.set(orders);
+        console.log('Orders from MongoDB:', orders);
+      },
+      error: (error) => {
+        console.error('Failed to load orders:', error);
+      }
+    });
+  }
 
 
   sortOrder = signal<'newest' | 'oldest'>("newest")
-
   currentPage = signal<number>(1);
   pageSize = signal<number>(6);
+
+
+  sortedBackendOrders = computed(() => {
+    const list = [...this.backendOrders()];
+
+    return list.sort((a, b) => {
+      const timeA = new Date(a.createdAt).getTime();
+      const timeB = new Date(b.createdAt).getTime();
+
+      if (this.sortOrder() === 'newest') {
+        return timeB - timeA;
+      } else {
+        return timeA - timeB;
+      }
+    });
+  })
 
 
   sortedOrders = computed(() => {
@@ -42,24 +79,27 @@ export class OrdersPage {
     });
   });
 
-  paginationOrders = computed(() => {
-
-
+  paginationBackendOrders = computed(() => {
     const start = (this.currentPage() - 1) * this.pageSize();
     const end = start + this.pageSize();
 
-    return  this.sortedOrders().slice(start, end);
+    return this.sortedBackendOrders().slice(start, end);
+  });
 
+  paginationOrders = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize();
+    const end = start + this.pageSize();
+    return this.sortedOrders().slice(start, end);
   })
 
   quantityPages = computed(() => {
-    const pagesQuantity = Math.ceil(this.sortedOrders().length / this.pageSize());
+    const pagesQuantity = Math.ceil(this.sortedBackendOrders().length / this.pageSize());
     return pagesQuantity;
   })
 
   pages = computed(() =>
     Array.from(
-      { length: this.quantityPages() },
+      {length: this.quantityPages()},
       (_, i) => i + 1
     )
   );
@@ -75,7 +115,7 @@ export class OrdersPage {
     console.log(value);
   }
 
-  viewDetails (order: Order) {
+  viewDetails(order: { _id: string | number }) {
     this.router.navigate(['/orders', order._id]);
   }
 

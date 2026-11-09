@@ -24,8 +24,12 @@ export class Order implements OnInit {
     this.stepper?.next();
   }
 
-  protected removeFromCart($event: Product) {
-    this.cartService.removeProduct($event._id);
+  protected removeFromCart(product: Product) {
+    this.cartService.removeProduct(product._id);
+
+    this.selectedProducts = this.selectedProducts.filter(
+      id => id !== product._id
+    );
   }
 
   ngOnInit() {
@@ -71,8 +75,15 @@ export class Order implements OnInit {
 
   removeAll() {
     console.log(this.selectedProducts);
-    this.selectedProducts.forEach((id) => {
-      this.cartService.removeProduct(id);
-    });
+
+    if (this.selectedProducts.length === 0) {
+      return;
+    }
+
+    this.cartService.removeSelectedOnServer(this.selectedProducts)
+    this.selectedProducts = []
+    // this.selectedProducts.forEach((id) => {
+    //   this.cartService.removeProduct(id);
+    // });
   }
 }

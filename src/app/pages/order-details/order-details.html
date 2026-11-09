@@ -1,19 +1,19 @@
 <div class="order-details-container">
   <h1 class="order-details-title">Order details</h1>
 
-  @if (order) {
+  @if (order(); as order) {
     <p class="order-info">Order ID: {{ order._id }}</p>
-    <p class="order-info">Order date: {{ order._id | date:'medium' }}</p>
-    <p class="order-info">Customer: {{ order.name }}</p>
+    <p class="order-info">Order date: {{ order.createdAt | date:'medium' }}</p>
+    <p class="order-info">Customer: {{ order.shippingAddress.firstName}} {{ order.shippingAddress.lastName }}</p>
     <p class="order-total">Total: {{ order.total | currency }}</p>
 
     <h2 class="order-products-title">Products</h2>
 
     @for (item of order.items; track item) {
       <p class="order-product">
-        {{ item.product.title }}
+        {{ item.productId }}
         - Quantity: {{ item.quantity }}
-        - {{ item.product.price | currency }}
+        - {{ item.price | currency }}
       </p>
     }
   } @else {

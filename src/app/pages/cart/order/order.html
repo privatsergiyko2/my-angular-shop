@@ -3,7 +3,13 @@
   <div class="cart-main-card">
     <div class="cart-actions">
       <label class="select-all">
-        <input (change)="selectAll($any($event.target).checked)" type="checkbox"/>
+        <input
+          type="checkbox"
+          (change)="selectAll($any($event.target).checked)"
+          [checked]="cartService.cart.length > 0 &&
+               selectedProducts.length === cartService.cart.length"
+        />
+
         <span>Select all ({{ cartService.cart.length }} items)</span>
       </label>
       <button type="button" class="remove-selected-btn" (click)="removeAll()">
@@ -37,7 +43,8 @@
             <button type="button" (click)="cartService.increaseQuantity(item.product._id)">+</button>
           </div>
 
-          <button type="button" class="remove-btn" (click)="cartService.removeProduct(item.product._id)">
+          <button type="button" class="remove-btn"
+                  (click)="removeFromCart(item.product)">
             🗑️
           </button>
         </div>

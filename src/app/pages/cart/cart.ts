@@ -6,13 +6,13 @@ import {HttpClient} from '@angular/common/http';
 import {PaymentResponse} from '../../payment-response';
 import {Router} from '@angular/router';
 import {RouterLink} from '@angular/router';
-import { MatStepperModule } from '@angular/material/stepper';
+import {MatStepper, MatStepperModule} from '@angular/material/stepper';
 import {Order} from './order/order';
 import {Shipping} from './shipping/shipping';
 import {Payment} from './payment/payment';
 import {ReactiveFormsModule, FormBuilder, Validators} from '@angular/forms';
 import {OrderSuccess} from './order-success/order-success';
-
+import {Orders} from '../../services/orders';
 
 
 @Component({
@@ -31,14 +31,19 @@ import {OrderSuccess} from './order-success/order-success';
   styleUrl: './cart.scss',
 })
 export class Cart implements OnInit {
+  private readonly orders = inject(Orders)
   private fb = inject(FormBuilder);
   @ViewChild(Shipping) shippingComp?: Shipping;
+  @ViewChild(MatStepper) stepper!: MatStepper;
   public _http = inject(HttpClient);
   recommendedProducts = signal<Product[]>([]);
   public cartService: CartService = inject(CartService);
   private router = inject(Router);
   selectedProducts: string[] = [];
   isPaid = false;
+  selectedDelivery = 'standard';
+  createdOrderId: string | null = null;
+  isCreatingOrder = false;
 
   onPaymentSucces() {
     this.isPaid = true;
@@ -57,6 +62,63 @@ export class Cart implements OnInit {
     postalCode: ['', Validators.required],
   });
 
+
+  getShippingData() {
+    const {
+      useDefaultAddress,
+      ...shippingAddress
+    } = this.shippingForm.getRawValue();
+
+    const items = this.cartService.cart.map((item) => ({
+      productId: item.product._id,
+      quantity: item.quantity,
+    }));
+
+    return {
+      items,
+      shippingAddress,
+      deliveryMethod: this.selectedDelivery,
+    };
+  }
+
+  createOrder() {
+    if (this.isCreatingOrder || this.createdOrderId) {
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+
+    if (this.shippingForm.invalid || this.cartService.cart.length === 0) {
+      this.shippingForm.markAllAsTouched();
+      return;
+    }
+
+    this.isCreatingOrder = true;
+
+    const orderData = this.getShippingData();
+
+    this.orders.createOrder(orderData, token).subscribe({
+      next: (response) => {
+        this.createdOrderId = response._id;
+        this.isCreatingOrder = false;
+
+        console.log('Order created:', response);
+        this.stepper.next();
+      },
+      error: (error) => {
+        this.isCreatingOrder = false;
+
+        console.error('Order creation failed:', error);
+      },
+    });
+  }
+
+
   protected removeFromCart($event: Product) {
     this.cartService.removeProduct($event._id);
   }
@@ -72,9 +134,9 @@ export class Cart implements OnInit {
       title: 'Your Order',
       subtitle: 'Review your items, update quantities, and proceed to checkout.',
     },
-    { title: 'Shipping', subtitle: 'Enter your shipping address and choose a delivery method.' },
-    { title: 'Payment', subtitle: 'Select a payment method and complete your purchase.' },
-    { title: 'Review', subtitle: 'Review your order details before final submission.' },
+    {title: 'Shipping', subtitle: 'Enter your shipping address and choose a delivery method.'},
+    {title: 'Payment', subtitle: 'Select a payment method and complete your purchase.'},
+    {title: 'Review', subtitle: 'Review your order details before final submission.'},
   ];
 
   onStepChange(event: any) {

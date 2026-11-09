@@ -2,6 +2,7 @@ import {Component, inject} from '@angular/core';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Auth} from '../../services/auth';
 import {Router, RouterLink} from '@angular/router';
+import {CartService} from '../../services/cart';
 
 
 @Component({
@@ -13,6 +14,7 @@ import {Router, RouterLink} from '@angular/router';
 export class Login {
   router = inject(Router);
   _auth: Auth = inject(Auth)
+  private cartService = inject(CartService);
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -29,9 +31,13 @@ export class Login {
 
     this._auth.login(email!, password!).subscribe(response => {
       console.log(response.name);
+
       this._auth.setAuthenticatedUser(response);
+
+      this.cartService.loadCart();
+
       this.router.navigate(['/']);
-    })
+    });
 
     // const user = this._auth.users.find(e => e.email === email && e.password === password);
     // if (user) {

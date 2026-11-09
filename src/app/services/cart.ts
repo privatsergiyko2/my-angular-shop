@@ -6,10 +6,12 @@ import {CartResponse} from '../models/cart-response';
 import {ProductsService} from './products';
 import {forkJoin, map, of, switchMap} from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
+
   private readonly _productsService = inject(ProductsService);
   private readonly _http = inject(HttpClient);
   // cart: CartItem[] = [];
@@ -172,6 +174,39 @@ export class CartService {
     ).subscribe(() => {
       this.loadCart();
     });
+  }
+
+  removeSelectedOnServer(productIds: string[]) {
+    if (productIds.length === 0) {
+      return;
+    }
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      return;
+    }
+
+    this._http.delete('http://localhost:3000/cart/items/selected', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: {
+        productIds: productIds
+      }
+    }).subscribe({
+      next: () => {
+        this.loadCart();
+      },
+      error: (error) => {
+        console.error('Помилка видалення вибраних товарів:', error);
+      }
+    });
+  }
+
+  resetCart() {
+    this.loadCartVersion++;
+    this.cart = [];
   }
 
   removeProduct(productId: string) {

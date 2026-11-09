@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {ReactiveFormsModule, FormsModule, FormBuilder, Validators, FormGroup} from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
@@ -23,6 +23,7 @@ import {OrderSummary} from '../order-summary/order-summary';
 export class Shipping implements OnInit {
   @Input() stepper?: MatStepper;
 
+
   private fb = inject(FormBuilder);
   private router = inject(Router);
   authService = inject(Auth);
@@ -33,6 +34,8 @@ export class Shipping implements OnInit {
   discountAmount = 0.00;
 
   @Input({ required: true }) shippingForm!: FormGroup;
+  @Output() deliveryChanged = new EventEmitter<string>();
+  @Output()  shippingContinued = new EventEmitter<void>();
 
   deliveryOptions = [
     {
@@ -85,6 +88,7 @@ export class Shipping implements OnInit {
 
   selectDelivery(method: string) {
     this.selectedDelivery = method;
+    this.deliveryChanged.emit(method);
   }
 
   goBack() {
@@ -96,6 +100,7 @@ export class Shipping implements OnInit {
       this.shippingForm.markAllAsTouched();
       return;
     }
-    this.stepper?.next();
+    this.shippingContinued.emit();
+    // this.stepper?.next();
   }
 }

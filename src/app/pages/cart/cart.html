@@ -37,13 +37,18 @@
 
       <mat-step label="Shipping" [stepControl]="shippingForm">
         <ng-template matStepContent>
-          <app-shipping [stepper]="stepper" [shippingForm]="shippingForm"></app-shipping>
+          <app-shipping
+            [stepper]="stepper"
+            [shippingForm]="shippingForm"
+            (deliveryChanged)="selectedDelivery = $event"
+            (shippingContinued)="createOrder()">
+          </app-shipping>
         </ng-template>
       </mat-step>
 
       <mat-step label="Payment" [completed]="isPaid">
         <ng-template matStepContent>
-          <app-payment [stepper]="stepper"></app-payment>
+          <app-payment [stepper]="stepper"  [orderId]="createdOrderId"></app-payment>
         </ng-template>
       </mat-step>
 
