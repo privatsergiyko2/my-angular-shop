@@ -34,6 +34,9 @@ export class EditProduct {
     category: ['', Validators.required],
     rating: [0, Validators.required],
     thumbnail: ['', Validators.required],
+    brand: [''],
+    discountPercentage: [0, [Validators.min(0), Validators.max(100)]],
+    stock: [0, [Validators.required, Validators.min(0)]],
     test: [''],
   });
 
@@ -50,6 +53,9 @@ export class EditProduct {
             category: product?.category,
             rating: product?.rating,
             thumbnail: product?.thumbnail,
+            brand: product?.brand,
+            discountPercentage: product?.discountPercentage,
+            stock: product?.stock,
           });
 
           this._cdr.detectChanges();

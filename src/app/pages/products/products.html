@@ -36,11 +36,11 @@
       </div>
 
       <div class="price-range-label">
-        ${{ minPrice || 0 }} — ${{ maxPrice || 2500 }}
+        ${{ minPrice }} — ${{ maxPrice }}
       </div>
 
       <div class="slider-container">
-        <mat-slider min="0" max="2500" step="10">
+        <mat-slider [min]="0" [max]="priceLimit" step="10">
           <input matSliderStartThumb [(ngModel)]="minPrice" (input)="filterProducts()">
           <input matSliderEndThumb [(ngModel)]="maxPrice" (input)="filterProducts()">
         </mat-slider>
@@ -67,12 +67,14 @@
       </div>
 
       <div class="checkbox-list">
-        <label class="custom-checkbox" [class.active]="minRating === 4.5" (click)="selectRating(4.5)">
+        <div class="custom-checkbox"
+             [class.active]="minRating === 4.5"
+             (click)="selectRating(4.5)">
           <input type="checkbox" [checked]="minRating === 4.5" readonly>
           <span class="checkmark"></span>
           <span class="stars">★★★★★</span>
           <span class="label-text">4.5 & up <span class="count">({{ getRatingCount(4.5) }})</span></span>
-        </label>
+        </div>
 
         <label class="custom-checkbox" [class.active]="minRating === 4.0" (click)="selectRating(4.0)">
           <input type="checkbox" [checked]="minRating === 4.0" readonly>
@@ -105,19 +107,19 @@
       </div>
 
       <div class="checkbox-list">
-        <label class="custom-checkbox" [class.active]="availability === 'inStock'"
+        <div class="custom-checkbox" [class.active]="availability === 'inStock'"
                (click)="selectAvailability('inStock')">
           <input type="checkbox" [checked]="availability === 'inStock'" readonly>
           <span class="checkmark"></span>
           <span class="label-text">In Stock <span class="count">({{ getAvailabilityCount('inStock') }})</span></span>
-        </label>
+        </div>
 
-        <label class="custom-checkbox" [class.active]="availability === 'lowStock'"
+        <div class="custom-checkbox" [class.active]="availability === 'lowStock'"
                (click)="selectAvailability('lowStock')">
           <input type="checkbox" [checked]="availability === 'lowStock'" readonly>
           <span class="checkmark"></span>
           <span class="label-text">Low Stock <span class="count">({{ getAvailabilityCount('lowStock') }})</span></span>
-        </label>
+        </div>
       </div>
     </div>
 
@@ -129,20 +131,21 @@
     <div class="products-toolbar">
       <div class="toolbar-info">
         <h1 class="products-title">
-          Products <span class="products-count">({{ productsService.productsFromApi().length }})</span>
+          Products <span class="products-count">({{ sortedProducts().length }})</span>
         </h1>
         <p class="products-subtext">
-          Showing 1–{{  productsService.productsFromApi().length }} of {{ productsService.productsFromApi().length }} products
+          Showing {{ sortedProducts().length === 0 ? 0 : 1 }}–{{ sortedProducts().length }}
+          of {{ productsService.productsFromApi().length }} products
         </p>
       </div>
       <div class="toolbar-actions">
-      <div class="search-wrapper">
-        <span class="search-icon">🔍</span>
-        <input type="text" placeholder="Search products..." [formControl]="searchInputControl">
-        @if (searchInputControl.hasError('minlength')) {
-          <div class="text-danger">Введи більше 3-х символів</div>
-        }
-      </div>
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" placeholder="Search products..." [formControl]="searchInputControl">
+          @if (searchInputControl.hasError('minlength')) {
+            <div class="text-danger">Введи більше 3-х символів</div>
+          }
+        </div>
 
 
         <div class="sort-wrapper">
@@ -159,25 +162,28 @@
     </div>
 
 
-      <div class="products-grid">
-        @for (product of productsService.productsFromApi(); track product._id) {
-          <app-product
-            [showAddToCard]="true"
-            [product]="product"
-            (addToCart)="cartService.addToCart($event)"
-            (remove)="removeFromProduct($event)">
-          </app-product>
-        }
-        @if (filteredProducts().length === 0 && !isError && !isLoading) {
-          <div class="empty-products">Товарів не знайдено</div>
-        }
-      </div>
-
-      @if (isError) {
-        <div>Не вдалося завантажити товари</div>
-        <button (click)="retry()">Спробувати ще раз</button>
+    <div class="products-grid">
+      @for (product of sortedProducts(); track product._id) {
+        <app-product
+          [showAddToCard]="true"
+          [product]="product"
+          (addToCart)="cartService.addToCart($event)"
+          (remove)="removeFromProduct($event)">
+        </app-product>
       }
-</main>
+      @if (filteredProducts().length === 0 && !isError && !isLoading) {
+        <div class="empty-products">Товарів не знайдено</div>
+      }
+    </div>
+
+    @if (isError) {
+      <div>Не вдалося завантажити товари</div>
+      <button (click)="retry()">Спробувати ще раз</button>
+    }
+  </main>
+  </main>
+
+
 
 
 

@@ -1,8 +1,10 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import {AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Auth} from '../../services/auth';
 import {Router} from '@angular/router';
 import {RouterLink} from '@angular/router';
+import {Users} from '../../services/users';
+import {UserProfile} from '../../models/user-profile';
 
 @Component({
   selector: 'app-profile',
@@ -13,6 +15,9 @@ import {RouterLink} from '@angular/router';
 export class Profile implements OnInit {
   router = inject(Router);
   _auth = inject(Auth);
+  _users = inject(Users);
+  user = signal<UserProfile | null>(null);
+
 
   newUser = new FormGroup({
     firstName: new FormControl('', [Validators.required]),
@@ -31,24 +36,52 @@ export class Profile implements OnInit {
   );
 
   ngOnInit() {
-    const userGet = localStorage.getItem('user')
+    const token = localStorage.getItem('token');
 
-    if (userGet) {
-      const userParse = JSON.parse(userGet);
-      this.user = userParse;
-      this.newUser.patchValue({
-        firstName: userParse.firstName || userParse.name?.split(' ')[0] || '',
-        lastName: userParse.lastName || userParse.name?.split(' ')[1] || '',
-        email: this.user.email,
-        phone: this.user.phone,
-      })
+    if (!token) {
+      console.error('Token not found');
+      return;
     }
 
+    this._users.getProfile(token).subscribe({
+      next: (user) => {
+        console.log('Profile from MongoDB:', user);
 
+        const nameParts = user.name.trim().split(/\s+/);
+
+        this.newUser.patchValue({
+          firstName: nameParts[0] || '',
+          lastName: nameParts.slice(1).join(' '),
+          email: user.email,
+          phone: user.phone || '',
+        });
+        this.user.set(user);
+      },
+      error: (error) => {
+        console.error('Failed to load profile:', error);
+      },
+    });
   }
 
+
+  // const userGet = localStorage.getItem('user')
+  //
+  //
+  // if (userGet) {
+  //   const userParse = JSON.parse(userGet);
+  //   this.user = userParse;
+  //   this.newUser.patchValue({
+  //     firstName: userParse.firstName || userParse.name?.split(' ')[0] || '',
+  //     lastName: userParse.lastName || userParse.name?.split(' ')[1] || '',
+  //     email: this.user.email,
+  //     phone: this.user.phone,
+  //   })
+  // }
+
+
   passwordError = '';
-  user = JSON.parse(localStorage.getItem('user')!);
+  passwordSuccess = '';
+
 
 
   passwordMatchValidator(form: AbstractControl) {
@@ -57,22 +90,56 @@ export class Profile implements OnInit {
     if (newPassword?.value === confirmPassword?.value) {
       return null;
     } else {
-      return { passwordMismatch: true };
+      return {passwordMismatch: true};
     }
   }
 
+
   savePassword() {
+
+    console.log('savePassword called');
+    console.log('Form valid:', this.password.valid);
+    console.log('Form errors:', this.password.errors);
+
+    console.log('Form values:', {
+      currentPasswordFilled: !!this.password.get('currentPassword')?.value,
+      newPasswordLength: this.password.get('newPassword')?.value?.length,
+      confirmPasswordLength: this.password.get('confirmPassword')?.value?.length,
+    });
+
     if (this.password.invalid) {
       this.password.markAllAsTouched();
       return;
     }
-    if (this.password.get('currentPassword')?.value !== this.user.password) {
-      this.passwordError = 'Current password is incorrect';
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.error('Token not found');
       return;
     }
-    this.user.password = this.password.get('newPassword')?.value;
-    localStorage.setItem('user', JSON.stringify(this.user));
+
+    const currentPassword = this.password.get('currentPassword')?.value || '';
+    const newPassword = this.password.get('newPassword')?.value || '';
+
+    this.passwordError = '';
+    this.passwordSuccess = '';
+    this._users.changePassword(token, newPassword, currentPassword).subscribe({
+      next: (response) => {
+        this.passwordSuccess = response.message;
+        this.passwordError = '';
+        this.password.reset();
+      },
+      error: (error) => {
+        console.error('Failed to change password:', error);
+
+        if (error.status === 401) {
+          this.passwordError = 'Current password is incorrect';
+        }
+      },
+    });
   }
+
 
   logout() {
     this._auth.logout();
@@ -84,10 +151,28 @@ export class Profile implements OnInit {
       this.newUser.markAllAsTouched();
       return;
     }
-    this.user = {
-      ...this.user,
-      ...this.newUser.getRawValue(),
-    };
-    localStorage.setItem('user', JSON.stringify(this.user));
+
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.error('Token not found');
+      return;
+    }
+
+    const firstName = this.newUser.get('firstName')?.value || '';
+    const lastName = this.newUser.get('lastName')?.value || '';
+    const phone = this.newUser.get('phone')?.value || '';
+
+    const name = `${firstName.trim()} ${lastName.trim()}`.trim();
+
+    this._users.updateProfile(token, name, phone).subscribe({
+      next: (user) => {
+        this.user.set(user);
+        console.log('Profile updated:', user);
+      },
+      error: (error) => {
+        console.error('Failed to update profile:', error);
+      },
+    });
   }
 }

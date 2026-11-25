@@ -7,11 +7,23 @@
         <p>Manage customer reviews</p>
       </div>
     </div>
-    <div class="sort-wrapper">
-      <span>Sort by:</span>
-      <app-sort [sort]="sortOptions" (sortChange)="sort.set($event)"></app-sort>
-    </div>
+    <div class="reviews-toolbar">
+      <div class="sort-wrapper">
+        <span>Sort by:</span>
+        <app-sort
+          [sort]="sortOptions"
+          (sortChange)="sort.set($event)">
+        </app-sort>
+      </div>
 
+      @if (selectedReviews().length > 0) {
+        <button
+          (click)="deleteSelectedReviews()"
+          class="deleteSelectedReviews">
+          Delete Selected
+        </button>
+      }
+    </div>
     <div class="table-container">
       @if (reviews().length > 0) {
         <table class="products-table">
@@ -20,6 +32,8 @@
             <th class="checkbox-col">
               <input
                 type="checkbox"
+                [checked]="allReviewsSelected()"
+                (change)="toggleAllReviews($any($event.target).checked)"
               />
             </th>
             <th>Customer</th>
@@ -34,7 +48,11 @@
             @for (review of paginationReviews(); track review._id) {
               <tr>
                 <td class="checkbox-col">
-                  <input type="checkbox">
+                  <input
+                    type="checkbox"
+                    [checked]="selectedReviews().includes(review._id)"
+                    (change)="toggleReview(review)"
+                  >
                 </td>
                 <td>{{ review.userName }}</td>
                 <td>{{ review.productTitle }}</td>

@@ -116,9 +116,8 @@ export class Admin {
   }
 
   removeProduct(id: string) {
-    this._productService.deleteProduct(id).subscribe(() => {
-      this._products.set(this._products().filter((product) => product._id !== id));
-      this._cdr.detectChanges();
-    });
+    this._products.set(
+      this._products().filter(product => product._id !== id)
+    );
   }
 }

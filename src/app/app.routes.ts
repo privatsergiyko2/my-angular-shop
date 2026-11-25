@@ -35,10 +35,12 @@ export const routes: Routes = [
   {
     path: 'cart',
     component: Cart,
+    canActivate: [authGuard],
   },
   {
     path: 'shipping',
     component: Shipping,
+    canActivate: [authGuard],
   },
   {
     path: 'add-page',
@@ -53,6 +55,7 @@ export const routes: Routes = [
   {
     path: 'favorites',
     component: FavoritesComponent,
+    canActivate: [authGuard],
   },
   {
     path: 'payment',
@@ -62,6 +65,7 @@ export const routes: Routes = [
   {
     path: 'order-success',
     component: OrderSuccess,
+    canActivate: [authGuard],
   },
   {
     path: 'login',
@@ -74,10 +78,12 @@ export const routes: Routes = [
   {
     path: 'orders',
     component: OrdersPage,
+    canActivate: [authGuard],
   },
   {
     path: 'orders/:id',
     component: OrderDetails,
+    canActivate: [authGuard],
   },
   {
     path: 'profile',
@@ -87,6 +93,7 @@ export const routes: Routes = [
   {
     path: 'reviews',
     component: Reviews,
+    canActivate: [authGuard],
   },
   // TODO: TOT OPTIMIZED
   // {

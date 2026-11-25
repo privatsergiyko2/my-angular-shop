@@ -7,7 +7,7 @@
       </div>
       <div class="user-info">
         <h3>{{ newUser.get('firstName')?.value }} {{ newUser.get('lastName')?.value }}</h3>
-        <p>{{ user.email }}</p>
+        <p>{{ user()?.email }}</p>
       </div>
     </div>
 
@@ -107,20 +107,20 @@
         <div class="password-fields">
           <div class="form-group">
             <label>Current password</label>
-            <input formControlName="currentPassword" placeholder="Enter your current password">
+            <input type="password" formControlName="currentPassword" placeholder="Enter your current password">
 
             @if (password.get("currentPassword")?.hasError("required") && password.get("currentPassword")?.touched) {
               <p class="profile-error">Password is required</p>
             }
 
             @if (passwordError) {
-              <p class="profile-error">Current password is incorrect</p>
+              <p class="profile-error">{{ passwordError }}</p>
             }
           </div>
 
           <div class="form-group">
             <label>New password</label>
-            <input formControlName="newPassword" placeholder="Enter a new password">
+            <input type="password" formControlName="newPassword" placeholder="Enter a new password">
 
             @if (password.get("newPassword")?.hasError("required") && password.get("newPassword")?.touched) {
               <p class="profile-error">Password is required</p>
@@ -133,7 +133,7 @@
 
           <div class="form-group">
             <label>Confirm new password</label>
-            <input formControlName="confirmPassword" placeholder="Confirm your new password">
+            <input type="password" formControlName="confirmPassword" placeholder="Confirm your new password">
 
             @if (password.get("confirmPassword")?.hasError("required") && password.get("confirmPassword")?.touched) {
               <p class="profile-error">Confirm password is required</p>
@@ -165,6 +165,9 @@
       </div>
 
       <button class="password-save-button" type="submit">Update password</button>
+      @if (passwordSuccess) {
+        <p class="profile-success">{{ passwordSuccess }}</p>
+      }
     </form>
   </div>
 </div>

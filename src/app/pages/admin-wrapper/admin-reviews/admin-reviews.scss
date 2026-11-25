@@ -244,4 +244,33 @@
 }
 
 
+.reviews-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+
+.deleteSelectedReviews {
+  padding: 12px 20px;
+  background: #fff;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
 

@@ -1,3 +1,4 @@
+@let isLoggedIn = auth.userSubject | async;
 @if (productSignal(); as product) {
 
   <nav class="breadcrumbs">
@@ -37,14 +38,17 @@
 
 
     <div class="product-card purchase-card">
-      <button type="button" class="add-to-cart-btn" (click)="addToCart()">
-        🛒 Add to Cart
-      </button>
-      <div class="quantity-controls">
-        <button type="button" (click)="decrementQuantity()">-</button>
-        <span>{{ quantity }}</span>
-        <button type="button" (click)="incrementQuantity()">+</button>
-      </div>
+      @if (isLoggedIn) {
+        <button type="button" class="add-to-cart-btn" (click)="addToCart()">
+          🛒 Add to Cart
+        </button>
+
+        <div class="quantity-controls">
+          <button type="button" (click)="decrementQuantity()">-</button>
+          <span>{{ quantity }}</span>
+          <button type="button" (click)="incrementQuantity()">+</button>
+        </div>
+      }
       <div class="specs-table">
         <div class="spec-row">
           <span class="spec-label">Category</span>
@@ -65,7 +69,9 @@
   <div class="product-card reviews-section">
     <div class="reviews-header">
       <h2>Reviews ({{ reviews.length }})</h2>
-      <button type="button" class="write-review-btn">Write a review</button>
+      @if (isLoggedIn) {
+        <button type="button" class="write-review-btn">Write a review</button>
+      }
     </div>
 
     @if (reviews.length === 0) {
@@ -80,7 +86,7 @@
                 <span class="user-name">{{ review.userName }}</span>
                 <div class="stars-date">
                   <span class="stars">{{ getStars(review.rating) }}</span>
-                  <span class="review-date">{{ review.date | date }}</span>
+                  <span class="review-date">{{ review.createdAt | date }}</span>
                 </div>
               </div>
             </div>
@@ -90,40 +96,41 @@
       </div>
     }
 
+    @if (isLoggedIn) {
+      <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="review-form">
+        <h3>Write a review</h3>
 
-    <form [formGroup]="reviewForm" (ngSubmit)="submitReview()" class="review-form">
-      <h3>Write a review</h3>
-
-      <div class="form-row">
-        <div class="rating-picker">
-          <label>Rating</label>
-          <div class="stars-rating">
-            @for (star of [1, 2, 3, 4, 5]; track star) {
-              <button
-                type="button"
-                class="review-button"
-                [class.active-star]="(reviewForm.value.rating ?? 0) >= star"
-                (click)="reviewForm.patchValue({ rating: star })">
-                ★
-              </button>
-            }
+        <div class="form-row">
+          <div class="rating-picker">
+            <label>Rating</label>
+            <div class="stars-rating">
+              @for (star of [1, 2, 3, 4, 5]; track star) {
+                <button
+                  type="button"
+                  class="review-button"
+                  [class.active-star]="(reviewForm.value.rating ?? 0) >= star"
+                  (click)="reviewForm.patchValue({ rating: star })">
+                  ★
+                </button>
+              }
+            </div>
           </div>
-        </div>
 
-        <div class="comment-picker">
-          <label class="comment-label">Comment</label>
-          <textarea
-            formControlName="comment"
-            placeholder="Write your feedback..."
-            rows="3">
+          <div class="comment-picker">
+            <label class="comment-label">Comment</label>
+            <textarea
+              formControlName="comment"
+              placeholder="Write your feedback..."
+              rows="3">
           </textarea>
-        </div>
+          </div>
 
-        <button type="submit" class="submit-button" [disabled]="reviewForm.invalid">
-          Submit review
-        </button>
-      </div>
+          <button type="submit" class="submit-button" [disabled]="reviewForm.invalid">
+            Submit review
+          </button>
+        </div>
     </form>
+    }
   </div>
 
 
@@ -144,20 +151,20 @@
             <span class="price">${{ product.price }}</span>
             <span class="rating">★ {{ product.rating }}</span>
           </div>
-
-          <button
-            type="button"
-            class="favorite-btn"
-            [class.active]="isFavorite(product?._id)"
-            (click)="toggleFavorite(product)"
-            aria-label="Toggle favorites">
-            {{ isFavorite(product?._id) ? '♥' : '♡' }}
-          </button>
+          @if (isLoggedIn) {
+            <button
+              type="button"
+              class="favorite-btn"
+              [class.active]="isFavorite(product?._id)"
+              (click)="toggleFavorite(product)"
+              aria-label="Toggle favorites">
+              {{ isFavorite(product?._id) ? '♥' : '♡' }}
+            </button>
+          }
         </div>
       }
     </div>
   </div>
-
 }
 
 

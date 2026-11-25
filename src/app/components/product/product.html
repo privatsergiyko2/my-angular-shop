@@ -48,7 +48,7 @@
     </div>
 
     <div class="products-actions">
-      @if (showAddToCard) {
+      @if (showAddToCard && isLoggedIn) {
         <button type="button" class="btn-add-cart" (click)="addToCart.emit(product)">
           🛒 Add to Cart
         </button>

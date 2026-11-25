@@ -5,5 +5,7 @@ export interface Review {
   productTitle: string;
   rating: number;
   comment: string;
-  date: number;
+  date?: number;
+  createdAt?: string;
+  userId?: string;
 }

@@ -16,11 +16,11 @@
     </tr>
     </thead>
     <tbody>
-      @for (product of paginationProducts(); track product?.id) {
+      @for (product of paginationProducts(); track product._id)  {
         <tr>
           <td class="checkbox-col">
             <input type="checkbox"
-                   [checked]="selectedProducts()?.includes(product.id)"
+                   [checked]="selectedProducts()?.includes(product._id)"
                    (change)="toggle(product)"/>
           </td>
           <td class="product-cell">
@@ -45,7 +45,7 @@
               <button class="icon-btn">...</button>
               <div class="dropdown-menu">
                 <button (click)="edit(product)" class="dropdown-item">Edit</button>
-                <button class="dropdown-item delete" (click)="remove(product.id)">
+                <button class="dropdown-item delete" (click)="remove(product._id)">
                   Delete
                 </button>
               </div>

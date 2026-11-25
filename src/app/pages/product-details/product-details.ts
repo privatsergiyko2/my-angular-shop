@@ -1,36 +1,51 @@
-import {ChangeDetectorRef, Component, effect, inject, OnInit, signal} from '@angular/core';
-import {ActivatedRoute, RouterLink} from '@angular/router';
-import {Product} from '../../models/product';
-import {ProductsService} from '../../services/products';
-import {toSignal} from '@angular/core/rxjs-interop';
-import {ReviewsService} from '../../services/reviews';
-import {Review} from '../../models/review';
-import {DatePipe, DecimalPipe} from '@angular/common';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Auth} from '../../services/auth';
-import {CartService} from '../../services/cart';
-import {Favorites} from '../../services/favorites';
-import { tap } from 'rxjs';
 
+import { Component, effect, inject, signal } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { DatePipe, DecimalPipe, AsyncPipe } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { Product } from '../../models/product';
+import { Review } from '../../models/review';
+
+import { ProductsService } from '../../services/products';
+import { ReviewsService } from '../../services/reviews';
+import { Auth } from '../../services/auth';
+import { CartService } from '../../services/cart';
+import { Favorites } from '../../services/favorites';
 
 @Component({
   selector: 'app-product-details',
-  imports: [RouterLink, DatePipe, ReactiveFormsModule, DecimalPipe],
+  imports: [
+    RouterLink,
+    DatePipe,
+    ReactiveFormsModule,
+    DecimalPipe,
+    AsyncPipe
+  ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
 })
 export class ProductDetails {
   fb = inject(FormBuilder);
-  private route: ActivatedRoute = inject(ActivatedRoute);
+
+  private route = inject(ActivatedRoute);
   private _productService = inject(ProductsService);
+
   reviewService = inject(ReviewsService);
   cartService = inject(CartService);
   auth = inject(Auth);
+  favoritesService = inject(Favorites);
+
+  id: string = this.route.snapshot.paramMap.get('id') || '';
+
+  productSignal = toSignal(
+    this._productService.getProductById(this.id)
+  );
+
   similarProducts = signal<Product[]>([]);
   reviews: Review[] = [];
-  favoritesService = inject(Favorites);
   quantity = 1;
-  id: string = this.route.snapshot.paramMap.get('id') || '';
 
   reviewForm = this.fb.group({
     rating: [0, [Validators.required, Validators.min(1)]],
@@ -38,40 +53,74 @@ export class ProductDetails {
   });
 
   constructor() {
-    this.reviews = this.reviewService.getReviewsByProduct(this.id);
+    this.reviewService.getReviewsByProductFromApi(this.id)
+      .subscribe({
+        next: (reviews) => {
+          this.reviews = reviews;
+        },
+        error: (error) => {
+          console.error('Failed to load reviews:', error);
+        }
+      });
 
     effect(() => {
       const prod = this.productSignal();
+
       if (prod) {
-        this._productService.getProducts({}).subscribe((products: Product[]) => {
-          this.similarProducts.set(
-            products.filter(
-              (item: Product) => item.category === prod.category && item._id !== prod._id,
-            ),
-          );
-        });
+        this._productService.getProducts({})
+          .subscribe((products: Product[]) => {
+            this.similarProducts.set(
+              products.filter(
+                (item: Product) =>
+                  item.category === prod.category &&
+                  item._id !== prod._id
+              )
+            );
+          });
       }
     });
   }
 
-  isFavorite(productId: string): boolean {
-    return this.favoritesService.favorites.some((item) => item._id == productId);
+  isFavorite(productId: string | undefined): boolean {
+    if (!productId) {
+      return false;
+    }
+
+    return this.favoritesService.isFavorite(productId);
   }
 
   toggleFavorite(product: Product) {
-    if (!product._id) return;
+    const productId = product._id;
 
-    this.favoritesService.toggleFavorites(product).pipe(
-      tap((data) => {
-        debugger;
-      })
-    ).subscribe()
+    if (!productId) {
+      return;
+    }
 
-    // if (this.isFavorite(product._id)) {
-    //   this.favoritesService.removeFromFavorite(product._id);
-    // } else {
-    //   this.favoritesService.addToFavorites(product);
-    // }
+    if (this.favoritesService.isFavorite(productId)) {
+      this.favoritesService.deleteFavoritesApi(productId)
+        .subscribe({
+          next: () => {
+            this.favoritesService.favoriteRecords.update(records =>
+              records.filter(record => record.productId !== productId)
+            );
+          },
+          error: (error) => {
+            console.error('Помилка видалення Favorites:', error);
+          }
+        });
+    } else {
+      this.favoritesService.addFavoritesApi(productId)
+        .subscribe({
+          next: (record) => {
+            this.favoritesService.favoriteRecords.update(records =>
+              [...records, record]
+            );
+          },
+          error: (error) => {
+            console.error('Помилка додавання Favorites:', error);
+          }
+        });
+    }
   }
 
   incrementQuantity() {
@@ -86,6 +135,7 @@ export class ProductDetails {
 
   addToCart() {
     const currentProduct = this.productSignal();
+
     if (currentProduct) {
       for (let i = 0; i < this.quantity; i++) {
         this.cartService.addToCart(currentProduct);
@@ -94,34 +144,41 @@ export class ProductDetails {
   }
 
   submitReview() {
-    if (this.reviewForm.invalid) {
-      return;
-    }
-    if (!this.auth.userSubject.value) {
-      return;
-    }
     const user = this.auth.userSubject.value;
+    const product = this.productSignal();
+
+    if (this.reviewForm.invalid || !user || !product) {
+      return;
+    }
+
     const review: Review = {
       userName: user.name,
       productId: this.id,
-      productTitle: this.productSignal()?.title!,
+      productTitle: product.title,
       rating: this.reviewForm.value.rating!,
       comment: this.reviewForm.value.comment!,
-      date: Date.now(),
     };
-    this.reviewService.addReview(review);
-    this.reviewForm.reset({
-      rating: 0,
-      comment: '',
-    });
-    this.reviews = this.reviewService.getReviewsByProduct(this.id);
+
+    this.reviewService.addReviewToApi(review)
+      .subscribe({
+        next: (savedReview) => {
+          this.reviews = [...this.reviews, savedReview];
+
+          this.reviewForm.reset({
+            rating: 0,
+            comment: '',
+          });
+        },
+        error: (error) => {
+          console.error('Помилка додавання відгуку:', error);
+        }
+      });
   }
 
   getStars(rating: number): string {
-    return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+    const filled = Math.max(0, Math.min(5, Math.round(rating)));
+
+    return '★'.repeat(filled) + '☆'.repeat(5 - filled);
   }
-
-  productSignal = toSignal(this._productService.getProductById(this.id));
-
-  product: Product | null = null;
 }
+

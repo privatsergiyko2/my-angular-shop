@@ -1,35 +1,41 @@
 <div class="reviews-page">
-  <h1 class="review-title">Reviews</h1>
+  <div class="reviews-header">
+    <h1 class="review-title">Reviews</h1>
+    <span>See what customers are saying about our products.</span>
+  </div>
 
-  @if (reviews.length === 0) {
+  @if (reviews().length === 0) {
     <p>No reviews yet</p>
   }
 
-  @for (review of reviews; track review._id) {
+  <div class="reviews-grid">
+  @for (review of reviews(); track review._id) {
     <div class="review-card">
-
-      <h3 >{{ review.userName }}</h3>
-
+      <div class="review-card-header">
+        <div class="review-user">
+          <div class="review-avatar">
+            {{ review.userName.charAt(0).toUpperCase() }}
+          </div>
+          <div class="review-user-info">
+            <h3>{{ review.userName }}</h3>
+            <p>{{ review.createdAt | date:'mediumDate' }}</p>
+          </div>
+        </div>
+          <p class="review-rating">
+            {{ getStars(review.rating) }}
+          </p>
+      </div>
       <p class="review-card-title">
         Product: {{ review.productTitle }}
-      </p>
-
-      <p class="review-rating">
-        {{ getStars(review.rating) }}
       </p>
 
       <p class="review-comment">
         {{ review.comment }}
       </p>
 
-      @if (isAdmin) {
+      @if (canDeleteReview(review)) {
         <button type="button" class="delete-button" (click)="deleteReview(review._id)">Delete</button>
       }
-
-      <p>
-        Date: {{ review.date | date:'mediumDate' }}
-      </p>
-
     </div>
   }
 </div>

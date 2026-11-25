@@ -1,8 +1,9 @@
-import { inject, Injectable } from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {Product} from '../models/product';
-import { BehaviorSubject, take } from 'rxjs';
+import {BehaviorSubject, Observable, take, tap} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import { ProductsService } from './products';
+import {ProductsService} from './products';
+import {Favorites as FavoriteRecord} from '../models/favorites';
 
 
 @Injectable({
@@ -12,18 +13,71 @@ export class Favorites {
   private readonly _productsService: ProductsService = inject(ProductsService);
   favorites: Product[] = [];
   private _favoritesSubject = new BehaviorSubject<Product[]>([]);
+  _http = inject(HttpClient);
+  favoriteRecords = signal<FavoriteRecord[]>([]);
 
   constructor() {
     this.favoritesParse();
   }
 
-  addToFavorites(product: Product) {
-    // const existingFavorites =   this.favorites.find(favorite => favorite._id === product._id);
-    // if (!existingFavorites) {
-    //   this.favorites.push(product);
-    //   this._favoritesSubject.next(this.favorites);
-    //   this.favoritesSave()
-    // }
+  //
+  // addToFavorites(product: Product) {
+  //   // const existingFavorites =   this.favorites.find(favorite => favorite._id === product._id);
+  //   // if (!existingFavorites) {
+  //   //   this.favorites.push(product);
+  //   //   this._favoritesSubject.next(this.favorites);
+  //   //   this.favoritesSave()
+  //   // }
+  // }
+
+  getFavoritesFromApi() {
+    const token = localStorage.getItem('token');
+
+    return this._http.get<FavoriteRecord[]>(
+      'http://localhost:3000/favorites',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    ).pipe(
+      tap(favorites => {
+        this.favoriteRecords.set(favorites);
+      })
+    );
+  }
+
+  addFavoritesApi(productId: string) {
+    const token = localStorage.getItem('token');
+
+    return this._http.post<FavoriteRecord>(
+      'http://localhost:3000/favorites',
+      {productId},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+
+  deleteFavoritesApi(productId: string) {
+    const token = localStorage.getItem('token');
+
+    return this._http.delete<FavoriteRecord | null>(
+      `http://localhost:3000/favorites/${productId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+  }
+
+  isFavorite(productId: string): boolean {
+    return this.favoriteRecords().some(
+      record => record.productId === productId
+    );
   }
 
   favoritesSave() {
@@ -53,12 +107,13 @@ export class Favorites {
 
 
 
-  toggleFavorites(product: Product) {
-    return this._productsService
-      .updateProduct(product._id, {
-        favorite: !product.favorite,
-      })
-      .pipe(take(1));
-  }
+
+  // toggleFavorites(product: Product) {
+  //   return this._productsService
+  //     .updateProduct(product._id, {
+  //       favorite: !product.favorite,
+  //     })
+  //     .pipe(take(1));
+  // }
 
 }

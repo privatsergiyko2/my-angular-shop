@@ -68,11 +68,26 @@ export class ProductsService {
   }
 
   addProductsToApi(product: Product) {
-    return this._http.post<Product>(`${apiUrl}/${environment.addProduct}`, product);
+    const token = localStorage.getItem('token');
+
+    return this._http.post<Product>(
+      `${apiUrl}/${environment.addProduct}`,
+      product,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
   }
 
   deleteProduct(id: string) {
-    return this._http.delete(`${apiUrl}/${environment.products}/${id}`).pipe(
+    const token = localStorage.getItem('token');
+    return this._http.delete(`${apiUrl}/${environment.products}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).pipe(
       tap((response) => {
         this.productsFromApi.set(this.productsFromApi().filter((product) => product._id !== id));
       }),
@@ -80,7 +95,12 @@ export class ProductsService {
   }
 
   updateProduct(id: string | null, data: Partial<Product>) {
-    return this._http.patch<Product>(`${apiUrl}/${environment.products}/${id}`, data);
+    const token = localStorage.getItem('token');
+    return this._http.patch<Product>(`${apiUrl}/${environment.products}/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 
   addProduct(product: Product) {

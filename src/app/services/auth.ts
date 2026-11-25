@@ -28,6 +28,7 @@ export class Auth {
       name: user.name,
       email: user.email,
       role: user.role,
+      _id: user._id,
     }));
 
     this.userSubject.next(user);
@@ -37,6 +38,28 @@ export class Auth {
     const savedUsers: string | null = localStorage.getItem('users');
 
     this.users = JSON.parse(savedUsers ?? '[]') || [];
+  }
+
+  getAllUsers(): Observable<IUser[]> {
+    return this.http.get<IUser[]>(
+      'http://localhost:3000/auth/users',
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    );
+  }
+
+  deleteUser(userId: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `http://localhost:3000/auth/users/${userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      }
+    );
   }
 
   getAuthenticatedUser() {

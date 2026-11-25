@@ -4,9 +4,8 @@ import {RouterLink} from '@angular/router';
 import {Favorites} from '../../services/favorites';
 import {Auth} from '../../services/auth';
 import {AsyncPipe, DecimalPipe} from '@angular/common';
-import { concatMap, tap } from 'rxjs';
-import { ProductsService } from '../../services/products';
-
+import {concatMap, tap} from 'rxjs';
+import {ProductsService} from '../../services/products';
 
 
 @Component({
@@ -32,35 +31,55 @@ export class ProductComponent {
     return Number(original.toFixed(2));
   }
 
-  addToFavorites() {
-    this._favorite.addToFavorites(this.product);
-    console.log(this._favorite.favorites);
-  }
+  // addToFavorites() {
+  //   this._favorite.addToFavorites(this.product);
+  //   console.log(this._favorite.favorites);
+  // }
 
   isFavorite(): boolean {
-    // return this._favorite.favorites.some((item) => item._id === this.product._id);
+    if (!this.product._id) {
+      return false;
+    }
 
-    return this.product.favorite;
+    return this._favoritesService.isFavorite(this.product._id);
   }
-
   isStarFilled(star: number): boolean {
     return star <= Math.round(this.product.rating);
   }
 
+
   toggleFavorite() {
-    this._favoritesService
-      .toggleFavorites(this.product)
-      .subscribe((updatedProduct) => {
-        this._productsService.updateProductInList(updatedProduct);
-        this.favoriteChange.emit(updatedProduct);
-      })
+    const productId = this.product._id;
 
+    if (!productId) return;
 
-    // if (this.isFavorite()) {
-    //   this._favorite.removeFromFavorite(this.product._id);
-    // } else {
-    //   this._favorite.addToFavorites(this.product);
-    // }
+    if (this._favoritesService.isFavorite(productId)) {
+      this._favoritesService.deleteFavoritesApi(productId)
+        .subscribe({
+          next: () => {
+            this._favoritesService.favoriteRecords.update(records =>
+              records.filter(record => record.productId !== productId)
+            );
+
+            this.favoriteChange.emit(this.product);
+          },
+          error: (error) => {
+            console.error('Помилка видалення Favorites:', error);
+          }
+        });
+    } else {
+      this._favoritesService.addFavoritesApi(productId)
+        .subscribe({
+          next: (record) => {
+            this._favoritesService.favoriteRecords.update(records =>
+              [...records, record]
+            );
+          },
+          error: (error) => {
+            console.error('Помилка додавання Favorites:', error);
+          }
+        });
+    }
   }
 
   removeFromFavorites(id: string) {
@@ -70,6 +89,12 @@ export class ProductComponent {
 
   @Input() showAddToCard: boolean = true;
   @Input() product!: Product;
-  @Output() addToCart = new EventEmitter<Product>();
-  @Output() remove = new EventEmitter<Product>();
+  @Output()
+  addToCart = new EventEmitter<Product>();
+  @Output()
+  remove = new EventEmitter<Product>();
+
+
 }
+
+

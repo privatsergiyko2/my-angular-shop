@@ -19,6 +19,7 @@ import {Auth} from '../../services/auth';
 import {catchError, take, tap, throwError} from 'rxjs';
 import {Sort} from '../../components/sort/sort';
 import {MatSliderModule} from '@angular/material/slider';
+import {Footer} from '../../components/footer/footer';
 
 
 @Component({
@@ -32,6 +33,7 @@ import {MatSliderModule} from '@angular/material/slider';
     AsyncPipe,
     Sort,
     MatSliderModule,
+    Footer,
   ],
   templateUrl: './products.html',
   styleUrl: './products.scss',
@@ -50,34 +52,58 @@ export class Products implements OnInit {
   isError = false;
   isLoading = true;
   minPrice = 0;
-  maxPrice = 2500;
+  maxPrice = 10000;
   minRating = 0;
+  priceLimit = 0;
   availability: string | null = null;
 
+  // constructor() {
+  //   this.productsService
+  //     .getProducts({})
+  //     .pipe(
+  //       tap((products) => {
+  //         // this.products = products;
+  //         // this.filteredProducts.set(products);
+  //         // this.filterProducts();
+  //         // console.log('filtered:', this.filteredProducts);
+  //         // this.isLoading = false;
+  //         // this.cdr.detectChanges();
+  //         // console.log('loading:', this.isLoading);
+  //         // console.log('products length:', this.filteredProducts().length);
+  //       }),
+  //     ).subscribe();
+  // }
+
   constructor() {
-    this.productsService
-      .getProducts({})
-      .pipe(
-        tap((products) => {
-          // this.products = products;
-          // this.filteredProducts.set(products);
-          // this.filterProducts();
-          // console.log('filtered:', this.filteredProducts);
-          // this.isLoading = false;
-          // this.cdr.detectChanges();
-          // console.log('loading:', this.isLoading);
-          // console.log('products length:', this.filteredProducts().length);
-        }),
-      ).subscribe();
+    this.productsService.getProducts({}).subscribe({
+      next: (products) => {
+        console.log('Products from API:', products.length);
+
+        this.products = products;
+        const prices = products.map(product => product.price);
+        this.priceLimit = Math.max(0, ...prices);
+        this.maxPrice = this.priceLimit;
+        this.filterProducts();
+
+        console.log('Filtered products:', this.filteredProducts().length);
+
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Failed to load products:', error);
+        this.isError = true;
+        this.isLoading = false;
+      },
+    });
   }
 
   sortOptions = [
-    { label: 'Recommended', value: 'recommended' },
-    { label: 'Price: Low → High', value: 'price-asc' },
-    { label: 'Price: High → Low', value: 'price-desc' },
-    { label: 'Rating: High → Low', value: 'rating-desc' },
-    { label: 'Name: A → Z', value: 'name-asc' },
-    { label: 'Name: Z → A', value: 'name-desc' },
+    {label: 'Recommended', value: 'recommended'},
+    {label: 'Price: Low → High', value: 'price-asc'},
+    {label: 'Price: High → Low', value: 'price-desc'},
+    {label: 'Rating: High → Low', value: 'rating-desc'},
+    {label: 'Name: A → Z', value: 'name-asc'},
+    {label: 'Name: Z → A', value: 'name-desc'},
   ];
 
   discountProduct(product: Product) {
@@ -85,37 +111,27 @@ export class Products implements OnInit {
   }
 
   sortedProducts = computed(() => {
-    // if (this.sort() === "price-asc") {
-    //   const products = [...this.filteredProducts()];
-    //   products.sort((a, b) => a.price - b.price);
-    //   return products;
-    // }
-    //
-    // if (this.sort() === "price-desc") {
-    //   const products = [...this.filteredProducts()];
-    //   products.sort((a, b) => b.price - a.price);
-    //   return products;
-    // }
-    //
-    // if (this.sort() === "rating-desc") {
-    //   const products = [...this.filteredProducts()];
-    //   products.sort((a, b) => b.rating - a.rating);
-    //   return products;
-    // }
-    //
-    //
-    // if (this.sort() === "name-asc") {
-    //   const products = [...this.filteredProducts()];
-    //   products.sort((a, b) => a.title.localeCompare(b.title));
-    //   return products;
-    // }
-    //
-    // if (this.sort() === "name-desc") {
-    //   const products = [...this.filteredProducts()];
-    //   products.sort((a, b) => b.title.localeCompare(a.title));
-    //   return products;
-    // }
-    return this.filteredProducts();
+    const products = [...this.filteredProducts()];
+
+    switch (this.sort()) {
+      case 'price-asc':
+        return products.sort((a, b) => a.price - b.price);
+
+      case 'price-desc':
+        return products.sort((a, b) => b.price - a.price);
+
+      case 'rating-desc':
+        return products.sort((a, b) => b.rating - a.rating);
+
+      case 'name-asc':
+        return products.sort((a, b) => a.title.localeCompare(b.title));
+
+      case 'name-desc':
+        return products.sort((a, b) => b.title.localeCompare(a.title));
+
+      default:
+        return products;
+    }
   });
 
   retry() {
@@ -175,7 +191,7 @@ export class Products implements OnInit {
     this.searchInputControl.setValue('');
     this.selectedCategory = notSelectedFilter;
     this.minPrice = 0;
-    this.maxPrice = 2500;
+    this.maxPrice = this.priceLimit;
     this.minRating = 0;
     this.availability = null;
     this.filterProducts();
@@ -187,20 +203,37 @@ export class Products implements OnInit {
   }
 
   selectRating(rating: number) {
-    this.minRating = rating;
+    console.log('Rating clicked:', rating);
+
+    if (this.minRating === rating) {
+      this.minRating = 0;
+    } else {
+      this.minRating = rating;
+    }
+
     this.filterProducts();
   }
 
   selectAvailability(status: string | null) {
-    this.availability = status;
+    // this.availability = status;
+    if(this.availability === status) {
+      this.availability = null;
+    } else {
+      this.availability = status;
+    }
     this.filterProducts();
   }
 
   getCategoryCount(category: string): number {
+    const products = this.productsService.productsFromApi();
+
     if (category === 'All' || category === 'All Products') {
-      return this.products.length;
+      return products.length;
     }
-    return this.products.filter((p) => p.category === category).length;
+
+    return products.filter(
+      (product) => product.category === category
+    ).length;
   }
 
   getRatingCount(rating: number): number {
@@ -208,12 +241,18 @@ export class Products implements OnInit {
   }
 
   getAvailabilityCount(status: string): number {
+    const products = this.productsService.productsFromApi();
+
     if (status === 'inStock') {
-      return this.products.filter((p) => p.stock > 10).length;
+      return products.filter(product => product.stock > 0).length;
     }
+
     if (status === 'lowStock') {
-      return this.products.filter((p) => p.stock > 0 && p.stock <= 10).length;
+      return products.filter(
+        product => product.stock > 0 && product.stock <= 5
+      ).length;
     }
+
     return 0;
   }
 
@@ -225,12 +264,12 @@ export class Products implements OnInit {
   protected removeFromProduct(item: Product) {
     if (!item._id) return;
 
-    this.productsService.deleteProduct(item?._id).subscribe((response) => {
-      // this.products = this.products.filter((product) => product._id !== item._id);
+    this.productsService.deleteProduct(item._id).subscribe(() => {
+      this.products = this.products.filter(
+        (product) => product._id !== item._id
+      );
 
-      // this.filteredProducts.set(
-      //   this.filteredProducts().filter((product) => product._id !== item._id),
-      // );
+      this.filterProducts();
     });
   }
 }

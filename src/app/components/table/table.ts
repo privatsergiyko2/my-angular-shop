@@ -1,5 +1,6 @@
-import { Component, computed, input, InputSignal, output, OutputEmitterRef, signal } from '@angular/core';
+import {Component, computed, inject, input, InputSignal, output, OutputEmitterRef, signal} from '@angular/core';
 import { Pagination } from '../pagination/pagination';
+import {ProductsService} from '../../services/products';
 
 @Component({
   selector: 'app-table',
@@ -14,6 +15,7 @@ export class Table {
   toggleAll: OutputEmitterRef<any> = output();
   removeProduct: OutputEmitterRef<any> = output();
   editProduct: OutputEmitterRef<any> = output();
+  productService = inject(ProductsService);
 
   currentPage = signal<number>(1);
   pageSize = signal<number>(6);
@@ -40,8 +42,15 @@ export class Table {
     this.toggleAll.emit(toogle);
   }
 
-  remove(product: any) {
-    this.removeProduct.emit(product);
+  remove(id: string) {
+    this.productService.deleteProduct(id).subscribe({
+      next: () => {
+        this.removeProduct.emit(id);
+      },
+      error: (error) => {
+        console.error('Помилка видалення товару:', error);
+      }
+    });
   }
 
   edit(product: any) {

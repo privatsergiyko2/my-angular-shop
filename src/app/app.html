@@ -2,6 +2,9 @@
 
 <router-outlet></router-outlet>
 
-<app-footer></app-footer>
+@if(showFooter()) {
+  <app-footer></app-footer>
+}
+
 
 

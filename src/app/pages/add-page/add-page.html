@@ -14,8 +14,33 @@
       <input type="number" id="price" formControlName="price">
     </div>
     <div class="form-group">
+      <label for="brand">Brand:</label>
+      <input
+        type="text"
+        id="brand"
+        formControlName="brand"
+        placeholder="e.g. Dior"
+      >
+    </div>
+    <div class="form-group">
+      <label for="discountPercentage">Discount (%):</label>
+      <input
+        type="number"
+        id="discountPercentage"
+        formControlName="discountPercentage"
+        min="0"
+        max="100"
+      >
+    </div>
+    <div class="form-group">
       <label for="category">Category:</label>
-      <input type="text" id="category" formControlName="category">
+      <select id="category" formControlName="category">
+        <option value="">Select category</option>
+        <option value="beauty">Beauty</option>
+        <option value="fragrances">Fragrances</option>
+        <option value="furniture">Furniture</option>
+        <option value="groceries">Groceries</option>
+      </select>
     </div>
     <div class="form-group">
       <label for="imageUrl">ImageUrl:</label>
@@ -29,6 +54,10 @@
   <div class="form-group">
     <label for="description">description:</label>
     <input type="text" id="description" formControlName="description">
+  </div>
+  <div class="form-group">
+    <label for="stock">Stock:</label>
+    <input type="number" id="stock" min="0" formControlName="stock">
   </div>
   <div class="add-form-buttons">
     <button class="add-form-submit" type="submit" [disabled]="myForm.invalid || isLoading">Submit</button>

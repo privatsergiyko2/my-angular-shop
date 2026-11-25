@@ -126,8 +126,9 @@
 //}
 
 :host {
-  display: inline-flex;
-  align-items: center;
+  //display: inline-flex;
+  //align-items: center;
+  display: block;
 }
 
 select {

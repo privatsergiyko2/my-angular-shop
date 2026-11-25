@@ -3,7 +3,7 @@ import { ProductsService } from '../../services/products';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
-import { catchError, take, tap } from 'rxjs';
+import {catchError, take, tap, throwError} from 'rxjs';
 import { Auth } from '../../services/auth';
 import { AsyncPipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -26,10 +26,11 @@ export class AddPage {
     title: ['', Validators.required],
     description: ['', Validators.required],
     category: ['', Validators.required],
-    price: [0, Validators.required],
-    discountPercentage: [0],
+    price: [0, [Validators.required, Validators.min(0)]],
+    discountPercentage: [0, [Validators.min(0), Validators.max(100)]],
     rating: [0, Validators.required],
-    stock: [0],
+    stock: [0, [Validators.required, Validators.min(0)]],
+
     tags: [[]],
     brand: [''],
     sku: [''],
@@ -47,6 +48,7 @@ export class AddPage {
     minimumOrderQuantity: [1],
     images: [[]],
     thumbnail: ['https://blocks.astratic.com/img/general-img-landscape.png', Validators.required],
+
   });
 
   isLoading = false;
@@ -68,9 +70,9 @@ export class AddPage {
             this._cdr.detectChanges();
           }),
           catchError((error) => {
-            console.log(error);
+            console.error('Add product failed:', error);
             this.isLoading = false;
-            return error;
+            return throwError(() => error);
           }),
         )
         .subscribe();
